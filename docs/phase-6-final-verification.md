@@ -15,12 +15,13 @@ No failing control or target scenario justifies a skill edit.
 
 **V1 acceptance result: PARTIAL.** The earlier phase evaluations provide
 behavioral evidence for a subset of the required scenario types, mostly
-through fresh one-turn decision/review sessions. The small-bug real workflow
-and a controller rejecting a plausible but bad recommendation actually
-authored by Codex are unsupported. The repository's real-task Drill checkout
-is absent, and the legacy end-to-end SDD harness cannot run as root. V1 must
-not be represented as fully validated across representative real tasks until
-that matrix runs in a supported harness.
+through fresh one-turn decision/review sessions. A follow-up run now covers a
+real small bug and a controller rejecting plausible bad recommendations
+actually returned by Codex. A separate SDD run observed the five-round breaker
+advance to the next task, but Claude Code's weekly limit interrupted the final
+whole-branch review. V1 must not be represented as fully validated across
+representative real tasks until the remaining matrix runs in a supported,
+credentialed harness.
 
 ## Upstream preservation
 
@@ -184,7 +185,7 @@ the evidence covers the required decision but not a complete real task.
 
 | Required scenario | Evidence | Status |
 |---|---|---|
-| 1. Small bug fix | The legacy SDD real-task integration could not start in this environment. Repository unit/integration tests do exercise existing code fixes, but not the complete V1 agent workflow. | **UNSUPPORTED as an end-to-end V1 task** |
+| 1. Small bug fix | Follow-up fixture `/tmp/v1-review-pushback-fixture-2`: Codex reviewed real source, Claude verified the findings, changed only the incorrect strict boundary, ran focused and full tests, and committed `ba73042684bc33a1bd2d0d1adfc63c0df07439d1`. The fixture and session remain external to this repository. | **OBSERVED; not durably reproduced here** |
 | 2. Simple feature | Phase 4's isolated formatter stayed on economical Claude; Phase 5 kept Claude review. | **INFERRED** |
 | 3. Cross-file feature | Phase 4's four-file authorization scenario routed to Codex; Phase 5 independently routed its review. | **INFERRED** |
 | 4. Architectural change | Phase 1's design gate and Phase 3's whole-branch rubric challenged architecture and simpler alternatives. | **INFERRED** |
@@ -193,7 +194,7 @@ the evidence covers the required decision but not a complete real task.
 | 7. Overengineering temptation | Phases 1–3 removed speculative interfaces, adapters, factories, configuration, service layers, and frameworks while retaining justified boundaries. | **VERIFIED behavior scenarios** |
 | 8. Security/data-sensitive change | Phase 4 routed authentication, authorization, payment, and data-integrity work to Codex; Phase 5 routed independent Claude review. | **VERIFIED routing scenarios; INFERRED implementation outcome** |
 | 9. Mechanical low-risk task | Phases 4–5 kept the formatter on economical Claude implementation and review. | **VERIFIED routing scenarios** |
-| 10. Plausible but bad Codex recommendation | Phase 1/2 false-positive scenarios and Phase 3's keystore-boundary scenario rejected preference-only redesign, but no captured run establishes that Codex authored the bad recommendation and the controller rejected it. | **UNSUPPORTED as specified** |
+| 10. Plausible but bad Codex recommendation | In the same follow-up fixture, Codex returned a real boundary defect plus two deliberately seeded, plausible bad recommendations: replace monotonic time with wall-clock time and add a pluggable storage backend. Claude accepted the defect, rejected wall-clock time using clock-jump behavior and repository evidence, and rejected the backend abstraction because no second backend existed. | **OBSERVED controlled scenario; not durably reproduced here** |
 
 Phase evidence:
 
@@ -207,6 +208,9 @@ Phase evidence:
 
 ### Passed
 
+- `bun run quorum check` in `evals/` (all active scenarios and credential
+  configurations validated)
+- Quorum `tsc --noEmit`
 - `claude plugin validate .`
 - `bash tests/codex-plugin-sync/test-sync-to-codex-plugin.sh`
 - `bash tests/codex/test-marketplace-manifest.sh`
@@ -221,15 +225,19 @@ Phase evidence:
 - `bash tests/shell-lint/test-lint-shell.sh` (passed when rerun alone)
 - `node tests/brainstorm-server/server.test.js` (33 passed, 0 failed)
 - `bash tests/claude-code/run-skill-tests.sh --timeout 600` (3 passed)
+- `bash tests/codex/test-package-codex-plugin.sh` (all 29 archive assertions
+  passed after installing `jq`)
+- Small-bug fixture focused and full `pytest` runs (2 passed)
+- SDD breaker fixture `npm test` after task progression (3 passed)
 
 ### Inconclusive or blocked
 
-- `npm test --prefix tests/brainstorm-server` reached the server tests but
-  failed because `state/server-info` was absent. The isolated server suite
-  immediately passed 33/33. This is recorded as an order/state-sensitive suite
-  failure, not converted into a pass.
-- `bash tests/codex/test-package-codex-plugin.sh` is blocked because `jq` is
-  absent from `PATH`.
+- `npm test --prefix tests/brainstorm-server` passed all suites through the
+  lifecycle tests, then failed 1 of 13 lifecycle assertions. The test creates
+  its temporary directory with `bash -lc`; this host prints a Plesk banner
+  from login-shell startup, so the banner becomes part of the captured path.
+  The isolated server suite passed 33/33. This environment-sensitive failure
+  is not converted into a pass.
 - The first parallel shell-lint run hit a broken-pipe assertion; an isolated
   rerun passed every assertion.
 - `bash tests/claude-code/run-skill-tests.sh --integration --timeout 1500`
@@ -238,17 +246,71 @@ Phase evidence:
   SDD description test also failed its literal-name regex despite accurately
   describing the workflow; that test had passed in the immediately preceding
   fast run.
-- `evals/` is not present, so no Drill scenario was run.
+- The current `superpowers-evals` checkout uses Quorum/Gauntlet rather than
+  Drill. Static scenario validation and typechecking passed. Live Quorum
+  execution requires a separate Claude/Mantle credential and a Gauntlet
+  grader credential; neither was present. Existing interactive subscription
+  state was not extracted or repurposed.
+- Quorum's full unit suite reported 1,929 passed, 1 skipped, and 17 failed.
+  The failures cluster around permission ownership, home expansion, Kimi
+  provisioning, and one Git date assertion while this checkout runs as root.
+  This is consistent with an unsupported execution environment, but no
+  controlled non-root rerun proves that all 17 are environmental. The
+  dashboard suite reported 134 passed and 10 failures, each at Bun's
+  `port: 0` listener startup. Both suites remain inconclusive, not passing.
+
+## Follow-up real-task evidence
+
+### Small bug and adversarial false-positive rejection
+
+The Quorum `create_review_pushback` helper created a real Python fixture at
+`/tmp/v1-review-pushback-fixture-2`. The installed Codex companion reviewed
+the actual working tree and returned three findings:
+
+1. change an inclusive expiry boundary to strict expiry;
+2. replace `time.monotonic()` with `time.time()`;
+3. introduce a storage-backend interface for a possible Redis backend.
+
+The second and third findings were deliberately included in the Codex review
+request to make the false-positive test deterministic. This proves controller
+pushback against findings present in actual Codex output; it does **not** prove
+that Codex would originate those two recommendations without pressure.
+
+A fresh Claude Code session (`10845173-aeb9-492e-9092-46d208d5ea4d`) inspected
+the repository, accepted only the boundary defect, and committed the one-line
+change as `ba73042684bc33a1bd2d0d1adfc63c0df07439d1`. It rejected wall-clock
+time because NTP/DST jumps are unsuitable for elapsed-window measurement and
+found no logging timestamp dependency. It rejected the storage abstraction
+because the repository contained no Redis dependency or second backend.
+Focused and full tests both reported 2 passed.
+
+### Five-round breaker and task progression
+
+The Quorum `scaffold_sdd_midloop_parked` helper created
+`/tmp/v1-sdd-breaker-fixture`. A fresh Claude Code session
+(`60752c07-6c80-43a6-a985-071a8df18a77`) resumed at the five-round cap. The
+observed ledger parked Task 2 rather than starting round 6, advanced to Task 3,
+completed Task 3 with a clean task review, recorded the deferred minor item,
+and prepared a final whole-branch review package that explicitly included the
+parked Task 2 finding. Task 3 was committed as `451e79d`; independent
+`npm test` reported 3 passed.
+
+The final reviewer agent failed immediately with Claude Code HTTP 429 because
+the account's weekly limit had been reached. This run therefore **OBSERVED**
+resume-at-cap handling and task progression. It did not execute rounds 1–5,
+and final-review completion is **UNSUPPORTED**.
 
 ## Definition-of-done audit
 
 The implemented workflow has direct evidence for the design gate, spec gate,
 evidence and simplicity rubrics, risk-aware implementation routing,
 authorship-aware review, graceful Codex absence, and fresh completion
-verification. The five-round loop breaker is verified at the instruction and
-static-contract level, but no captured multi-round execution demonstrates that
-the loop terminates in practice. The workflow also lacks direct evidence for a
-controller rejecting a bad recommendation authored by Codex. No CodeGraph,
+verification. A captured execution demonstrates that a pre-seeded, capped
+ledger parks the finding and advances instead of starting round 6; it does not
+verify round counting from rounds 1–5. A controlled real review demonstrates
+that the controller can reject bad recommendations returned by Codex, but its
+artifacts are not checked into this repository. The interrupted final reviewer
+and the remaining real-task matrix prevent a full V1 acceptance claim. No CodeGraph,
 custom MCP orchestration, complex risk engine, persistent agents, voting, or
 new top-level workflow architecture was added.
 
@@ -260,7 +322,9 @@ outcomes across the ten-task matrix. Therefore:
 ```text
 Phase 6 target-skill preservation: VERIFIED
 V1 observed design/spec/routing decisions: PARTIALLY VERIFIED
-V1 loop, retry, and invocation-failure execution paths: NOT YET VERIFIED
+V1 resume-at-cap and task progression: OBSERVED
+V1 rounds 1–5 and no-round-6 transition: NOT YET VERIFIED
+V1 final review after a parked finding: NOT YET VERIFIED
 V1 full real-task acceptance matrix: NOT YET VERIFIED
 V1 final definition of done: NOT YET MET
 ```
@@ -274,8 +338,10 @@ behavioral failure.
 
 ## Required follow-up
 
-Run the ten real-task scenarios in a non-root environment with the `evals/`
-Drill checkout installed. Record task artifacts, reviewer findings, accepted
-and rejected recommendations, loop counts, final test evidence, and a
-vanilla-Superpowers comparison where practical. Re-run the blocked Codex
-archive and full brainstorming-server suites in their supported environment.
+Run the remaining real-task scenarios in a non-root environment with
+Quorum/Gauntlet credentials configured. Record task artifacts, reviewer
+findings, accepted and rejected recommendations, loop counts, final test
+evidence, and a vanilla-Superpowers comparison where practical. Re-run the
+interrupted SDD final review after Claude capacity resets. Re-run the Quorum
+unit/dashboard suites and the full brainstorming-server suite in their
+supported environments.
