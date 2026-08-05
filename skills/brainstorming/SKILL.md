@@ -22,16 +22,18 @@ Every project goes through this process. A todo list, a single-function utility,
 You MUST create a task for each of these items and complete them in order:
 
 1. **Explore project context** — check files, docs, recent commits
-2. **Offer the visual companion just-in-time** — NOT upfront. The first time a question would genuinely be clearer shown than described, offer it then (its own message); on approval its browser tab opens for you. If no visual question ever arises, never offer it. See the Visual Companion section below.
-3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
-4. **Propose 2-3 approaches** — with trade-offs and your recommendation
-5. **Present candidate design** — in sections scaled to their complexity, validate each section with the user
-6. **Review and synthesize design** — after the full candidate is coherent, run constructive and adversarial review, synthesize against evidence and user intent, then get final user approval (see below)
-7. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
-8. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
-9. **Review and synthesize written spec** — run Codex adversarial/completeness review, verify and apply findings, and establish the canonical spec
-10. **User reviews written spec** — ask user to review the canonical spec before proceeding
-11. **Transition to implementation** — invoke writing-plans skill to create implementation plan
+2. **Map the actors — "who uses this, from where, doing what?"** — before any design question, list every user (human and agent), every platform they act from, and the real job each is doing. The design must pass EACH row's own speed-and-effort test. A plan without this table is mis-scoped by definition.
+3. **Offer the visual companion just-in-time** — NOT upfront. The first time a question would genuinely be clearer shown than described, offer it then (its own message); on approval its browser tab opens for you. If no visual question ever arises, never offer it. See the Visual Companion section below.
+4. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
+5. **Propose 2-3 approaches** — with trade-offs and your recommendation
+6. **Co-design with a second model (when available)** — before hardening the candidate, dispatch Codex as a DESIGN PARTNER (not a reviewer): it works the design questions from the USER'S seat and returns positions + explicit disagreements. Adopt what's evidence-backed; flag the rest. See "Codex Co-design" below.
+7. **Present candidate design** — in sections scaled to their complexity, validate each section with the user
+8. **Review and synthesize design** — after the full candidate is coherent, run constructive and adversarial review, synthesize against evidence and user intent, then get final user approval (see below)
+9. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
+10. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
+11. **Review and synthesize written spec** — run Codex adversarial/completeness review, verify and apply findings, and establish the canonical spec
+12. **User reviews written spec** — ask user to review the canonical spec before proceeding
+13. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
 ## Process Flow
 
@@ -139,6 +141,34 @@ digraph brainstorming {
 - Explore the current structure before proposing changes. Follow existing patterns.
 - Where existing code has problems that affect the work (e.g., a file that's grown too large, unclear boundaries, tangled responsibilities), include targeted improvements as part of the design - the way a good developer improves code they're working in.
 - Don't propose unrelated refactoring. Stay focused on what serves the current goal.
+
+## The Actors Table (mandatory first analysis)
+
+Before refining any idea, write the table:
+
+| Who | From where | Doing what |
+|---|---|---|
+| every human user | each platform/surface they act from | the real job, in their words |
+| every agent/automation | its runtime and capabilities | what it actually does with this |
+
+Rules:
+- A row per REAL combination — "the user" is never one row if they act from two surfaces with different capabilities (browser vs shell, phone vs desktop).
+- Each row gets its own success test: what does THIS actor do, and how fast/effortless must it be for them to call it done?
+- Capabilities constrain design: an actor that cannot move bytes, run a shell, or hold state needs a different pipeline, not a footnote. If two rows need two mechanisms, the design says so explicitly — one mechanism that serves only some rows is a mis-scoped design.
+- Reviews cannot catch what the scope never contained. This table is the frame-check; intelligence spent after a wrong frame only polishes the wrong thing.
+
+Why this exists: a heavily-reviewed design once optimized one pipeline for weeks while the user's actual task crossed two platforms with different capabilities — every review polished the mis-scoped half. The table would have shown two pipelines on day one.
+
+## Codex Co-design (design partner, not reviewer)
+
+When a second strong model is available (the official `codex:codex-rescue` subagent or equivalent), use it BEFORE the candidate design hardens — as a collaborator working the same design questions, not a critic of finished output:
+
+- Give it: the actors table, intent + constraints + success criteria, repository evidence, and the OPEN design questions — especially ones where it is itself a user of the result (tool ergonomics, API shapes, agent workflows).
+- Ask for: concrete positions with reasoning, explicit DISAGREEMENTS with your working assumptions, and artifacts it would want as a user (exact config text, templates, naming).
+- Synthesize: adopt evidence-backed positions; where you reject one, record why. Disagreements between models are design signal — each one marks a decision that deserved more thought than either model alone would give it.
+- This complements, never replaces, the adversarial review gates: co-design shapes the design early; adversarial review attacks it once coherent. The same model can serve both roles because the prompts demand different postures.
+
+If no second model is available, state that the co-design perspective was unavailable and continue.
 
 ## Design Review Gate
 
