@@ -22,11 +22,11 @@ Every project goes through this process. A todo list, a single-function utility,
 You MUST create a task for each of these items and complete them in order:
 
 1. **Explore project context** — check files, docs, recent commits
-2. **Map the actors — "who uses this, from where, doing what?"** — before any design question, list every user (human and agent), every platform they act from, and the real job each is doing. The design must pass EACH row's own speed-and-effort test. A plan without this table is mis-scoped by definition.
+2. **Establish actor coverage — "who uses this, from where, doing what?"** — before any design question, account for every material actor, surface/runtime, capability constraint, and success condition. Trivial single-actor work takes one compact actor statement; complex work takes the full table. See "Actor Coverage" below.
 3. **Offer the visual companion just-in-time** — NOT upfront. The first time a question would genuinely be clearer shown than described, offer it then (its own message); on approval its browser tab opens for you. If no visual question ever arises, never offer it. See the Visual Companion section below.
 4. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
 5. **Propose 2-3 approaches** — with trade-offs and your recommendation
-6. **Co-design with a second model (when available)** — before hardening the candidate, dispatch Codex as a DESIGN PARTNER (not a reviewer): it works the design questions from the USER'S seat and returns positions + explicit disagreements. Adopt what's evidence-backed; flag the rest. See "Codex Co-design" below.
+6. **Codex co-design (value-triggered)** — when a second model is available AND a material open design decision would benefit from an independent perspective, dispatch Codex as a DESIGN PARTNER (not a reviewer) after the approaches exist. Skip it for routine work. See "Codex Co-design" below.
 7. **Present candidate design** — in sections scaled to their complexity, validate each section with the user
 8. **Review and synthesize design** — after the full candidate is coherent, run constructive and adversarial review, synthesize against evidence and user intent, then get final user approval (see below)
 9. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
@@ -40,10 +40,10 @@ You MUST create a task for each of these items and complete them in order:
 ```dot
 digraph brainstorming {
     "Explore project context" [shape=box];
-    "Map the actors table" [shape=box];
+    "Establish actor coverage" [shape=box];
     "Ask clarifying questions" [shape=box];
     "Propose 2-3 approaches" [shape=box];
-    "Codex co-design (when available)" [shape=box];
+    "Codex co-design (if value-triggered)" [shape=box];
     "Present candidate design sections" [shape=box];
     "Candidate design coherent?" [shape=diamond];
     "Constructive + adversarial review" [shape=box];
@@ -67,11 +67,11 @@ digraph brainstorming {
     "User reviews spec?" [shape=diamond];
     "Invoke writing-plans skill" [shape=doublecircle];
 
-    "Explore project context" -> "Map the actors table";
-    "Map the actors table" -> "Ask clarifying questions";
+    "Explore project context" -> "Establish actor coverage";
+    "Establish actor coverage" -> "Ask clarifying questions";
     "Ask clarifying questions" -> "Propose 2-3 approaches";
-    "Propose 2-3 approaches" -> "Codex co-design (when available)";
-    "Codex co-design (when available)" -> "Present candidate design sections";
+    "Propose 2-3 approaches" -> "Codex co-design (if value-triggered)";
+    "Codex co-design (if value-triggered)" -> "Present candidate design sections";
     "Present candidate design sections" -> "Candidate design coherent?";
     "Candidate design coherent?" -> "Present candidate design sections" [label="no, revise"];
     "Candidate design coherent?" -> "Constructive + adversarial review" [label="yes"];
@@ -113,7 +113,7 @@ digraph brainstorming {
 - Check out the current project state first (files, docs, recent commits)
 - Before asking detailed questions, assess scope: if the request describes multiple independent subsystems (e.g., "build a platform with chat, file storage, billing, and analytics"), flag this immediately. Don't spend questions refining details of a project that needs to be decomposed first.
 - If the project is too large for a single spec, help the user decompose into sub-projects: what are the independent pieces, how do they relate, what order should they be built? Then brainstorm the first sub-project through the normal design flow. Each sub-project gets its own spec → plan → implementation cycle.
-- Once scope is settled, draft the actors table (see "The Actors Table" below) and confirm it with the user before other detailed questions
+- Once scope is settled, establish actor coverage (see "Actor Coverage" below) — a compact statement or the full table — and resolve material uncertainty with the user before other detailed questions
 - For appropriately-scoped projects, ask questions one at a time to refine the idea
 - Prefer multiple choice questions when possible, but open-ended is fine too
 - Only one question per message - if a topic needs more exploration, break it into multiple questions
@@ -147,35 +147,76 @@ digraph brainstorming {
 - Where existing code has problems that affect the work (e.g., a file that's grown too large, unclear boundaries, tangled responsibilities), include targeted improvements as part of the design - the way a good developer improves code they're working in.
 - Don't propose unrelated refactoring. Stay focused on what serves the current goal.
 
-## The Actors Table (mandatory first analysis)
+## Actor Coverage (mandatory analysis; the table when complexity justifies it)
 
-Before refining any idea, write the table:
+A design or plan that has not accounted for every material actor, surface, capability constraint,
+and success condition is mis-scoped. The ANALYSIS is mandatory for every design; the tabular
+format is not.
 
-| Who | From where | Doing what |
-|---|---|---|
-| every human user | each platform/surface they act from | the real job, in their words |
-| every agent/automation | its runtime and capabilities | what it actually does with this |
+**Compact actor statement** — for genuinely single-actor, single-surface, low-risk work, one
+sentence-pair suffices:
 
-Draft it from evidence (files, docs, the user's words) — never invent rows. Mark uncertain rows
-`UNCONFIRMED` and spend the first clarifying question(s) confirming or completing the table before
-proposing approaches.
+```markdown
+**Actor scope:** Developer using the CLI to correct one configuration value. Success means the
+existing validation command passes with the intended value.
+```
+
+**Full actors table** — required when ANY of these applies: multiple human users · multiple
+surfaces or runtimes · humans plus agents/automations · meaningful handoffs between systems ·
+materially different capabilities · different success conditions · cross-platform workflows ·
+agent-facing APIs, tools, or protocols · uncertainty about who actually consumes the result.
+
+```markdown
+| Actor | Surface/runtime | Job to be done | Capability constraints | Success test |
+|---|---|---|---|---|
+```
+
+- **Actor:** human, agent, automation, external system, or operational role.
+- **Surface/runtime:** browser, mobile app, shell, server process, scheduled job, API client, or other execution environment.
+- **Job to be done:** what the actor is actually trying to accomplish.
+- **Capability constraints:** limits that materially affect the design — e.g. cannot run shell commands, move files, retain state, access credentials, or receive interactive input.
+- **Success test:** the observable condition under which THIS actor calls the outcome successful.
 
 Rules:
+- Draft rows from inspected evidence and the user's statements — never invent rows. Mark uncertain entries `UNCONFIRMED` and resolve material uncertainty before proposing approaches.
 - A row per REAL combination — "the user" is never one row if they act from two surfaces with different capabilities (browser vs shell, phone vs desktop).
-- Each row gets its own success test: what does THIS actor do, and how fast/effortless must it be for them to call it done?
 - Capabilities constrain design: an actor that cannot move bytes, run a shell, or hold state needs a different pipeline, not a footnote. If two rows need two mechanisms, the design says so explicitly — one mechanism that serves only some rows is a mis-scoped design.
-- Reviews cannot catch what the scope never contained. This table is the frame-check; intelligence spent after a wrong frame only polishes the wrong thing (proven: a heavily-reviewed design once served one platform while the real task crossed two — e.g. browser Claude cannot move files; shell agents can).
+- Reviews cannot catch what the scope never contained. This is the frame-check; intelligence spent after a wrong frame only polishes the wrong thing (proven: a heavily-reviewed design once served one platform while the real task crossed two — e.g. browser Claude cannot move files; shell agents can).
 
 ## Codex Co-design (design partner, not reviewer)
 
-When a second strong model is available (the official `codex:codex-rescue` subagent or equivalent), dispatch it AFTER the 2-3 approaches exist and BEFORE presenting candidate design sections — as a collaborator working the same design questions, not a critic of finished output:
+Dispatch a second strong model (the official `codex:codex-rescue` subagent or equivalent) as a
+co-designer only when BOTH hold:
 
-- Give it: the actors table, intent + constraints + success criteria, repository evidence, and the OPEN design questions — especially ones where it is itself a user of the result (tool ergonomics, API shapes, agent workflows).
-- Ask for: concrete positions with reasoning, explicit DISAGREEMENTS with your working assumptions, and artifacts it would want as a user (exact config text, templates, naming).
-- Synthesize: adopt evidence-backed positions; where you reject one, record why. Disagreements between models are design signal — each one marks a decision that deserved more thought than either model alone would give it.
-- This complements, never replaces, the adversarial review gates: co-design shapes the design early; adversarial review attacks it once coherent. The same model can serve both roles because the prompts demand different postures.
+1. the capability is available, AND
+2. a material open design decision would benefit from an independent constructive perspective —
+   e.g. multiple actors or surfaces; consequential architecture choices; APIs, protocols, agent
+   interfaces, or tool ergonomics; decisions expensive to reverse; significant uncertainty between
+   approaches; Codex is itself a user or implementer of the result; the user asked for multi-model
+   design; or you have low confidence in your preferred approach.
 
-If no co-design capability exists, state that the perspective was unavailable and continue. If a dispatch was attempted and failed (start, auth, completion, or unusable output), report the failure and ask whether to retry or continue without it — same rules as the Design Review Gate; never silently substitute your own answer for a failed invocation.
+SKIP it — even when available — when the task is routine or mechanical, the approaches differ only
+trivially, no material design decision remains open, or the later adversarial review is
+sufficient. Never invoke it merely for symmetry.
+
+When triggered, dispatch AFTER the 2-3 approaches exist and BEFORE presenting candidate design
+sections — a collaborator working the open design questions, not a critic of finished output:
+
+- Give it: the actor coverage, intent + constraints + success criteria, repository evidence, and the OPEN design questions.
+- Ask for: concrete positions with reasoning, explicit disagreements with your working assumptions, and artifacts it would want as a user (exact config text, templates, naming).
+- Synthesize: adopt evidence-backed positions; where you reject one, record why. MATERIAL disagreement is design evidence — it exposes different assumptions, conflicting evidence, different actor needs, a consequential trade-off, feasibility uncertainty, or different failure modes. Ignore wording differences, preference-only redesign, stylistic disagreement, equivalent solutions with no material consequence, and speculative concerns outside the approved scope. You own the synthesis; do not vote between models.
+
+Reviewer independence: the same model may co-design here and adversarially review later, but the
+later review must run in a FRESH thread/context. Give that reviewer the approved intent, confirmed
+actor coverage, constraints, repository evidence, and the coherent candidate design — NOT the
+earlier co-design response, your defence of the chosen design, or commentary steering what it
+should or should not flag. This is not perfect independence, but it reduces anchoring and prevents
+the review from merely reaffirming its earlier position.
+
+If no co-design capability exists, state that the perspective was unavailable and continue — never
+block the workflow. If a dispatch was attempted and failed (start, auth, completion, or unusable
+output), report the failure and ask whether to retry or continue without it — same rules as the
+Design Review Gate; never silently substitute your own answer for a failed invocation.
 
 ## Design Review Gate
 

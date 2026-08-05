@@ -20,12 +20,27 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 ## Scope Check
 
-The spec's actors table ("who uses this, from where, doing what?") governs the plan's scope:
-every actor row and its success test must trace to one or more plan tasks (one task may serve
-several rows — traceability, not one-task-per-row). A plan that silently serves only some rows is
-mis-scoped. If the spec has no actors table, draft one from the spec/requirements, ask the user to
-confirm uncertain rows, and proceed only once every row has a success test — reviews cannot catch
-what the scope never contained.
+The spec's actor coverage ("who uses this, from where, doing what?") governs the plan's scope: a
+plan that has not accounted for every material actor, surface, capability constraint, and success
+condition is mis-scoped. Every material actor and success test must be covered by one or more
+tasks or by a clearly identified existing capability that requires no change — one task may serve
+several actors; traceability, not one-task-per-row. Where the spec carries a full actors table,
+add a lightweight traceability section to the plan:
+
+```markdown
+## Actor Coverage
+
+| Actor/success test | Covered by |
+|---|---|
+| [actor and observable success] | Task 2, Task 4 |
+| [actor and observable success] | Existing capability verified during Task 1 |
+```
+
+Skip this table when the spec's compact single-actor statement makes coverage self-evident —
+traceability is the goal, not paperwork. If the spec has no actor analysis at all, reconstruct the
+material actors from the spec/requirements, mark uncertainty `UNCONFIRMED`, ask only the necessary
+clarification, and proceed only once every material actor has a success test — reviews cannot
+catch what the scope never contained.
 
 If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
 
