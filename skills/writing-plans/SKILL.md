@@ -20,10 +20,12 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 ## Scope Check
 
-The spec's actors table ("who uses this, from where, doing what?") governs the plan's scope: every
-actor row must be served by some task, and a plan that silently serves only some rows is
-mis-scoped. If the spec has no actors table, stop and get one — reviews cannot catch what the
-scope never contained.
+The spec's actors table ("who uses this, from where, doing what?") governs the plan's scope:
+every actor row and its success test must trace to one or more plan tasks (one task may serve
+several rows — traceability, not one-task-per-row). A plan that silently serves only some rows is
+mis-scoped. If the spec has no actors table, draft one from the spec/requirements, ask the user to
+confirm uncertain rows, and proceed only once every row has a success test — reviews cannot catch
+what the scope never contained.
 
 If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
 

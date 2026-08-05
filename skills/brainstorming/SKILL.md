@@ -113,6 +113,7 @@ digraph brainstorming {
 - Check out the current project state first (files, docs, recent commits)
 - Before asking detailed questions, assess scope: if the request describes multiple independent subsystems (e.g., "build a platform with chat, file storage, billing, and analytics"), flag this immediately. Don't spend questions refining details of a project that needs to be decomposed first.
 - If the project is too large for a single spec, help the user decompose into sub-projects: what are the independent pieces, how do they relate, what order should they be built? Then brainstorm the first sub-project through the normal design flow. Each sub-project gets its own spec → plan → implementation cycle.
+- Once scope is settled, draft the actors table (see "The Actors Table" below) and confirm it with the user before other detailed questions
 - For appropriately-scoped projects, ask questions one at a time to refine the idea
 - Prefer multiple choice questions when possible, but open-ended is fine too
 - Only one question per message - if a topic needs more exploration, break it into multiple questions
@@ -155,24 +156,26 @@ Before refining any idea, write the table:
 | every human user | each platform/surface they act from | the real job, in their words |
 | every agent/automation | its runtime and capabilities | what it actually does with this |
 
+Draft it from evidence (files, docs, the user's words) — never invent rows. Mark uncertain rows
+`UNCONFIRMED` and spend the first clarifying question(s) confirming or completing the table before
+proposing approaches.
+
 Rules:
 - A row per REAL combination — "the user" is never one row if they act from two surfaces with different capabilities (browser vs shell, phone vs desktop).
 - Each row gets its own success test: what does THIS actor do, and how fast/effortless must it be for them to call it done?
 - Capabilities constrain design: an actor that cannot move bytes, run a shell, or hold state needs a different pipeline, not a footnote. If two rows need two mechanisms, the design says so explicitly — one mechanism that serves only some rows is a mis-scoped design.
-- Reviews cannot catch what the scope never contained. This table is the frame-check; intelligence spent after a wrong frame only polishes the wrong thing.
-
-Why this exists: a heavily-reviewed design once optimized one pipeline for weeks while the user's actual task crossed two platforms with different capabilities — every review polished the mis-scoped half. The table would have shown two pipelines on day one.
+- Reviews cannot catch what the scope never contained. This table is the frame-check; intelligence spent after a wrong frame only polishes the wrong thing (proven: a heavily-reviewed design once served one platform while the real task crossed two — e.g. browser Claude cannot move files; shell agents can).
 
 ## Codex Co-design (design partner, not reviewer)
 
-When a second strong model is available (the official `codex:codex-rescue` subagent or equivalent), use it BEFORE the candidate design hardens — as a collaborator working the same design questions, not a critic of finished output:
+When a second strong model is available (the official `codex:codex-rescue` subagent or equivalent), dispatch it AFTER the 2-3 approaches exist and BEFORE presenting candidate design sections — as a collaborator working the same design questions, not a critic of finished output:
 
 - Give it: the actors table, intent + constraints + success criteria, repository evidence, and the OPEN design questions — especially ones where it is itself a user of the result (tool ergonomics, API shapes, agent workflows).
 - Ask for: concrete positions with reasoning, explicit DISAGREEMENTS with your working assumptions, and artifacts it would want as a user (exact config text, templates, naming).
 - Synthesize: adopt evidence-backed positions; where you reject one, record why. Disagreements between models are design signal — each one marks a decision that deserved more thought than either model alone would give it.
 - This complements, never replaces, the adversarial review gates: co-design shapes the design early; adversarial review attacks it once coherent. The same model can serve both roles because the prompts demand different postures.
 
-If no second model is available, state that the co-design perspective was unavailable and continue.
+If no co-design capability exists, state that the perspective was unavailable and continue. If a dispatch was attempted and failed (start, auth, completion, or unusable output), report the failure and ask whether to retry or continue without it — same rules as the Design Review Gate; never silently substitute your own answer for a failed invocation.
 
 ## Design Review Gate
 
