@@ -43,7 +43,8 @@ digraph brainstorming {
     "Establish actor coverage" [shape=box];
     "Ask clarifying questions" [shape=box];
     "Propose 2-3 approaches" [shape=box];
-    "Codex co-design (if value-triggered)" [shape=box];
+    "Material open decision + capability available?" [shape=diamond];
+    "Codex co-design" [shape=box];
     "Present candidate design sections" [shape=box];
     "Candidate design coherent?" [shape=diamond];
     "Constructive + adversarial review" [shape=box];
@@ -70,8 +71,10 @@ digraph brainstorming {
     "Explore project context" -> "Establish actor coverage";
     "Establish actor coverage" -> "Ask clarifying questions";
     "Ask clarifying questions" -> "Propose 2-3 approaches";
-    "Propose 2-3 approaches" -> "Codex co-design (if value-triggered)";
-    "Codex co-design (if value-triggered)" -> "Present candidate design sections";
+    "Propose 2-3 approaches" -> "Material open decision + capability available?";
+    "Material open decision + capability available?" -> "Codex co-design" [label="yes"];
+    "Material open decision + capability available?" -> "Present candidate design sections" [label="no, skip"];
+    "Codex co-design" -> "Present candidate design sections";
     "Present candidate design sections" -> "Candidate design coherent?";
     "Candidate design coherent?" -> "Present candidate design sections" [label="no, revise"];
     "Candidate design coherent?" -> "Constructive + adversarial review" [label="yes"];
@@ -177,8 +180,8 @@ agent-facing APIs, tools, or protocols · uncertainty about who actually consume
 - **Capability constraints:** limits that materially affect the design — e.g. cannot run shell commands, move files, retain state, access credentials, or receive interactive input.
 - **Success test:** the observable condition under which THIS actor calls the outcome successful.
 
-Rules:
-- Draft rows from inspected evidence and the user's statements — never invent rows. Mark uncertain entries `UNCONFIRMED` and resolve material uncertainty before proposing approaches.
+Rules (they apply to the compact statement AND the table — the format changes, the discipline doesn't):
+- Draft actor coverage from inspected evidence and the user's statements — never invent actors. Mark ANY uncertain actor, surface, capability constraint, or success condition `UNCONFIRMED` and resolve material uncertainty before proposing approaches. Uncertainty about who consumes the result always triggers the full table.
 - A row per REAL combination — "the user" is never one row if they act from two surfaces with different capabilities (browser vs shell, phone vs desktop).
 - Capabilities constrain design: an actor that cannot move bytes, run a shell, or hold state needs a different pipeline, not a footnote. If two rows need two mechanisms, the design says so explicitly — one mechanism that serves only some rows is a mis-scoped design.
 - Reviews cannot catch what the scope never contained. This is the frame-check; intelligence spent after a wrong frame only polishes the wrong thing (proven: a heavily-reviewed design once served one platform while the real task crossed two — e.g. browser Claude cannot move files; shell agents can).

@@ -24,8 +24,9 @@ The spec's actor coverage ("who uses this, from where, doing what?") governs the
 plan that has not accounted for every material actor, surface, capability constraint, and success
 condition is mis-scoped. Every material actor and success test must be covered by one or more
 tasks or by a clearly identified existing capability that requires no change — one task may serve
-several actors; traceability, not one-task-per-row. Where the spec carries a full actors table,
-add a lightweight traceability section to the plan:
+several actors; traceability, not one-task-per-row. Add a lightweight traceability section to the
+plan whenever coverage is NOT self-evident from a valid compact single-actor statement — whether
+the actors came from the spec's full table or were reconstructed below:
 
 ```markdown
 ## Actor Coverage
@@ -36,11 +37,12 @@ add a lightweight traceability section to the plan:
 | [actor and observable success] | Existing capability verified during Task 1 |
 ```
 
-Skip this table when the spec's compact single-actor statement makes coverage self-evident —
+Skip the table only when the spec's compact single-actor statement makes coverage self-evident —
 traceability is the goal, not paperwork. If the spec has no actor analysis at all, reconstruct the
 material actors from the spec/requirements, mark uncertainty `UNCONFIRMED`, ask only the necessary
-clarification, and proceed only once every material actor has a success test — reviews cannot
-catch what the scope never contained.
+clarification, and proceed only once every material actor has a success test; if that
+reconstruction yields more than a single actor/surface, the plan's traceability section is
+required — reviews cannot catch what the scope never contained.
 
 If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
 
