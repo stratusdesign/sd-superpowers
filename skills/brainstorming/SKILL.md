@@ -40,8 +40,10 @@ You MUST create a task for each of these items and complete them in order:
 ```dot
 digraph brainstorming {
     "Explore project context" [shape=box];
+    "Map the actors table" [shape=box];
     "Ask clarifying questions" [shape=box];
     "Propose 2-3 approaches" [shape=box];
+    "Codex co-design (when available)" [shape=box];
     "Present candidate design sections" [shape=box];
     "Candidate design coherent?" [shape=diamond];
     "Constructive + adversarial review" [shape=box];
@@ -65,9 +67,11 @@ digraph brainstorming {
     "User reviews spec?" [shape=diamond];
     "Invoke writing-plans skill" [shape=doublecircle];
 
-    "Explore project context" -> "Ask clarifying questions";
+    "Explore project context" -> "Map the actors table";
+    "Map the actors table" -> "Ask clarifying questions";
     "Ask clarifying questions" -> "Propose 2-3 approaches";
-    "Propose 2-3 approaches" -> "Present candidate design sections";
+    "Propose 2-3 approaches" -> "Codex co-design (when available)";
+    "Codex co-design (when available)" -> "Present candidate design sections";
     "Present candidate design sections" -> "Candidate design coherent?";
     "Candidate design coherent?" -> "Present candidate design sections" [label="no, revise"];
     "Candidate design coherent?" -> "Constructive + adversarial review" [label="yes"];
