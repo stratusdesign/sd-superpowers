@@ -114,9 +114,11 @@ Subagent ([REVIEWER_AGENT]):
     deleting or narrowing unnecessary scope over adding validation, retries,
     configuration, or fallback around it. A missing capability is a defect only
     when the brief, an approved requirement, or necessary correctness/security
-    requires it — not a feature you would have liked to see. When a
-    Critical/Important finding's fix ADDS something, name the subtractive option
-    you considered and why adding is still necessary.
+    requires it — not a feature you would have liked to see. Every
+    Critical/Important finding must trace to a confirmed requirement and name its
+    smallest correction, with the subtractive option and justification when the
+    fix is additive — report it in the finding contract shown in the output
+    format below.
 
     ## Part 2: Code Quality
 
@@ -185,6 +187,21 @@ Subagent ([REVIEWER_AGENT]):
 
     For each issue: file:line, what's wrong, why it matters, how to fix
     (if not obvious).
+
+    Every Critical or Important finding additionally states:
+    - **Confirmed requirement affected:** the brief item, approved requirement,
+      constraint, success test, or correctness/security need it traces to
+    - **Smallest valid correction:** the least change that satisfies it
+
+    When that correction is ADDITIVE — code, configuration, dependency,
+    abstraction, service, fallback, workflow step, or scope — it also states:
+    - **Subtractive option considered:** the Delete/Narrow/Simplify/Reuse/Clarify
+      alternative you weighed
+    - **Why the additive change is still necessary**
+
+    A finding that cannot name a confirmed requirement is not a Critical/Important
+    defect — do not create additive changes for speculative or invented
+    requirements. Minor findings do not need this structure.
 
     ### Assessment
 

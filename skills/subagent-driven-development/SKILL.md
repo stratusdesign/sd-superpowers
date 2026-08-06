@@ -535,14 +535,18 @@ superpowers:requesting-code-review's
 the ledger's deferred-minor and parked lines so it can triage which must be
 fixed before merge.
 
-This broad final review remains a fresh, most-capable Claude review.
-Codex-authored tasks therefore receive independent review here as well as at
-their task gate; Claude-authored tasks that materially required cross-model
-challenge already received Codex at their task gate. Do not add a second
-whole-branch reviewer.
+This broad final review is a fresh, most-capable independent review. The
+controller selects its route per superpowers:requesting-code-review's role-based
+contract; for this whole-branch gate, escalate to the cross-family route only
+when the change is risky or consequential enough to justify it, never merely for
+symmetry. Tasks whose author already received an independent cross-family review
+at their task gate do not need it repeated here for that reason alone. Do not add
+a second whole-branch reviewer.
 
-If the final whole-branch review returns findings, dispatch ONE fix subagent
-with the complete findings list — not one fixer per finding.
+If the final whole-branch review returns findings, first verify and adjudicate
+them against the requirements and evidence — apply valid findings and reject
+unsupported, invented, or preference-only ones with reasoning — then dispatch ONE
+fix subagent with the complete accepted-findings list — not one fixer per finding.
 Per-finding fixers each rebuild context and re-run suites; a real
 session's final-review fix wave cost more than all its tasks combined.
 Then run exactly one scoped re-review of the fix wave

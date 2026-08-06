@@ -42,7 +42,7 @@ digraph brainstorming {
     "Explore project context" [shape=box];
     "Establish actor coverage" [shape=box];
     "Material open decision + capability available?" [shape=diamond];
-    "Co-design active:\nblind question + approach gen" [shape=box];
+    "Co-design active (state)" [shape=box];
     "Ask clarifying questions" [shape=box];
     "Propose 2-3 approaches" [shape=box];
     "Present candidate design sections" [shape=box];
@@ -70,10 +70,10 @@ digraph brainstorming {
 
     "Explore project context" -> "Establish actor coverage";
     "Establish actor coverage" -> "Material open decision + capability available?";
-    "Material open decision + capability available?" -> "Co-design active:\nblind question + approach gen" [label="yes"];
+    "Material open decision + capability available?" -> "Co-design active (state)" [label="yes"];
     "Material open decision + capability available?" -> "Ask clarifying questions" [label="no, skip"];
-    "Co-design active:\nblind question + approach gen" -> "Ask clarifying questions";
-    "Ask clarifying questions" -> "Propose 2-3 approaches";
+    "Co-design active (state)" -> "Ask clarifying questions";
+    "Ask clarifying questions" -> "Propose 2-3 approaches" [label="answers"];
     "Propose 2-3 approaches" -> "Present candidate design sections";
     "Present candidate design sections" -> "Candidate design coherent?";
     "Candidate design coherent?" -> "Present candidate design sections" [label="no, revise"];
@@ -106,6 +106,8 @@ digraph brainstorming {
     "User reviews spec?" -> "Invoke writing-plans skill" [label="approved"];
 }
 ```
+
+**"Co-design active" is a state, not a step.** It does not do work before discovery. When it holds: the *Ask clarifying questions* step runs blind SA + independent question generation, then merge/filter/present, BEFORE the user answers; then, after the user's answers, the *Propose 2-3 approaches* step runs blind SA + independent approach generation, then synthesis. Order is always discovery questions → user answers → approach generation, co-design on or off (see "Independent Co-design").
 
 **The terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY skill you invoke after brainstorming is writing-plans.
 
@@ -207,7 +209,7 @@ SKIP it — even when a second model is available — for routine or mechanical 
 
 **When it runs, it spans discovery and approaches — BOTH generated blind:**
 
-1. **Independent question generation (during discovery).** The SA drafts the questions it believes must be answered. The independent co-designer receives the same neutral brief and drafts its own. Neither sees the other's list before producing its own. The SA merges, deduplicates, orders, and presents them to the user. The SA never answers an unresolved question itself and never converts missing information into an invented requirement. Material answers may prompt targeted follow-ups from either side.
+1. **Independent question generation (during discovery).** The SA drafts the questions it believes must be answered. The independent co-designer receives the same neutral brief and drafts its own. Neither sees the other's list before producing its own. Then the SA does NOT present every question — raw model output can be long (an independent probe once produced 14). The SA: merges the two sets; deduplicates; drops questions already answered by inspected evidence; drops low-value curiosity; drops questions whose answers would not materially change the design; orders what remains naturally; and presents the smallest useful set. **Keep a question only if its answer could materially change actor coverage, scope, constraints, success conditions, architecture, implementation feasibility, security, or failure handling.** There is no numeric maximum — the rule is: ask the smallest set of questions needed to prevent material assumptions. Lists and small batches remain allowed. The SA never answers an unresolved question itself and never converts missing information into an invented requirement. Material answers may prompt targeted follow-ups from either side.
 2. **Independent approach generation (after discovery).** The SA develops its approaches and provisional recommendation; the independent co-designer develops approaches from the same neutral brief; neither sees the other's conclusions first. The SA then compares and synthesizes into the simplest complete candidate, before presenting candidate design sections.
 
 **Neutral brief — prevents SA anchoring.** The independent role receives: the user's verbatim statements or faithful summaries, confirmed actor coverage, confirmed constraints and success conditions, relevant repository files and observed facts, the unresolved facts and user-originated open questions (never either side's drafted discovery-question list — that stays private until both lists are complete), and authoritative external evidence where applicable. It must NOT receive: the SA's preferred solution or recommendation, a defence of any approach, another model's conclusions, or case-specific steering about what to flag or not flag. The fixed role rubric — the standing list of what a reviewer's or co-designer's role checks for — is not steering and is always allowed; the ban is on advocacy and per-finding steering, not on telling a role what its job is. This anti-anchoring rule applies to co-design AND to later review.

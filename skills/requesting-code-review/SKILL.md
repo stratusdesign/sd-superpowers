@@ -31,19 +31,28 @@ HEAD_SHA=$(git rev-parse HEAD)
 
 **2. Dispatch code reviewer subagent:**
 
-Dispatch a `general-purpose` subagent, filling the template at [code-reviewer.md](code-reviewer.md)
+The reviewer is a role, not a model brand. Choose the route by available
+capability, diff complexity and risk, authorship independence, and model-family
+independence where materially useful — always a fresh context, never the
+implementation context. Within Claude Code the route resolves to
+`general-purpose` (with an explicit model per subagent-driven-development Model
+Selection) or `codex:codex-rescue` (model/effort omitted unless the user chose
+them); do not invent unsupported routes. Prefer the cross-family route when the
+change is risky or consequential enough to justify it, not merely for symmetry.
+Fill the template at [code-reviewer.md](code-reviewer.md).
 
 **Placeholders:**
+- `[REVIEWER_AGENT]` / `[MODEL]` - the chosen route and its model per above
 - `{DESCRIPTION}` - Brief summary of what you built
 - `{PLAN_OR_REQUIREMENTS}` - What it should do
 - `{BASE_SHA}` - Starting commit
 - `{HEAD_SHA}` - Ending commit
 
-**3. Act on feedback:**
-- Fix Critical issues immediately
-- Fix Important issues before proceeding
+**3. Verify and adjudicate findings (do not auto-apply):**
+- Verify each Critical and Important finding against the requirements and evidence
+- Apply valid findings; reject unsupported, invented, or preference-only findings, with reasoning
 - Note Minor issues for later
-- Push back if reviewer is wrong (with reasoning)
+- The SA/controller owns the decision — there is no model vote, and no blanket "fix every Critical and Important finding"
 
 ## Example
 
@@ -68,7 +77,9 @@ HEAD_SHA=$(git rev-parse HEAD)
     Minor: Magic number (100) for reporting interval
   Assessment: Ready to proceed
 
-You: [Fix progress indicators]
+You: [Verify "Missing progress indicators" against the requirements — the plan
+     does require progress reporting, so the finding is valid. Apply it. Had it
+     been an unrequested addition, reject it with reasoning instead.]
 [Continue to Task 3]
 ```
 
@@ -83,8 +94,8 @@ You: [Fix progress indicators]
 
 **Never:**
 - Skip review because "it's simple"
-- Ignore Critical issues
-- Proceed with unfixed Important issues
+- Ignore a verified Critical finding
+- Proceed past a verified Important finding without adjudicating it
 - Argue with valid technical feedback
 
 **If reviewer wrong:**
