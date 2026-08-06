@@ -7,7 +7,7 @@ description: "You MUST use this before any creative work - creating features, bu
 
 Help turn ideas into fully formed designs and specs through natural collaborative dialogue.
 
-Start by understanding the current project context, then ask questions one at a time to refine the idea. Once you understand what you're building, present the design and get user approval.
+Start by understanding the current project context, then ask focused questions — a single question, a small thematic batch, or a concise list — to refine the idea. Once you understand what you're building, present the design and get user approval.
 
 <HARD-GATE>
 Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY project regardless of perceived simplicity.
@@ -23,15 +23,15 @@ You MUST create a task for each of these items and complete them in order:
 
 1. **Explore project context** — check files, docs, recent commits
 2. **Establish actor coverage — "who uses this, from where, doing what?"** — before any design question, account for every material actor, surface/runtime, capability constraint, and success condition. Trivial single-actor work takes one compact actor statement; complex work takes the full table. See "Actor Coverage" below.
-3. **Offer the visual companion just-in-time** — NOT upfront. The first time a question would genuinely be clearer shown than described, offer it then (its own message); on approval its browser tab opens for you. If no visual question ever arises, never offer it. See the Visual Companion section below.
-4. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
-5. **Propose 2-3 approaches** — with trade-offs and your recommendation
-6. **Codex co-design (value-triggered)** — when a second model is available AND a material open design decision would benefit from an independent perspective, dispatch Codex as a DESIGN PARTNER (not a reviewer) after the approaches exist. Skip it for routine work. See "Codex Co-design" below.
+3. **Decide independent co-design (value-triggered)** — right after actor coverage, judge whether BOTH hold: an independent model route is available AND a material open design decision would benefit from a second perspective. If yes, the discovery and approach steps below are generated blind (SA and the independent co-designer each work first, then the SA merges/synthesizes). If no, skip and run them normally. Revisit if discovery later exposes a material decision. See "Independent Co-design" below.
+4. **Offer the visual companion just-in-time** — NOT upfront. The first time a question would genuinely be clearer shown than described, offer it then (its own message); on approval its browser tab opens for you. If no visual question ever arises, never offer it. See the Visual Companion section below.
+5. **Ask clarifying questions** — as a single question, a small thematic batch, or a concise list; understand purpose/constraints/success criteria. When co-design is active, the SA and the independent co-designer draft questions blind, then the SA merges, dedupes, and presents.
+6. **Propose 2-3 approaches** — with trade-offs and your recommendation. When co-design is active, the SA and the independent co-designer develop approaches blind, then the SA synthesizes the simplest complete candidate.
 7. **Present candidate design** — in sections scaled to their complexity, validate each section with the user
 8. **Review and synthesize design** — after the full candidate is coherent, run constructive and adversarial review, synthesize against evidence and user intent, then get final user approval (see below)
 9. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
 10. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
-11. **Review and synthesize written spec** — run Codex adversarial/completeness review, verify and apply findings, and establish the canonical spec
+11. **Review and synthesize written spec** — run an independent adversarial/completeness review, verify and apply findings, and establish the canonical spec
 12. **User reviews written spec** — ask user to review the canonical spec before proceeding
 13. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
@@ -41,10 +41,10 @@ You MUST create a task for each of these items and complete them in order:
 digraph brainstorming {
     "Explore project context" [shape=box];
     "Establish actor coverage" [shape=box];
+    "Material open decision + capability available?" [shape=diamond];
+    "Co-design active (state)" [shape=box];
     "Ask clarifying questions" [shape=box];
     "Propose 2-3 approaches" [shape=box];
-    "Material open decision + capability available?" [shape=diamond];
-    "Codex co-design" [shape=box];
     "Present candidate design sections" [shape=box];
     "Candidate design coherent?" [shape=diamond];
     "Constructive + adversarial review" [shape=box];
@@ -59,7 +59,7 @@ digraph brainstorming {
     "Materially different candidate?" [shape=diamond];
     "Write design doc" [shape=box];
     "Spec self-review\n(fix inline)" [shape=box];
-    "Codex spec review" [shape=box];
+    "Independent spec review" [shape=box];
     "Synthesize canonical spec" [shape=box];
     "Spec blocker remains?" [shape=diamond];
     "Targeted spec re-check" [shape=box];
@@ -69,12 +69,12 @@ digraph brainstorming {
     "Invoke writing-plans skill" [shape=doublecircle];
 
     "Explore project context" -> "Establish actor coverage";
-    "Establish actor coverage" -> "Ask clarifying questions";
-    "Ask clarifying questions" -> "Propose 2-3 approaches";
-    "Propose 2-3 approaches" -> "Material open decision + capability available?";
-    "Material open decision + capability available?" -> "Codex co-design" [label="yes"];
-    "Material open decision + capability available?" -> "Present candidate design sections" [label="no, skip"];
-    "Codex co-design" -> "Present candidate design sections";
+    "Establish actor coverage" -> "Material open decision + capability available?";
+    "Material open decision + capability available?" -> "Co-design active (state)" [label="yes"];
+    "Material open decision + capability available?" -> "Ask clarifying questions" [label="no, skip"];
+    "Co-design active (state)" -> "Ask clarifying questions";
+    "Ask clarifying questions" -> "Propose 2-3 approaches" [label="answers"];
+    "Propose 2-3 approaches" -> "Present candidate design sections";
     "Present candidate design sections" -> "Candidate design coherent?";
     "Candidate design coherent?" -> "Present candidate design sections" [label="no, revise"];
     "Candidate design coherent?" -> "Constructive + adversarial review" [label="yes"];
@@ -93,8 +93,8 @@ digraph brainstorming {
     "Materially different candidate?" -> "User gives final approval?" [label="no, minor revision"];
     "User gives final approval?" -> "Write design doc" [label="yes"];
     "Write design doc" -> "Spec self-review\n(fix inline)";
-    "Spec self-review\n(fix inline)" -> "Codex spec review";
-    "Codex spec review" -> "Synthesize canonical spec";
+    "Spec self-review\n(fix inline)" -> "Independent spec review";
+    "Independent spec review" -> "Synthesize canonical spec";
     "Synthesize canonical spec" -> "Spec blocker remains?";
     "Spec blocker remains?" -> "Targeted spec re-check" [label="yes, once"];
     "Targeted spec re-check" -> "Resolve spec with user" [label="still unresolved"];
@@ -107,6 +107,8 @@ digraph brainstorming {
 }
 ```
 
+**"Co-design active" is a state, not a step.** It does not do work before discovery. When it holds: the *Ask clarifying questions* step runs blind SA + independent question generation, then merge/filter/present, BEFORE the user answers; then, after the user's answers, the *Propose 2-3 approaches* step runs blind SA + independent approach generation, then synthesis. Order is always discovery questions → user answers → approach generation, co-design on or off (see "Independent Co-design").
+
 **The terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY skill you invoke after brainstorming is writing-plans.
 
 ## The Process
@@ -117,9 +119,9 @@ digraph brainstorming {
 - Before asking detailed questions, assess scope: if the request describes multiple independent subsystems (e.g., "build a platform with chat, file storage, billing, and analytics"), flag this immediately. Don't spend questions refining details of a project that needs to be decomposed first.
 - If the project is too large for a single spec, help the user decompose into sub-projects: what are the independent pieces, how do they relate, what order should they be built? Then brainstorm the first sub-project through the normal design flow. Each sub-project gets its own spec → plan → implementation cycle.
 - Once scope is settled, establish actor coverage (see "Actor Coverage" below) — a compact statement or the full table — and resolve material uncertainty with the user before other detailed questions
-- For appropriately-scoped projects, ask questions one at a time to refine the idea
-- Prefer multiple choice questions when possible, but open-ended is fine too
-- Only one question per message - if a topic needs more exploration, break it into multiple questions
+- For appropriately-scoped projects, ask focused questions to refine the idea — choose the format that makes discovery efficient: a single question, a small thematic batch of related questions, or a concise numbered list
+- Batch when the questions are related and independently answerable and batching avoids conversational delay; use a single follow-up when one answer determines what to ask next, or when a point is ambiguous or sensitive
+- Keep questions open and concrete — never embed your preferred solution, and never restrict the user to agent-generated options. Multiple-choice may make a question easier to grasp, but it must not stop the user from giving another answer. Leave room for answers neither model anticipated
 - Focus on understanding: purpose, constraints, success criteria
 
 **Exploring approaches:**
@@ -181,63 +183,80 @@ agent-facing APIs, tools, or protocols · uncertainty about who actually consume
 - **Success test:** the observable condition under which THIS actor calls the outcome successful.
 
 Rules (they apply to the compact statement AND the table — the format changes, the discipline doesn't):
-- Draft actor coverage from inspected evidence and the user's statements — never invent actors. Mark ANY uncertain actor, surface, capability constraint, or success condition `UNCONFIRMED` and resolve material uncertainty before proposing approaches. Uncertainty about who consumes the result always triggers the full table.
+- Draft actor coverage from inspected evidence and the user's statements (repository files, project docs, observed workflows, confirmed external constraints) — never invent actors or requirements. Mark ANY uncertain actor, surface, capability constraint, or success condition `UNCONFIRMED` and resolve material uncertainty before proposing approaches; minor uncertainty may remain visibly marked where it does not prevent a valid design. Uncertainty about who consumes the result always triggers the full table.
 - A row per REAL combination — "the user" is never one row if they act from two surfaces with different capabilities (browser vs shell, phone vs desktop).
 - Capabilities constrain design: an actor that cannot move bytes, run a shell, or hold state needs a different pipeline, not a footnote. If two rows need two mechanisms, the design says so explicitly — one mechanism that serves only some rows is a mis-scoped design.
 - Reviews cannot catch what the scope never contained. This is the frame-check; intelligence spent after a wrong frame only polishes the wrong thing (proven: a heavily-reviewed design once served one platform while the real task crossed two — e.g. browser Claude cannot move files; shell agents can).
 
-## Codex Co-design (design partner, not reviewer)
+## Independent Co-design (design partner, not reviewer)
 
-Dispatch a second strong model (the official `codex:codex-rescue` subagent or equivalent) as a
-co-designer only when BOTH hold:
+**Roles are defined independently of model brand.** The same rules hold whichever model fills a role:
 
-1. the capability is available, AND
-2. a material open design decision would benefit from an independent constructive perspective —
-   e.g. multiple actors or surfaces; consequential architecture choices; APIs, protocols, agent
-   interfaces, or tool ergonomics; decisions expensive to reverse; significant uncertainty between
-   approaches; Codex is itself a user or implementer of the result; the user asked for multi-model
-   design; or you have low confidence in your preferred approach.
+- **Primary System Agent (SA):** owns user dialogue, orchestration, evidence gathering, synthesis, adjudication, the canonical design and spec, and every final decision.
+- **Independent co-designer:** works from a fresh context and a neutral brief; proposes discovery questions, develops independent approaches, names assumptions and trade-offs. It does NOT make the final decision.
+- **Reviewer / implementer / verifier** are defined in the review gates below and in subagent-driven-development.
 
-SKIP it — even when available — when the task is routine or mechanical, the approaches differ only
-trivially, no material design decision remains open, or the later adversarial review is
-sufficient. Never invoke it merely for symmetry.
+Verification comes from repository evidence, version-control history, tests, type/compiler checks, runtime behaviour, authoritative documentation, and observed tool output — a model statement is not verification by itself.
 
-When triggered, dispatch AFTER the 2-3 approaches exist and BEFORE presenting candidate design
-sections — a collaborator working the open design questions, not a critic of finished output:
+**Capability bindings (Claude Code today).** The SA is the parent session. An independent role may be filled by a fresh separate context of the same family, or by the `codex:codex-rescue` subagent. Where practical, use a DIFFERENT model family for the independent role; when only one family is available, use a fresh isolated context and disclose that model-family independence was unavailable. In another harness, bind these same roles to the routes that actually exist there — never invent a route (e.g. a reverse dispatch) that is not installed and verified merely to make the prose symmetrical.
 
-- Give it: the actor coverage, intent + constraints + success criteria, repository evidence, and the OPEN design questions.
-- Ask for: concrete positions with reasoning, explicit disagreements with your working assumptions, and artifacts it would want as a user (exact config text, templates, naming).
-- Synthesize: adopt evidence-backed positions; where you reject one, record why. MATERIAL disagreement is design evidence — it exposes different assumptions, conflicting evidence, different actor needs, a consequential trade-off, feasibility uncertainty, or different failure modes. Ignore wording differences, preference-only redesign, stylistic disagreement, equivalent solutions with no material consequence, and speculative concerns outside the approved scope. You own the synthesis; do not vote between models.
+**When to run co-design — BOTH must hold:**
 
-Reviewer independence: the same model may co-design here and adversarially review later, but the
-later review must run in a FRESH thread/context. Give that reviewer the approved intent, confirmed
-actor coverage, constraints, repository evidence, and the coherent candidate design — NOT the
-earlier co-design response, your defence of the chosen design, or commentary steering what it
-should or should not flag. This is not perfect independence, but it reduces anchoring and prevents
-the review from merely reaffirming its earlier position.
+1. an independent capability is available, AND
+2. a material open design decision would benefit from a second constructive perspective — multiple actors or surfaces; materially different actor capabilities; consequential or hard-to-reverse architecture; APIs, protocols, agent interfaces, or tool ergonomics; several credible approaches with real trade-offs; significant uncertainty; the independent model is itself a user or implementer of the result; the user asked for multi-model design; or low SA confidence in the preferred approach.
 
-If no co-design capability exists, state that the perspective was unavailable and continue — never
-block the workflow. If a dispatch was attempted and failed (start, auth, completion, or unusable
-output), report the failure and ask whether to retry or continue without it — same rules as the
-Design Review Gate; never silently substitute your own answer for a failed invocation.
+SKIP it — even when a second model is available — for routine or mechanical work, trivially different approaches, no open material decision, or when the later review gate is sufficient challenge. Never invoke for symmetry. When skipped, the SA still performs proportionate actor, requirement, and success-condition discovery, and the review gates remain available where justified.
+
+**When it runs, it spans discovery and approaches — BOTH generated blind:**
+
+1. **Independent question generation (during discovery).** The SA drafts the questions it believes must be answered. The independent co-designer receives the same neutral brief and drafts its own. Neither sees the other's list before producing its own. Then the SA does NOT present every question — raw model output can be long (an independent probe once produced 14). The SA: merges the two sets; deduplicates; drops questions already answered by inspected evidence; drops low-value curiosity; drops questions whose answers would not materially change the design; orders what remains naturally; and presents the smallest useful set. **Keep a question only if its answer could materially change actor coverage, scope, constraints, success conditions, architecture, implementation feasibility, security, or failure handling.** There is no numeric maximum — the rule is: ask the smallest set of questions needed to prevent material assumptions. Lists and small batches remain allowed. The SA never answers an unresolved question itself and never converts missing information into an invented requirement. Material answers may prompt targeted follow-ups from either side.
+2. **Independent approach generation (after discovery).** The SA develops its approaches and provisional recommendation; the independent co-designer develops approaches from the same neutral brief; neither sees the other's conclusions first. The SA then compares and synthesizes into the simplest complete candidate, before presenting candidate design sections.
+
+**Neutral brief — prevents SA anchoring.** The independent role receives: the user's verbatim statements or faithful summaries, confirmed actor coverage, confirmed constraints and success conditions, relevant repository files and observed facts, the unresolved facts and user-originated open questions (never either side's drafted discovery-question list — that stays private until both lists are complete), and authoritative external evidence where applicable. It must NOT receive: the SA's preferred solution or recommendation, a defence of any approach, another model's conclusions, or case-specific steering about what to flag or not flag. The fixed role rubric — the standing list of what a reviewer's or co-designer's role checks for — is not steering and is always allowed; the ban is on advocacy and per-finding steering, not on telling a role what its job is. This anti-anchoring rule applies to co-design AND to later review.
+
+**Synthesis — material disagreement only.** Adopt evidence-backed positions; where you reject one, record why. MATERIAL disagreement is design evidence — different assumptions, conflicting evidence, different actor needs, a consequential trade-off, feasibility uncertainty, or different failure/security modes. Ignore wording, style, preference-only redesign, equivalent solutions with no material consequence, and speculative concerns outside confirmed scope. Explain material accepted and rejected positions where it helps the user understand the design. You own the synthesis; do not vote between models, and do not build an exhaustive disagreement ledger.
+
+**Reviewer independence.** The same model may co-design here and adversarially review later, but the later review runs in a FRESH context with the neutral review brief (approved intent, confirmed actor coverage, constraints, repository evidence, and the coherent candidate) — NOT the earlier co-design response, your defence of the chosen design, or commentary steering what it should or should not flag. This is not perfect independence, but it reduces anchoring and prevents the review from merely reaffirming its earlier position.
+
+**Degradation.** If no independent capability exists, state that the independent perspective was unavailable and continue — use a fresh isolated self-review where useful; never fabricate a second-model result, never block. If a dispatch was attempted and failed (setup, auth, dispatch, completion, or unusable output), report the actionable failure and ask whether to retry or explicitly continue with reduced independence — same rules as the Design Review Gate; never silently substitute your own answer for a failed invocation.
+
+## Simplicity and Defect Handling (governing rules)
+
+These govern design, synthesis, and every review gate below — they are not optional reviewer advice.
+
+**Simplicity is the default.** Select the simplest complete solution. Every added component, abstraction, dependency, configuration option, workflow stage, or requirement carries the burden of proof — justified only by confirmed actor needs, confirmed constraints, observable success conditions, or necessary correctness, security, or maintainability. Do not add architecture for hypothetical scale, possible future consumers, unrequested extensibility, abstract purity, model preference, or convention with no current need. When two solutions both fully satisfy the requirement, choose the simpler. Simple never means incomplete, fragile, insecure, or untestable — it means no unjustified machinery. Visible process scales with complexity too: a trivial task gets a compact actor statement, brief discovery (a single question or short list as warranted — sometimes none beyond a confirmation), and a concise design; a cross-platform or agentic system may need the full process.
+
+**Subtractive before additive.** For each material finding, evaluate remedies in order — **Delete → Narrow → Simplify → Reuse → Clarify → Add only what remains necessary.** Before recommending anything additive, ask: can the problematic scope be removed; is the defect caused by unnecessary scope or an invented/unconfirmed requirement; can an existing mechanism solve it; can the failure state be made impossible; would the fix cost more complexity than the defect warrants? A missing capability is a defect only when a confirmed actor, approved requirement, stated constraint, observable success test, or necessary correctness/security demands it. Reject additive recommendations that have no confirmed need.
+
+Every BLOCKER or IMPORTANT finding reports the confirmed requirement affected and the smallest valid correction. A finding whose correction ADDS something reports two more lines — the subtractive option considered, and why adding is still necessary:
+
+```text
+Finding:
+Confirmed requirement affected:
+Smallest valid correction:
+(additive corrections only) Subtractive option considered:
+(additive corrections only) Why an additive change is still necessary:
+```
+
+Do not force this onto OPTIONAL or minor findings, where it costs more than it returns.
 
 ## Design Review Gate
 
 Run this gate once the project context is inspected, intent and constraints are understood, approaches have been explored, and the complete candidate design is coherent. Do not run it on every message or unfinished design section.
 
-Use [design-reviewer-prompt.md](design-reviewer-prompt.md) to dispatch:
+Use [design-reviewer-prompt.md](design-reviewer-prompt.md) to dispatch two independent read-only reviewers filling distinct roles:
 
-1. a Claude constructive reviewer; and
-2. a Codex adversarial reviewer through the official Codex integration when available.
+1. a constructive reviewer; and
+2. an adversarial reviewer.
 
-Both reviews are read-only and capability-dependent. If a reviewer capability is absent before dispatch, apply that reviewer's rubric yourself, tell the user which independent perspective was unavailable, and continue — never invent a command or block the generic workflow. If an available reviewer fails to start, authenticate, finish, or return usable output, report the actionable failure and ask whether to retry or proceed with an explicitly degraded self-review. Do not silently substitute your own answer for a failed invocation.
+Bind these roles to available routes — a fresh same-family context and/or the `codex:codex-rescue` subagent — preferring a different model family for at least one where practical. Both reviews are read-only and capability-dependent. If a reviewer capability is absent before dispatch, apply that reviewer's rubric yourself, tell the user which independent perspective was unavailable, and continue — never invent a command or block the workflow. If an available reviewer fails to start, authenticate, finish, or return usable output, report the actionable failure and ask whether to retry or proceed with an explicitly degraded self-review. Do not silently substitute your own answer for a failed invocation.
 
 **Synthesis:**
 
 - Compare both reviews with the user's stated intent and constraints.
 - Verify load-bearing factual disputes against repository evidence or authoritative documentation where practical. Mark material claims `VERIFIED`, `INFERRED`, or `UNSUPPORTED` when that distinction helps the decision.
-- Ask: **Can this be materially simpler while still fully solving the current requirement?** Remove premature abstractions, speculative extensibility, and unnecessary interfaces, adapters, factories, service layers, dependencies, or configuration. Simple must remain correct and maintainable.
-- Accept evidence-backed findings; reject preference-only redesign and invented requirements. Codex is an input, not final authority. Do not vote.
+- Apply **Simplicity and Defect Handling** above: ask whether this can be materially simpler while still fully solving the current requirement, and resolve each finding subtractive-first (Delete → Narrow → Simplify → Reuse → Clarify → Add only what remains). Remove premature abstractions, speculative extensibility, and unnecessary interfaces, adapters, factories, service layers, dependencies, or configuration. Simple must remain correct and maintainable.
+- Accept evidence-backed findings; reject preference-only redesign and invented requirements. An independent reviewer is an input, not final authority. Do not vote.
 - Present the synthesized design and explain material accepted or rejected findings before asking for final user approval.
 
 Run at most one targeted second review using the scoped contract in [design-reviewer-prompt.md](design-reviewer-prompt.md), and only when a blocker remains, an important factual dispute is unresolved, or synthesis materially changed the design and needs re-checking. Dispatch only the reviewer needed for that issue. Optional findings never trigger another pass. If a material issue remains after the targeted pass, surface it to the user instead of starting a debate loop.
@@ -264,19 +283,19 @@ Fix any issues inline. No need to re-review — just fix and move on.
 
 **Written Spec Review Gate:**
 
-After self-review, dispatch a fresh, read-only Codex review using [spec-document-reviewer-prompt.md](spec-document-reviewer-prompt.md). The central question is: **Could another competent coding agent implement this specification without making material assumptions?**
+After self-review, dispatch a fresh, read-only independent review using [spec-document-reviewer-prompt.md](spec-document-reviewer-prompt.md). The central question is: **Could another competent coding agent implement this specification without making material assumptions?**
 
 The independent review must challenge blockers, ambiguity, unsupported or hallucinated claims, missing acceptance criteria and tests, invented requirements, unnecessary complexity, missing edge cases, and unimplementable dependencies. It must ask whether the requirement can be solved materially more simply without becoming brittle or incomplete.
 
-Use the official `codex:codex-rescue` subagent for the in-conversation spec review when available. Apply the same capability-absence and invocation-failure handling as the Design Review Gate: disclose degraded self-review when capability is absent; for setup, authentication, dispatch, completion, or result failure, report the failure and ask whether to retry or explicitly continue degraded. Never fabricate reviewer output.
+Bind the independent reviewer role to an available route — the `codex:codex-rescue` subagent or a fresh separate context — preferring a different model family where practical. Apply the same capability-absence and invocation-failure handling as the Design Review Gate: disclose degraded self-review when capability is absent; for setup, authentication, dispatch, completion, or result failure, report the failure and ask whether to retry or explicitly continue degraded. Never fabricate reviewer output.
 
 Synthesize findings into the spec before asking the user to review it:
 
 - Before canonicalizing the spec, identify and verify its load-bearing technical claims and repository assumptions, including every one flagged by review, against repository evidence, observed output, or authoritative documentation. If verification is not practical, label the claim `UNSUPPORTED` and resolve it with the user; never present it as fact or silently proceed.
 - Resolve blockers, ambiguities, missing acceptance criteria, missing tests, and implementability gaps.
 - Reject invented requirements and preference-only redesign that conflict with approved intent.
-- Ask: **Can this be materially simpler while still fully solving the current requirement?**
-- The primary agent owns the canonical spec. Codex reports findings; it does not rewrite the spec or make the final decision.
+- Ask: **Can this be materially simpler while still fully solving the current requirement?** Resolve findings subtractive-first per **Simplicity and Defect Handling** above.
+- The SA owns the canonical spec. The independent reviewer reports findings; it does not rewrite the spec or make the final decision.
 
 Use at most one targeted re-check, only for an unresolved blocker or material factual dispute after synthesis. Optional or advisory findings do not trigger another pass. If a material issue remains, resolve it with the user instead of starting another reviewer loop.
 
