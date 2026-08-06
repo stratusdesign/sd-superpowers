@@ -169,11 +169,12 @@ independence, not by model brand or availability.
 Route implementation by value and risk first, then choose the least powerful
 model that can handle the role. Do not calculate a score.
 
-**High-value or high-risk implementation:** dispatch the official
-`codex:codex-rescue` subagent with the same task brief, context, report path,
-and implementer contract described below. Prepend `--wait --fresh` to the
-initial Codex request so SDD receives a terminal result rather than a
-background-job acknowledgement. Prefer Codex when the task involves
+**High-value or high-risk implementation:** dispatch the high-assurance
+implementer route — the cross-family route, `codex:codex-rescue` in Claude Code
+today — with the same task brief, context, report path, and implementer
+contract described below. Prepend `--wait --fresh` to that route's initial
+request so SDD receives a terminal result rather than a background-job
+acknowledgement. Prefer the cross-family route when the task involves
 architecture changes, authentication or authorization, security-sensitive
 code, payments, migrations, data integrity, critical business logic,
 concurrency, broad cross-codebase effects, difficult integrations, or failure
@@ -186,14 +187,16 @@ model name for `general-purpose`. Do not invent a Codex model identifier or
 put Codex in the Claude `model` field. Leave Codex model and effort unset unless
 the user explicitly chose them.
 
-**Routine or mechanical implementation:** dispatch `general-purpose` with an
-explicit suitable Claude model. Examples include isolated changes with a clear
-spec, straightforward CRUD or UI work, boilerplate, routine configuration,
-ordinary tests, and mechanical refactoring.
+**Routine or mechanical implementation:** dispatch the standard same-family
+implementer route (`general-purpose` with an explicit suitable model in Claude
+Code). Examples include isolated changes with a clear spec, straightforward
+CRUD or UI work, boilerplate, routine configuration, ordinary tests, and
+mechanical refactoring.
 
-**Neither class clearly dominates:** use the standard Claude integration and
-judgment tier below. Escalate to Codex only when the actual task has a
-high-value/high-risk signal, not merely because Codex is available.
+**Neither class clearly dominates:** use the standard same-family route and
+judgment tier below. Escalate to the cross-family route only when the actual
+task has a high-value/high-risk signal, not merely because that route is
+available.
 
 If the Codex capability is absent before dispatch, use the most capable
 available Claude implementer and disclose the degraded routing. If Codex is
@@ -241,11 +244,12 @@ authentication, dispatch, completion, or result retrieval fails, report the
 actionable failure and ask whether to retry or explicitly fall back to Claude.
 Never claim an independent Codex review when no usable Codex result exists.
 
-**Fix-loop escalation (rounds 4-5)**: for a Claude implementer, use a model at
-least one tier above the implementer that got stuck. For a Codex implementer,
-dispatch a fresh `codex:codex-rescue` agent with the existing brief, report,
-and findings; leave its model/effort unset unless the user chose them. Fresh
-context supplies the escalation without inventing a Codex tier.
+**Fix-loop escalation (rounds 4-5)**: for a same-family implementer, use a
+model at least one tier above the implementer that got stuck. For a cross-family
+(`codex:codex-rescue`) implementer, dispatch a fresh agent on that route with
+the existing brief, report, and findings; leave its model/effort unset unless
+the user chose them. Fresh context supplies the escalation without inventing a
+cross-family tier.
 
 **Always specify the model explicitly when dispatching a Claude subagent.**
 An omitted Claude model inherits your session's model — often the most capable

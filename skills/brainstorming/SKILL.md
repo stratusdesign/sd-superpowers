@@ -23,10 +23,10 @@ You MUST create a task for each of these items and complete them in order:
 
 1. **Explore project context** — check files, docs, recent commits
 2. **Establish actor coverage — "who uses this, from where, doing what?"** — before any design question, account for every material actor, surface/runtime, capability constraint, and success condition. Trivial single-actor work takes one compact actor statement; complex work takes the full table. See "Actor Coverage" below.
-3. **Offer the visual companion just-in-time** — NOT upfront. The first time a question would genuinely be clearer shown than described, offer it then (its own message); on approval its browser tab opens for you. If no visual question ever arises, never offer it. See the Visual Companion section below.
-4. **Ask clarifying questions** — as a single question, a small thematic batch, or a concise list; understand purpose/constraints/success criteria
-5. **Propose 2-3 approaches** — with trade-offs and your recommendation
-6. **Independent co-design (value-triggered)** — when an independent model route is available AND a material open design decision would benefit from a second perspective, run co-design as a DESIGN PARTNER (not a reviewer): blind question generation during discovery, then blind approach generation. Skip it for routine, mechanical, or genuinely simple work. See "Independent Co-design" below.
+3. **Decide independent co-design (value-triggered)** — right after actor coverage, judge whether BOTH hold: an independent model route is available AND a material open design decision would benefit from a second perspective. If yes, the discovery and approach steps below are generated blind (SA and the independent co-designer each work first, then the SA merges/synthesizes). If no, skip and run them normally. Revisit if discovery later exposes a material decision. See "Independent Co-design" below.
+4. **Offer the visual companion just-in-time** — NOT upfront. The first time a question would genuinely be clearer shown than described, offer it then (its own message); on approval its browser tab opens for you. If no visual question ever arises, never offer it. See the Visual Companion section below.
+5. **Ask clarifying questions** — as a single question, a small thematic batch, or a concise list; understand purpose/constraints/success criteria. When co-design is active, the SA and the independent co-designer draft questions blind, then the SA merges, dedupes, and presents.
+6. **Propose 2-3 approaches** — with trade-offs and your recommendation. When co-design is active, the SA and the independent co-designer develop approaches blind, then the SA synthesizes the simplest complete candidate.
 7. **Present candidate design** — in sections scaled to their complexity, validate each section with the user
 8. **Review and synthesize design** — after the full candidate is coherent, run constructive and adversarial review, synthesize against evidence and user intent, then get final user approval (see below)
 9. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
@@ -41,10 +41,10 @@ You MUST create a task for each of these items and complete them in order:
 digraph brainstorming {
     "Explore project context" [shape=box];
     "Establish actor coverage" [shape=box];
+    "Material open decision + capability available?" [shape=diamond];
+    "Co-design active:\nblind question + approach gen" [shape=box];
     "Ask clarifying questions" [shape=box];
     "Propose 2-3 approaches" [shape=box];
-    "Material open decision + capability available?" [shape=diamond];
-    "Independent co-design" [shape=box];
     "Present candidate design sections" [shape=box];
     "Candidate design coherent?" [shape=diamond];
     "Constructive + adversarial review" [shape=box];
@@ -69,12 +69,12 @@ digraph brainstorming {
     "Invoke writing-plans skill" [shape=doublecircle];
 
     "Explore project context" -> "Establish actor coverage";
-    "Establish actor coverage" -> "Ask clarifying questions";
+    "Establish actor coverage" -> "Material open decision + capability available?";
+    "Material open decision + capability available?" -> "Co-design active:\nblind question + approach gen" [label="yes"];
+    "Material open decision + capability available?" -> "Ask clarifying questions" [label="no, skip"];
+    "Co-design active:\nblind question + approach gen" -> "Ask clarifying questions";
     "Ask clarifying questions" -> "Propose 2-3 approaches";
-    "Propose 2-3 approaches" -> "Material open decision + capability available?";
-    "Material open decision + capability available?" -> "Independent co-design" [label="yes"];
-    "Material open decision + capability available?" -> "Present candidate design sections" [label="no, skip"];
-    "Independent co-design" -> "Present candidate design sections";
+    "Propose 2-3 approaches" -> "Present candidate design sections";
     "Present candidate design sections" -> "Candidate design coherent?";
     "Candidate design coherent?" -> "Present candidate design sections" [label="no, revise"];
     "Candidate design coherent?" -> "Constructive + adversarial review" [label="yes"];
@@ -210,7 +210,7 @@ SKIP it — even when a second model is available — for routine or mechanical 
 1. **Independent question generation (during discovery).** The SA drafts the questions it believes must be answered. The independent co-designer receives the same neutral brief and drafts its own. Neither sees the other's list before producing its own. The SA merges, deduplicates, orders, and presents them to the user. The SA never answers an unresolved question itself and never converts missing information into an invented requirement. Material answers may prompt targeted follow-ups from either side.
 2. **Independent approach generation (after discovery).** The SA develops its approaches and provisional recommendation; the independent co-designer develops approaches from the same neutral brief; neither sees the other's conclusions first. The SA then compares and synthesizes into the simplest complete candidate, before presenting candidate design sections.
 
-**Neutral brief — prevents SA anchoring.** The independent role receives: the user's verbatim statements or faithful summaries, confirmed actor coverage, confirmed constraints and success conditions, relevant repository files and observed facts, the open questions, and authoritative external evidence where applicable. It must NOT receive: the SA's preferred solution or recommendation, any defence of an approach, another model's conclusions, or instructions telling it what to find or not find. This anti-anchoring rule applies to co-design AND to later review.
+**Neutral brief — prevents SA anchoring.** The independent role receives: the user's verbatim statements or faithful summaries, confirmed actor coverage, confirmed constraints and success conditions, relevant repository files and observed facts, the unresolved facts and user-originated open questions (never either side's drafted discovery-question list — that stays private until both lists are complete), and authoritative external evidence where applicable. It must NOT receive: the SA's preferred solution or recommendation, a defence of any approach, another model's conclusions, or case-specific steering about what to flag or not flag. The fixed role rubric — the standing list of what a reviewer's or co-designer's role checks for — is not steering and is always allowed; the ban is on advocacy and per-finding steering, not on telling a role what its job is. This anti-anchoring rule applies to co-design AND to later review.
 
 **Synthesis — material disagreement only.** Adopt evidence-backed positions; where you reject one, record why. MATERIAL disagreement is design evidence — different assumptions, conflicting evidence, different actor needs, a consequential trade-off, feasibility uncertainty, or different failure/security modes. Ignore wording, style, preference-only redesign, equivalent solutions with no material consequence, and speculative concerns outside confirmed scope. Explain material accepted and rejected positions where it helps the user understand the design. You own the synthesis; do not vote between models, and do not build an exhaustive disagreement ledger.
 
@@ -222,21 +222,21 @@ SKIP it — even when a second model is available — for routine or mechanical 
 
 These govern design, synthesis, and every review gate below — they are not optional reviewer advice.
 
-**Simplicity is the default.** Select the simplest complete solution. Every added component, abstraction, dependency, configuration option, workflow stage, or requirement carries the burden of proof — justified only by confirmed actor needs, confirmed constraints, observable success conditions, or necessary correctness, security, or maintainability. Do not add architecture for hypothetical scale, possible future consumers, unrequested extensibility, abstract purity, model preference, or convention with no current need. When two solutions both fully satisfy the requirement, choose the simpler. Simple never means incomplete, fragile, insecure, or untestable — it means no unjustified machinery. Visible process scales with complexity too: a trivial task gets a compact actor statement, a short question list, and a concise design; a cross-platform or agentic system may need the full process.
+**Simplicity is the default.** Select the simplest complete solution. Every added component, abstraction, dependency, configuration option, workflow stage, or requirement carries the burden of proof — justified only by confirmed actor needs, confirmed constraints, observable success conditions, or necessary correctness, security, or maintainability. Do not add architecture for hypothetical scale, possible future consumers, unrequested extensibility, abstract purity, model preference, or convention with no current need. When two solutions both fully satisfy the requirement, choose the simpler. Simple never means incomplete, fragile, insecure, or untestable — it means no unjustified machinery. Visible process scales with complexity too: a trivial task gets a compact actor statement, brief discovery (a single question or short list as warranted — sometimes none beyond a confirmation), and a concise design; a cross-platform or agentic system may need the full process.
 
 **Subtractive before additive.** For each material finding, evaluate remedies in order — **Delete → Narrow → Simplify → Reuse → Clarify → Add only what remains necessary.** Before recommending anything additive, ask: can the problematic scope be removed; is the defect caused by unnecessary scope or an invented/unconfirmed requirement; can an existing mechanism solve it; can the failure state be made impossible; would the fix cost more complexity than the defect warrants? A missing capability is a defect only when a confirmed actor, approved requirement, stated constraint, observable success test, or necessary correctness/security demands it. Reject additive recommendations that have no confirmed need.
 
-For each BLOCKING or IMPORTANT finding — especially an additive one — report:
+Every BLOCKER or IMPORTANT finding reports the confirmed requirement affected and the smallest valid correction. A finding whose correction ADDS something reports two more lines — the subtractive option considered, and why adding is still necessary:
 
 ```text
 Finding:
 Confirmed requirement affected:
 Smallest valid correction:
-Subtractive option considered:
-Why an additive change is necessary, if one is proposed:
+(additive corrections only) Subtractive option considered:
+(additive corrections only) Why an additive change is still necessary:
 ```
 
-Do not force this template onto minor findings, where it costs more than it returns.
+Do not force this onto OPTIONAL or minor findings, where it costs more than it returns.
 
 ## Design Review Gate
 

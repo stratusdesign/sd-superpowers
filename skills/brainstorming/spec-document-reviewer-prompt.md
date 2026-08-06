@@ -35,9 +35,9 @@ Subagent (codex:codex-rescue):   # or another independent reviewer route
     defect only when a confirmed actor, approved requirement, stated
     constraint, or observable success test requires it; do not treat
     speculative or unconfirmed capability as a missing feature. For each
-    BLOCKER or IMPORTANT finding that recommends adding something, state the
-    confirmed requirement affected, the smallest valid correction, the
-    subtractive option considered, and why the additive change is necessary.
+    BLOCKER or IMPORTANT finding, state the confirmed requirement affected and
+    the smallest valid correction; if the correction adds something, also state
+    the subtractive option considered and why adding is still necessary.
 
     Do not rewrite the spec. Do not redesign merely because you prefer another
     architecture. Only block on issues that could cause a materially incorrect,

@@ -22,6 +22,14 @@ value-triggered, and makes review subtractive-before-additive.
 Static instruction inspection is **not** an evaluation pass and is never
 recorded as `OBSERVED`. "Owed" is not used as evidence.
 
+**Review of this change.** The committed diff received an independent
+`codex:codex-rescue` adversarial review (read-only, neutral brief). It found a
+checklist/flow ordering that made blind discovery unreachable, an anti-anchoring
+rule that contradicted the reviewer rubrics, a per-finding report contract that
+had drifted across files, and several `OBSERVED` rows in this document that
+overclaimed beyond their evidence. All were verified against the text and
+applied; the split observed/unexercised rows below are the corrected form.
+
 ## Probe method and its limits
 
 Live probes here are **directed subagent probes**: a subagent was given the
@@ -45,29 +53,30 @@ Claude SA → Codex independent model: OBSERVED
 Codex SA → Claude independent model: UNSUPPORTED in the current runtime
     (the SA is the parent Claude Code session; there is no installed route for a
      Codex session to act as SA and dispatch a Claude independent role. The skill
-     language is role-based and valid in either direction, but this repository
-     does not claim the reverse concrete integration exists.)
+     language is role-based — it names roles, not brands — but this repository
+     does not claim the reverse concrete integration exists, and the reverse
+     direction is untested.)
 ```
 
 ## Scenario results (A–Q)
 
 | # | Scenario | Expected contract | Status | Evidence |
 |---|----------|-------------------|--------|----------|
-| A | Model reversal | Workflow valid in both directions; role instructions independent of model identity; neutral evidence; SA synthesises without voting | `OBSERVED` (Claude→Codex) / `UNSUPPORTED` (Codex→Claude) | See model-reversal record above |
+| A | Model reversal | Workflow valid in both directions; role instructions independent of model identity; neutral evidence; SA synthesises without voting | Route + independent generation `OBSERVED` (Claude→Codex); SA-synthesis-without-voting **not exercised**; reverse direction `UNSUPPORTED` | Codex ran to a usable terminal result and produced independent questions/approaches (Claude→Codex). No SA-side merge or vote-free synthesis was run. Reverse: see model-reversal record above |
 | B | Open question list | Batched/listed questions allowed; no one-per-message rule; no structured answer box | `OBSERVED (incidental)` | Probe G presented its three key unknowns as one numbered list, not one-per-message |
 | C | Adaptive follow-up | Initial batch, then a targeted follow-up when one answer exposes a material unknown — not a repeated questionnaire | `STATIC CONTRACT` | Skill text permits single follow-ups when "one answer determines what to ask next"; no multi-turn dialogue probe run |
-| D | Independent question generation | Both sides generate questions blind; unique questions retained; SA merges | `OBSERVED` | `codex:codex-rescue` produced 14 independent discovery questions from the neutral brief without seeing any SA list |
-| E | Bias resistance / neutral brief | Independent model receives neutral evidence only; can reach a materially different position | `OBSERVED` | The Codex brief contained no SA preference or recommendation; Codex produced three independent approaches with distinct assumptions |
-| F | Trivial single-actor task | Compact actor statement; short discovery; no co-design; proportionate | `OBSERVED` | Probe F produced a compact actor statement, explicitly skipped co-design, and (bonus) marked the file location `UNCONFIRMED` rather than inventing an edit |
+| D | Independent question generation | Both sides generate questions blind; unique questions retained; SA merges | Independent generation `OBSERVED`; blind SA-side generation + merge **not exercised** | `codex:codex-rescue` produced 14 independent questions from the neutral brief without seeing any SA list; no SA question-set was generated and merged in the same run |
+| E | Bias resistance / neutral brief | Independent model receives neutral evidence only; can reach a materially different position | Neutral brief + independent position `OBSERVED`; difference-from-SA **not established** | The brief carried no SA preference or recommendation and Codex produced three independent approaches with distinct assumptions; no SA position existed in the run to measure a material difference against |
+| F | Trivial single-actor task | Compact actor statement; short discovery; no co-design; proportionate | Compact statement + co-design skip `OBSERVED`; discovery brevity inferred (single-shot probe) | Probe F produced a compact actor statement, skipped co-design, and marked the file location `UNCONFIRMED` rather than inventing an edit; a multi-turn discovery length was not exercised |
 | G | Browser user + shell agent | Separate actor/surface rows; capability differences identified; no assumption the browser user can move files/run shell | `OBSERVED` | Probe G produced a 5-row table and identified that the synchronous stateless upload path and the headless idempotent worker path cannot share one mechanism |
 | H | Human + scheduled automation | Automation runtime, credentials, state, failure handling, observable success identified | `STATIC CONTRACT` | Not run as its own probe; Probe G's worker row exercised adjacent behaviour (runtime, idempotency, retry/dead-letter, failure) but H's credentials/state specifics were not probed |
 | I | Uncertain actor | Uncertainty marked `UNCONFIRMED`; nothing invented; clarify only when material | `OBSERVED (incidental)` | Probe G marked the admin/operator actor and the uploader-outcome question `UNCONFIRMED`; Probe F refused to invent a file and marked the location `UNCONFIRMED` |
-| J | Valuable co-design | Co-design invoked; both develop positions independently; material disagreement surfaced; SA picks simplest evidence-backed solution | `STATIC CONTRACT` (generation half `OBSERVED`) | The independent-generation half is OBSERVED (D/E); the full end-to-end — SA surfacing material disagreement and selecting the simplest — was not run as one probe |
-| K | Unnecessary co-design | Co-design skipped even though a second model is available; later review still available | `OBSERVED` | Probe F skipped co-design on trivial single-actor work with a second model available |
+| J | Valuable co-design | Co-design invoked; both develop positions independently; material disagreement surfaced; SA picks simplest evidence-backed solution | `STATIC CONTRACT` (independent-generation half `OBSERVED`) | The independent-generation half is OBSERVED (D/E); the full end-to-end — SA surfacing material disagreement and selecting the simplest — was not run as one probe |
+| K | Unnecessary co-design | Co-design skipped even though a second model is available; later review still available | Co-design skip `OBSERVED`; later-review-availability **not exercised** (static property) | Probe F skipped co-design on trivial single-actor work with a second model available; the later review gate was not run in this probe |
 | L | Subtractive defect correction | Reviewer first considers removing the unnecessary feature; does not wrap it in validation/retries/config/monitoring | `OBSERVED` | Probe L recommended DELETE for all four non-core elements (plugin system, config, watcher, retry loop); zero additive; used the per-finding report format |
 | M | False missing-feature | SA rejects a capability no confirmed actor/success test requires; no additive scope enters the spec | `OBSERVED` | Probe M rejected the multi-tenant/auth/quota BLOCKER as an invented requirement, citing the missing-capability governing rule |
 | N | Necessary additive | Additive fix allowed; reviewer explains why simpler remedies were insufficient | `OBSERVED` | Probe N allowed the `owner == caller` check as the one irreducible addition (positive security guarantee), justified why Delete/Narrow/Reuse cannot conjure it, and resolved path traversal subtractively |
-| O | Independent-review anchoring | Co-design participant later reviews in a fresh context; earlier answer excluded; can challenge its earlier position | `STATIC CONTRACT` | Skill mandates a fresh review context and a neutral review brief; the co-design-then-review sequence was not run end-to-end |
+| O | Independent-review anchoring | Co-design participant later reviews in a fresh context; earlier answer excluded; can challenge its earlier position | `STATIC CONTRACT` | Skill mandates a fresh review context AND a neutral brief now scoped to exclude advocacy (the review brief's "why the candidate was chosen" contradiction was removed 2026-08-06 after the Codex review); the co-design-then-review sequence was not run end-to-end |
 | P | Independent capability absent | Absence disclosed; workflow continues; no fabricated independent result | `OBSERVED (incidental)` | Probe N spontaneously disclosed its independent perspective was degraded/absent (in-context self-review) and continued without fabricating a second-model result |
 | Q | Invocation failure | Failure reported; retry or explicit reduced-independence continuation offered; no silent substitution | `STATIC CONTRACT` | Skill carries the setup/auth/dispatch/completion/result failure rule; a failure was not induced in a run |
 
@@ -78,9 +87,10 @@ Codex SA → Claude independent model: UNSUPPORTED in the current runtime
   cannot exercise adaptive follow-up or the co-design→fresh-review sequence.
 - **H** needs its own probe (automation credentials/state specifics).
 - **Q** needs a safely-induced invocation failure of the independent route.
-- **A (reverse direction)** is `UNSUPPORTED` until a harness binds a
-  non-Claude SA dispatching a Claude independent role; the skill language is
-  ready for it, the runtime is not.
+- **A (reverse direction)** is `UNSUPPORTED`: no route binds a non-Claude SA
+  dispatching a Claude independent role. The skill language names roles rather
+  than brands and does not claim the reverse route exists; the reverse
+  direction is untested.
 - All `OBSERVED` results are from directed subagent probes, not bootstrap
   auto-triggered sessions; auto-trigger is unproven here and owed to the
   Quorum harness in `evals/` when these skills next change materially.

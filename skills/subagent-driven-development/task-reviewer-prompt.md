@@ -114,7 +114,9 @@ Subagent ([REVIEWER_AGENT]):
     deleting or narrowing unnecessary scope over adding validation, retries,
     configuration, or fallback around it. A missing capability is a defect only
     when the brief, an approved requirement, or necessary correctness/security
-    requires it — not a feature you would have liked to see.
+    requires it — not a feature you would have liked to see. When a
+    Critical/Important finding's fix ADDS something, name the subtractive option
+    you considered and why adding is still necessary.
 
     ## Part 2: Code Quality
 

@@ -5,11 +5,14 @@ reviewers the same compact review brief:
 
 - user intent, success criteria, and constraints;
 - relevant inspected repository evidence;
-- approaches considered and why the candidate was chosen;
+- the approaches and alternatives considered (as neutral options, not a defence of the chosen one);
 - the complete candidate design;
 - material technical claims and their known evidence.
 
-Reviewers are read-only. They report findings; they do not rewrite the design.
+Give the fixed rubric below, but no case-specific steering about what to flag
+or not flag, and no argument for why the candidate is right — the anti-anchoring
+rule bans advocacy, not the standing rubric. Reviewers are read-only. They
+report findings; they do not rewrite the design.
 
 Both roles are model-independent. Bind them to available routes — a fresh
 same-family context and/or the `codex:codex-rescue` subagent — preferring a
@@ -62,10 +65,10 @@ test requires it; do not treat speculative or unconfirmed capability as missing.
 
 Classify each finding as BLOCKER, IMPORTANT, or OPTIONAL. For load-bearing
 factual claims where useful, classify them VERIFIED, INFERRED, or UNSUPPORTED.
-For every BLOCKER or IMPORTANT finding — especially an additive recommendation —
-report: the confirmed requirement affected, the smallest valid correction, the
-subtractive option you considered, and why an additive change is necessary if you
-propose one. Do not force this format onto OPTIONAL findings.
+Every BLOCKER or IMPORTANT finding reports the confirmed requirement affected and
+the smallest valid correction; a finding whose correction ADDS something also
+reports the subtractive option you considered and why adding is still necessary.
+Do not force this format onto OPTIONAL findings.
 
 [REVIEW BRIEF]
 ```
