@@ -198,12 +198,12 @@ judgment tier below. Escalate to the cross-family route only when the actual
 task has a high-value/high-risk signal, not merely because that route is
 available.
 
-If the Codex capability is absent before dispatch, use the most capable
-available Claude implementer and disclose the degraded routing. If Codex is
-available but setup, authentication, dispatch, completion, or result retrieval
-fails, report the actionable failure and ask whether to retry or explicitly
-fall back to Claude. Never claim Codex implemented work when no usable Codex
-result exists.
+If the cross-family capability is absent before dispatch, use the most capable
+available same-family implementer and disclose the degraded routing. If the
+cross-family route is available but setup, authentication, dispatch, completion,
+or result retrieval fails, report the actionable failure and ask whether to
+retry or explicitly fall back to the same-family route. Never claim the
+cross-family route implemented work when no usable result exists.
 
 **Mechanical implementation tasks** (isolated functions, clear specs, 1-2 files): use a fast, cheap model. Most implementation tasks are mechanical when the plan is well-specified.
 
@@ -238,11 +238,12 @@ from any cross-family implementer, receive the same task-reviewer prompt, and be
 explicitly told the review is read-only. Prepend `--wait --fresh` to its initial
 request and leave its model and effort unset unless the user chose them.
 
-If the Codex review capability is absent, use the most capable available
-Claude reviewer and disclose degraded routing. If Codex setup,
-authentication, dispatch, completion, or result retrieval fails, report the
-actionable failure and ask whether to retry or explicitly fall back to Claude.
-Never claim an independent Codex review when no usable Codex result exists.
+If the cross-family review capability is absent, use the most capable available
+same-family reviewer and disclose degraded routing. If the cross-family route's
+setup, authentication, dispatch, completion, or result retrieval fails, report
+the actionable failure and ask whether to retry or explicitly fall back to the
+same-family route. Never claim an independent cross-family review when no usable
+cross-family result exists.
 
 **Fix-loop escalation (rounds 4-5)**: for a same-family implementer, use a
 model at least one tier above the implementer that got stuck. For a cross-family
@@ -251,10 +252,11 @@ the existing brief, report, and findings; leave its model/effort unset unless
 the user chose them. Fresh context supplies the escalation without inventing a
 cross-family tier.
 
-**Always specify the model explicitly when dispatching a Claude subagent.**
-An omitted Claude model inherits your session's model — often the most capable
-and most expensive — which silently defeats this section. The Codex route is
-the explicit exception described above.
+**Always specify the model explicitly when dispatching a same-family
+(`general-purpose`) subagent.** An omitted model inherits your session's model —
+often the most capable and most expensive — which silently defeats this section.
+The cross-family route is the explicit exception described above (its model and
+effort stay unset unless the user chose them).
 
 **Turn count beats token price.** Wall-clock and context cost scale with how
 many turns a subagent takes, and the cheapest models routinely take 2-3× the
@@ -281,10 +283,10 @@ Record BASE (`git rev-parse HEAD`) before dispatching — the review package
 and fix-round diffs need it.
 
 First classify the task using Model Selection. For high-value/high-risk work,
-dispatch `codex:codex-rescue`; otherwise dispatch `general-purpose` with the
-explicit Claude model tier. In either case, fill the single
-[implementer-prompt.md](implementer-prompt.md) contract below—do not maintain a
-second Codex-specific task prompt.
+dispatch the cross-family route (`codex:codex-rescue`); otherwise dispatch the
+same-family route (`general-purpose`) with an explicit model tier. In either
+case, fill the single [implementer-prompt.md](implementer-prompt.md) contract
+below—do not maintain a second route-specific task prompt.
 
 For Codex, prepend `--wait --fresh` to the initial filled prompt. Do not proceed
 to task review until the foreground dispatch has returned a usable terminal
@@ -472,16 +474,18 @@ minors — they never extend the loop.
 Record the author type of each fix and apply **Independent review routing**
 again to the fix diff:
 
-- **Codex-authored fix:** dispatch a fresh `general-purpose` Claude reviewer
-  with an explicit model. Do not resume a prior Codex reviewer.
-- **Claude-authored fix:** use Claude by default. If the material cross-model
-  reasons above select Codex and the prior reviewer was Codex, resume that
-  reviewer with `--wait --resume`; otherwise dispatch a fresh Codex reviewer
-  with `--wait --fresh`.
+- **Cross-family (`codex:codex-rescue`) authored fix:** dispatch a fresh
+  same-family (`general-purpose`) reviewer with an explicit model. Do not resume
+  a prior cross-family reviewer.
+- **Same-family (`general-purpose`) authored fix:** use the same-family route by
+  default. If the material cross-model reasons above select the cross-family
+  route and the prior reviewer was on it, resume that reviewer with
+  `--wait --resume`; otherwise dispatch a fresh cross-family reviewer with
+  `--wait --fresh`.
 
-Any fresh reviewer receives the complete re-review prompt. A Codex reviewer is
-read-only. Never let the fix author review its own work, and never resume a
-Codex implementation thread for review.
+Any fresh reviewer receives the complete re-review prompt. A cross-family
+reviewer is read-only. Never let the fix author review its own work, and never
+resume a cross-family implementation thread for review.
 
 **After each round,** append to the ledger:
 `Task <N>: fix round <R>/5 (<X> addressed, <Y> open — <finding one-liners>; commits <a7>..<b7>)`
@@ -554,8 +558,9 @@ Then run exactly one scoped re-review of the fix wave
 [re-review-prompt.md](re-review-prompt.md)).
 Select this re-reviewer from the fix author's type using **Independent review
 routing**; there is no task-reviewer thread to inherit. Dispatch a fresh
-reviewer with the complete scoped prompt. A Claude reviewer gets an explicit
-model tier; a Codex reviewer is read-only and uses `--wait --fresh`.
+reviewer with the complete scoped prompt. A same-family (`general-purpose`)
+reviewer gets an explicit model tier; a cross-family (`codex:codex-rescue`)
+reviewer is read-only and uses `--wait --fresh`.
 Adjudicate any residual findings as in the task loop's breaker: park with
 rulings, or stop on load-bearing ones. There is no second fix wave —
 residual load-bearing findings surface to your human partner when
