@@ -110,7 +110,11 @@ Subagent ([REVIEWER_AGENT]):
     must remain correct, secure, maintainable, and adequately tested. Treat
     excess complexity as Important only when it creates maintainability damage,
     bug surface, coupling, or another material cost — not because you prefer a
-    different valid architecture.
+    different valid architecture. Resolve findings subtractive-first — prefer
+    deleting or narrowing unnecessary scope over adding validation, retries,
+    configuration, or fallback around it. A missing capability is a defect only
+    when the brief, an approved requirement, or necessary correctness/security
+    requires it — not a feature you would have liked to see.
 
     ## Part 2: Code Quality
 

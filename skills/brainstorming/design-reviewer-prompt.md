@@ -11,9 +11,13 @@ reviewers the same compact review brief:
 
 Reviewers are read-only. They report findings; they do not rewrite the design.
 
-## Claude Constructive Review
+Both roles are model-independent. Bind them to available routes — a fresh
+same-family context and/or the `codex:codex-rescue` subagent — preferring a
+different model family for at least one where practical.
 
-When a Claude subagent is available, dispatch it with:
+## Constructive Review
+
+Dispatch the constructive reviewer with:
 
 ```text
 Constructively review this candidate design.
@@ -30,10 +34,10 @@ change.
 [REVIEW BRIEF]
 ```
 
-## Codex Adversarial Review
+## Adversarial Review
 
-When the official `codex:codex-rescue` subagent is available, dispatch a fresh,
-explicitly read-only review request with:
+Dispatch the adversarial reviewer in a fresh, explicitly read-only context
+(the `codex:codex-rescue` subagent or another independent route) with:
 
 ```text
 Adversarially review this candidate design. Do not edit files.
@@ -51,20 +55,28 @@ Look specifically for:
 Ask: Can this be materially simpler while still fully solving the current
 requirement? Do not redesign merely because you prefer another architecture.
 
+Resolve each finding subtractive-first — Delete, Narrow, Simplify, Reuse,
+Clarify, and only then Add. A missing capability is a defect only when a
+confirmed actor, approved requirement, stated constraint, or observable success
+test requires it; do not treat speculative or unconfirmed capability as missing.
+
 Classify each finding as BLOCKER, IMPORTANT, or OPTIONAL. For load-bearing
 factual claims where useful, classify them VERIFIED, INFERRED, or UNSUPPORTED.
-For every BLOCKER or IMPORTANT finding, state the evidence needed or the smallest
-useful correction.
+For every BLOCKER or IMPORTANT finding — especially an additive recommendation —
+report: the confirmed requirement affected, the smallest valid correction, the
+subtractive option you considered, and why an additive change is necessary if you
+propose one. Do not force this format onto OPTIONAL findings.
 
 [REVIEW BRIEF]
 ```
 
-The official `/codex:adversarial-review` command reviews Git state; use the
-Codex task subagent above for an in-conversation candidate design. If that
-capability is absent before dispatch, the primary agent applies the same
-adversarial prompt itself and clearly reports the degraded review. Apply the
-same fallback to the constructive prompt when no independent Claude reviewer
-exists.
+Where the harness offers a Git-state review command (in Claude Code, the
+`/codex:adversarial-review` command reviews Git state), that reviews committed
+work; use an in-context subagent route for a candidate design that is not yet
+committed. If the adversarial route is absent before dispatch, the SA applies
+the same adversarial prompt itself and clearly reports the degraded review.
+Apply the same fallback to the constructive prompt when no independent reviewer
+route exists.
 
 Capability absence is different from invocation failure. If a reviewer is
 available but setup, authentication, dispatch, completion, or result retrieval

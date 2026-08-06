@@ -156,6 +156,16 @@ conflicts that only emerge from implementation.
 
 ## Model Selection
 
+**Roles are model-independent; bindings are concrete.** This section routes two
+roles — **implementer** and **reviewer** — and one hard rule governs both: the
+reviewer is never the implementer's own context. Prefer a different model family
+for the review where practical. The concrete bindings below are for Claude Code
+today: `general-purpose` is the Claude implementer/reviewer route and
+`codex:codex-rescue` is the independent (cross-family) route. In another harness,
+bind the same two roles to whatever routes exist there — do not invent a route
+that is not installed and verified. Route by task suitability and authorship
+independence, not by model brand or availability.
+
 Route implementation by value and risk first, then choose the least powerful
 model that can handle the role. Do not calculate a score.
 
@@ -205,24 +215,25 @@ diff's size, complexity, and risk. A small mechanical diff does not need the
 most capable model; a subtle concurrency change does. Scoped re-reviews of
 small fix diffs take a cheap-to-mid tier.
 
-**Independent review routing:** Record whether each task was implemented by
-Claude (`general-purpose`) or Codex (`codex:codex-rescue`), then choose the
-reviewer:
+**Independent review routing:** Record which route implemented each task, then
+choose a reviewer that is a fresh context and — where it materially helps — a
+different model family. In the current bindings:
 
-- Codex-authored work is reviewed by a fresh `general-purpose` Claude
-  reviewer with an explicit model tier.
-- Claude-authored work normally uses a fresh `general-purpose` Claude
-  reviewer. Use `codex:codex-rescue` for the review only when independent
-  cross-model challenge is materially justified: the work fell back from a
-  high-risk Codex route, or it relies on uncertain external APIs, versions,
-  configuration, repository capabilities, or a difficult integration.
+- Cross-family (`codex:codex-rescue`) authored work is reviewed by a fresh
+  `general-purpose` reviewer with an explicit model tier.
+- `general-purpose`-authored work normally uses a fresh `general-purpose`
+  reviewer. Route it to the cross-family (`codex:codex-rescue`) reviewer only
+  when independent cross-model challenge is materially justified: the work fell
+  back from a high-risk cross-family route, or it relies on uncertain external
+  APIs, versions, configuration, repository capabilities, or a difficult
+  integration.
 
-Do not route routine Claude-authored work to Codex merely for symmetry, and do
-not add a second reviewer or vote between models. Tests do not replace either
-review route. A Codex reviewer must be a different thread from any Codex
-implementer, receive the same task-reviewer prompt, and be explicitly told the
-review is read-only. Prepend `--wait --fresh` to its initial request and leave
-Codex model and effort unset unless the user chose them.
+Do not route routine same-family work to the cross-family reviewer merely for
+symmetry, and do not add a second reviewer or vote between models. Tests do not
+replace either review route. A cross-family reviewer must be a different thread
+from any cross-family implementer, receive the same task-reviewer prompt, and be
+explicitly told the review is read-only. Prepend `--wait --fresh` to its initial
+request and leave its model and effort unset unless the user chose them.
 
 If the Codex review capability is absent, use the most capable available
 Claude reviewer and disclose degraded routing. If Codex setup,
