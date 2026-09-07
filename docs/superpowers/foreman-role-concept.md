@@ -1,150 +1,209 @@
-# Foreman Role — Concept Sketch
+# Foreman — Concept (v2, research-grounded)
 
-> **Status:** Candidate under discussion. Not approved, not a spec. Open decisions marked ⬒.
-> Built collaboratively 2026-09-07. Next step is your judgment, then the design review gate.
+> **Status:** Fleshed-out concept, ready for submission to design. Supersedes the v1 sketch on
+> this branch and incorporates: the operator interview (2026-09-07), the Codex adversarial review
+> of v1, memory-stack receipts (Hermes, PulseMark), and three research passes (Claude Code control
+> surface, Happy/Happier, per-harness bootstrap). Claims are tagged VERIFIED (receipt in hand),
+> DECLARED (operator's operational experience, stated as ground truth by the project owner), or
+> EXPERIMENT (needs an empirical test before design freeze).
 
-## In one line
+## Problem (DECLARED)
 
-The foreman is an independent overseer that sits **above** the SA, checks its work against the
-current plan, and runs the checks the SA can't fairly run on itself. Thin, with teeth over process
-and scope — not over the answer.
+The operator runs multi-session AI development and is trapped in the middle of it:
 
-## Why it exists
+- ~90% of what gets escalated to him shouldn't reach him at all.
+- Real scope drift — out-of-scope decisions, rabbit holes — reaches him only because he reads
+  reasoning logs and halts sessions by hand.
+- The drift usually originates with the most capable model in the system (the SA/architect):
+  powerful models solve problems but rabbit-hole, and from inside their own reasoning the detour
+  looks like progress.
+- When the SA or builder commissions its own review, it frames the review toward what it expects,
+  so its blind spots stay blind.
 
-- You are heavily in the middle. ~90% of what reaches you shouldn't; the real scope-drift reaches
-  you only because you read the logs and halt it by hand.
-- The drift usually comes from the SA itself. Powerful models solve problems but rabbit-hole, and
-  from inside their own reasoning the detour looks like progress.
-- The party that drifts can't police its own drift. The party being reviewed shouldn't frame its
-  own review. Both land on you today.
+These are declared from direct operational experience across projects, not measured from
+transcripts; the design does not depend on the exact percentages.
+
+## Charter
+
+This fork's V1 brief deliberately avoided building an orchestration layer. The foreman
+**supersedes that constraint by design** — it is the next phase of the fork, chosen by the
+project owner. The V1 workflow (skills, gates, reviews) remains the process the foreman
+supervises; the foreman is the layer that makes it run without the operator in the middle.
 
 ## The core idea
 
-The fork already uses independent checks (co-designer, reviewer, verifier). Today the **SA decides**
-whether they happen and how they're framed — the checked party running its own check. The foreman
-moves that out. The SA can't fairly judge whether it stayed in scope, whether a gate ran, or how its
-work should be reviewed — so the foreman owns those and hands each to an independent model. The
-thinking stays with the SA.
+The fork already believes in independent checking (co-designer, adversarial reviewer, verifier).
+Today the checked party runs its own checks — the SA decides whether they happen and how they are
+framed. The foreman moves that discipline up: a party that produces work never judges its own
+scope, never frames its own review, never marks its own gate passed. The foreman owns those
+functions and hands each judgment to an independent model. The thinking stays with the producers.
 
-## Three roles
-
-| Role | Who | Does |
-|---|---|---|
-| **Producer** | SA / builder | The work. Can't fairly check itself. |
-| **Foreman** | independent overseer | Owns *what* is checked, *who* checks it, the result, the teeth. Not the judge. |
-| **Checker** | opposite model (e.g. Codex) | Judges. Independent of both; picked for fit + different blind spots. |
-
-What the foreman hands to an independent checker — never judges itself:
-- did the work quietly leave scope? (semantic call)
-- do the docs match what the code does?
-- how should this be reviewed, and by whom?
-
-What's just a script, no model needed:
-- did the required gate run? did tests pass? does this action map to an open ticket?
-
-## The plan is the reference
-
-- The foreman measures drift against the **plan / tickets you already have**. No new artifact, no ceremony.
-- Plans change — that's normal. The foreman flags only **unraised departures**. Drift = a scope
-  change that skipped you, not a plan that moved.
-
-## When the foreman looks
-
-Not every step — that's just you-reading-logs again. It checks at a few moments:
-
-- work starting that isn't tied to an open ticket,
-- a proposed change to scope / design / a ticket's definition of done,
-- anything irreversible or outside-world,
-- one ticket eating far more effort than it should — the rabbit-hole smell. ⬒ threshold to tune.
-
-## Script vs model (don't pay a thinker to tick a box)
-
-- **Script** — deterministic, free, no judgment: gate ran? tests pass? action maps to a ticket?
-- **Model** — judgment, handed to an independent checker: left scope? docs honest? review scoped to catch what's catchable?
-- The foreman never pays a thinking model for a yes/no, and never trusts a script with a judgment.
-
-## Escalation — getting you out of the middle
-
-- **Handled silently / SA proceeds:** anything the plan already answers, and all trivia.
-- **Raised to you:** an unraised departure, a request to change the plan, irreversible actions, and
-  genuine ambiguity the artifacts can't resolve.
-- **Ladder:** SA → foreman → you. The foreman resolves against the plan first, or asks the SA. You
-  are the last stop, not the first.
-- **Target:** the ~90% stops reaching you; the drift you currently catch by hand gets caught
-  *before* the action.
+## Topology — a hub, not a chain
 
 ```text
-        ┌─────────── the plan (design → architecture → tickets) ──────────────┐
-        │                                                                     │
-   YOU ─┤  raised: unraised departure · plan-change request · irreversible · true ambiguity
-        │                                                                     │
-        └──────── FOREMAN (thin, teeth on process + scope) ───────────────────┘
-                    │ check moment?       │ hand off check
-                    ▼                     ▼
-                  SA / builder  ──────► opposite-model checker (scope · docs · review)
-                  (does the work)        (judges; independent of both)
+You + Strategic Advisor ──► documentation updates
+You ──► Foreman
+Foreman ──► SA/Architect
+Foreman ──► Builder(s)
+Foreman ──► Checkers (commissioned per check)
+Hermes ──► spawns foremen · independent read-only verifier beneath everything
 ```
 
-## Teeth ⬒ (proposed; open)
+- The foreman is the **only role that holds sessions**. The SA writes tickets but never
+  dispatches them; the foreman hands work to builders and can slot an independent check between
+  spec and build. The spec's author never controls the party implementing it.
+- All agent-to-agent influence flows through the foreman or through artifacts. There are no side
+  channels between sessions.
+- **The artifact rule:** conversations are free; nothing is real until it lands in a doc or
+  ticket and the foreman is informed. This applies to the operator too — his steering enters as
+  documentation updates (via the Strategic Advisor seat), not as orders down a chain. That is
+  what makes talking directly to any session safe: the artifact is the event, and an artifact
+  cannot be unraised.
 
-- **On process and scope:** foreman can halt, refuse to mark a stage complete, and escalate.
-- **Not on the answer:** cannot overrule a decision you or the SA made; cannot invent scope.
-- Open: is "refuse to advance a gate" a hard block or a loud flag?
+## Roles
+
+| Role | Seat | Does |
+|---|---|---|
+| **Operator** | Happy (phone/desktop) | Owns the plan. Last stop of escalation. Talks to the foreman directly; may drop into any session — outcomes land as artifacts. |
+| **Strategic Advisor** | operator's own session | Design-phase thinking partner; turns operator intent into documentation updates. (Seat already exists in the PulseMark pattern — VERIFIED, `architect/ARCHITECT.md`.) |
+| **Foreman** | per-project Happy session | Holds worker sessions, the process, and the escalation gate. Thin: routes, checks against the plan, commissions judgment out. Never reasons about the domain. |
+| **SA / Architect** | worker session | Technical delivery: architecture, specs, tickets, doc maintenance, direct small fixes. Modeled on PulseMark `ARCHITECT.md` (VERIFIED). |
+| **Builder(s)** | worker session, one at a time in v1 | Implements tickets; appends Builder Reports; never modifies specs; flags ambiguity, doesn't decide. Modeled on PulseMark `BUILDER.md` (VERIFIED). |
+| **Checkers** | fresh sessions, commissioned per check | Judge one question each: scope drift, doc/code sync, review of a spec or diff. Routed by fit and independence, model-agnostic. |
+| **Hermes** | existing container | Spawns foremen; independent read-only evidence source (project mounts + read-only code graph) to verify any claim without trusting the claimant. VERIFIED live in operator infra. |
+
+## Authority — by domain, not a stack
+
+- **Content** (what the answer is): SA and builders decide, within the plan.
+- **Process and scope visibility**: the foreman — it can hold a gate, block an action, refuse to
+  mark a stage complete, and escalate. Its teeth never decide an answer; they force a decision to
+  be **raised**. A producer can always get its way — by raising it.
+- **Plan changes**: the operator. Wanting to change the plan is legitimate and is itself an
+  escalation; it is never granted by a producer to itself.
+- Adjudication when a checker and a producer disagree on substance: content belongs to the
+  producer; the foreman records the disagreement and escalates only if it is a plan departure, a
+  gate breach, or genuinely unresolvable against the artifacts.
+
+## The reference — by phase
+
+- **Design phase:** no plan exists yet, so the foreman enforces the **process that produces the
+  plan** — gates run, reviews independently scoped, artifacts written. The design conversation
+  itself stays operator↔SA direct; the foreman is not in that loop (too much back-and-forth).
+- **Build phase:** the approved design → architecture → tickets are the reference. The reference
+  is **living** — plans change constantly and that is normal. Drift is exclusively an **unraised
+  departure**: work or decisions that leave the reference without the change being raised first.
+
+## Enforcement mechanics
+
+**Pre-action gate (VERIFIED mechanism).** Claude Code routes a session's permission prompts to an
+external tool (`--permission-prompt-tool` / Agent SDK `canUseTool`): every gated action goes out
+for approve/deny **before it executes**. Pointed at the foreman, this is real pre-action
+interception — the foreman literally holds the permission gate for its workers, replacing
+after-the-fact log reading. Receipt: code.claude.com/docs permissions + agent-sdk docs.
+
+**Check moments.** The foreman is not a per-step reader. It checks when:
+1. work starts that isn't tied to an open ticket;
+2. a change to scope / design / a ticket's definition of done is proposed;
+3. anything irreversible or outside-world fires (arrives naturally via the permission gate);
+4. one ticket consumes far more effort than expected — the rabbit-hole smell (threshold: a design
+   decision).
+
+**Script vs model.** Deterministic checks (gate ran? tests pass? action maps to an open ticket?)
+are scripts — free, exact. Judgment checks (did this quietly leave scope? do docs match code? how
+should this review be scoped so what can be caught is?) are commissioned to an independent
+checker. The foreman never pays a thinking model for a yes/no and never trusts a script with a
+judgment.
+
+## Escalation pipeline
+
+1. Producer hits a gate or raises a question.
+2. Foreman resolves against the artifacts, or asks the SA.
+3. Still unclear → foreman commissions an independent check (e.g. adversarial review) to try to
+   resolve it.
+4. Still unclear, or a plan change, or irreversible → **operator**: phone push via Happy (or
+   Hermes→Telegram); the worker blocks until answered (v1).
+
+Target: the ~90% noise never reaches the operator; the drift he currently catches by reading
+logs is caught at the gate, before the action.
+
+## Ticketing and documentation (inherited, working pattern)
+
+The PulseMark contract is adopted as the baseline (VERIFIED on disk, previously run in
+production by the operator):
+
+- backlog index + ticket files with lifecycle status; specs with acceptance criteria;
+- Builder Reports appended to tickets (status, branch, commit, deviations, known issues);
+- hard ownership boundaries (builder never edits specs or architect files; ambiguity is flagged,
+  not decided);
+- fix-vs-spec judgment rules for the SA;
+- docs updated to match reality, with the SA owning doc accuracy — and the foreman commissioning
+  independent doc/code sync checks, since the SA wrote both.
+
+The foreman adds what PulseMark lacked: the tickets become machine-read state — the foreman reads
+the same backlog the humans do, and ticket status transitions are the events it supervises.
 
 ## Model routing
 
-Route each check to an independent model that fits it — chosen for independence and fit, not cost.
-The foreman itself wants a model that holds a line rather than chasing the problem, probably a
-different family from the SA so it doesn't share its blind spots.
+Model-agnostic throughout. Roles are bound to models per project by fit:
+- Foreman: a model that holds a line rather than chasing the problem; ideally a different family
+  from the SA so blind spots don't align.
+- SA: the strongest available reasoner.
+- Builders: routed by task weight.
+- Checkers: chosen per check for independence and fit; different family where different blind
+  spots help. Fresh context always.
 
-## Runtime shape (resolved)
+## Runtime foundation (research receipts)
 
-"On top" can't live inside a single Claude Code session — that session **is** the top tool-loop.
-Two facts make it concrete:
+**Spawning full sessions — already proven in operator infra.** Hermes spawns full Claude/Codex
+sessions in tmux with complete config, MCPs, and the superpowers bootstrap wired for both
+harnesses (Claude via SessionStart hook in settings.json; Codex via AGENTS.md). VERIFIED
+2026-08-12, Una workbench receipt.
 
-- **Full sessions, not subagents.** Subagents run with the skill bootstrap disabled — they don't
-  auto-follow process. A full session launched fresh runs its SessionStart hook and auto-fires
-  skills. So the foreman spawns *full sessions* as workers, and process-following comes for free.
-- **Comms runs down the tree.** Two co-equal sessions can't talk directly, but whoever *launches* a
-  session owns its input/output. The foreman is the launcher, so foreman↔worker is a direct channel.
+**Driving sessions programmatically — VERIFIED two ways.** CLI multi-turn (`--resume` with JSON
+output) and Agent SDK (`ClaudeSDKClient`, concurrent sessions, asyncio-native). Spawn-time
+scoping per worker is rich: permission mode, allowed tools, MCP config, model, workdir, injected
+system prompt. Gap: per-skill enable/disable is not granular (EXPERIMENT / design-around).
 
-Inside the foreman: deterministic code spawns sessions and does the box-matching; a thin model does
-the routing and escalation judgment. Workers are full Claude Code / Codex sessions with fresh,
-independent contexts (also the "SA runs lean, restartable" win). Tax: full sessions are heavier than
-subagents, and interactive-auth MCP servers (Una, Corpus) are absent unless the harness carries login.
+**Happy layer — use `happier`.** The ecosystem split: slopus/happy works, but happier-dev/happier
+(independent rewrite, more active) is ahead on every axis the foreman needs — `happier session`
+CLI (create/send/history/wait/status/stop with per-session MCP selection at spawn),
+**`happier mcp serve`** (an MCP surface purpose-built for an orchestrating agent to drive
+sessions as tools), resume properly solved **including takeover of existing Claude sessions from
+their JSONL files** — which is precisely the design-phase→foreman handoff mechanism — deep Codex
+support, and dual attach (phone + orchestrator on the same session) as core design. VERIFIED from
+repo code/docs, 2026-09-07.
 
-## Happy as spawner + viewport
+**Design-phase handoff, concretely:** operator and SA brainstorm in a normal session; on design
+approval the docs are written; the foreman takes over the SA session via resume/takeover — or
+spawns a fresh SA that rehydrates from the docs. Both paths exist; choosing is a design decision.
 
-[Happy](https://github.com/happier-dev/happier) is an end-to-end-encrypted client for Claude Code
-and Codex, with a host daemon that spawns sessions and a `happy-agent` CLI.
+## V1 scope decisions (operator-set)
 
-- **Non-headless on purpose.** Workers run visible and mirror to your phone. Monitoring becomes a
-  backstop — you glance when you want, not because nothing else is watching.
-- **File-state sidesteps Happy's weak resume.** State lives in files, so the foreman spawns a fresh
-  session and rehydrates it rather than reconnecting.
-- **The foreman is itself a Happy session** — a direct line to it from anywhere. Workers watched by
-  the foreman; the foreman watched by you. That is who checks the foreman: **you**, cheaply, because
-  it's the one session you hold a line to. You manage one session, not N.
+- One foreman per project; Hermes spawns it (or the operator does, by hand).
+- One builder at a time; the SA session may stay live alongside.
+- Escalation: phone push, worker blocks until answered.
+- Budget/token-awareness: **out of v1.**
+- Cross-project resource arbitration: **out of v1** — parked; natural future seat is Hermes'
+  layer, above per-project foremen.
 
-## Keep the foreman thin
+## Experiments required before design freeze
 
-A full session can drift too — the thing the foreman exists to catch. So its judgment stays small:
-route, escalate, check against the plan; everything mechanical is a script. Thin enough that watching
-it is a glance, not log-reading. If it starts "helping" with the work, it's becoming a second SA.
+1. Skills bootstrap in headless/SDK-spawned sessions — does SessionStart fire and inject it?
+   (Hermes' interactive tmux path is verified; this tests the non-tmux paths.)
+2. Happier: concurrent drive + human interject on the same session, mid-turn.
+3. Happier: takeover/resume of an arbitrary pre-existing Claude session (the handoff mechanism).
+4. Happier: does `session wait` surface pending permission prompts to the driver? (Load-bearing
+   for the foreman-as-permission-gate loop.)
+5. Happier release-ring gating — which needed features are public-ring vs dev builds.
+6. Local spawn endpoint security posture on a shared host (loopback binding).
+7. Relay latency/throughput when one foreman drives several sessions.
 
-## Prove this first ⬒
+## Open design questions (for the design phase)
 
-Before betting on Happy as the spawn channel, run one test: **script-spawn a single session via
-Happy's daemon and confirm an external orchestrator can BOTH drive it AND see it mirrored on your
-phone.** The mirror is solid; an orchestrator's programmatic grip on a Happy-spawned session is the
-part their open issues call rough. Works → Happy is spawner and viewport in one. Doesn't → foreman
-drives via the Agent SDK and Happy just mirrors alongside. Either way you're not blocked.
-
-## Open decisions
-
-1. **Teeth** ⬒ — hard-block vs loud-flag on gate advance.
-2. **Trip-wire tuning** ⬒ — the rabbit-hole effort threshold.
-3. **Prove first** ⬒ — the Happy orchestrator-grip test.
-4. **Resolved** — on-top = orchestrator spawning full sessions; comms down the tree; foreman is a
-   thin Happy session you hold a direct line to; the SA can't judge its own scope/gates/reviews, so
-   those go to independent checkers.
+- Handoff mechanics: takeover-existing-session vs fresh-spawn-from-docs (both verified available).
+- Rabbit-hole threshold: what signal and limit trigger check moment #4.
+- The foreman's own session config: which tools/MCPs it gets; how its thinness is enforced
+  (allowlist is the obvious lever — its own spawn scoping).
+- Which existing fork skills move commissioning up to the foreman vs stay SA-run in
+  foreman-less projects (the fork must still work standalone).
+- Ticket schema: how much PulseMark structure is adopted verbatim vs adapted.
