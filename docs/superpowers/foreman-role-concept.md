@@ -105,24 +105,71 @@ drift too late. Trip-wires are the middle.
 - The foreman itself wants the **stubborn, least-seducible** model — likely a different family
   from the SA, precisely so it doesn't share the SA's blind spots.
 
-## The thinness guarantee — the line to defend
+## Runtime shape (resolved)
 
-The foreman routes and holds a box; it does **not** reason about the domain. That thinness is
-exactly what removes the need to "check the checker." The moment the foreman starts having domain
-opinions, it becomes a second SA with its own blind spots and the guarantee breaks.
+"On top" cannot live inside a single Claude Code session — that session **is** the top tool-loop;
+nothing sits above it there. Two resolutions make the on-top foreman concrete:
 
-## Biggest open decision ⬒ — "on top" means a new harness
+- **Full sessions, not subagents.** Subagents run inside a session with the skill bootstrap
+  disabled — they don't auto-follow process. A **full session** launched fresh runs its
+  SessionStart hook, loads the bootstrap, and auto-fires skills. So the foreman spawns *full
+  sessions* as workers, and process-following comes for free instead of needing manual injection.
+- **Comms runs down the tree.** Two co-equal sessions can't talk directly, but whoever *launches*
+  a session owns its input/output. The foreman sits in that launcher seat, so foreman↔worker is a
+  direct channel — one level up from subagents.
 
-- On-top can't live inside Claude Code: the Claude Code session **is** the top tool-loop; nothing
-  sits above it there.
-- A real on-top foreman is a **separate orchestrator** (Agent SDK or similar) that spawns
-  Claude Code / Codex / other sessions as workers and sits over them.
-- That makes this a **harness around the fork, not just new skills in it** — a materially bigger
-  build. This decision determines what the project actually is.
+Inside the foreman:
+
+- **Deterministic code** does the mechanical half: spawn sessions, watch trip-wires, box-match tickets.
+- **A thin model** does the judgment half: route, escalate, scope reviews.
+- **Workers are full Claude Code / Codex sessions** — full tools, auto-fired skills, fresh
+  independent contexts (also the "SA runs lean, restartable" win).
+- **Tax, honestly:** full sessions are heavier than subagents, and interactive-auth MCP servers
+  (Una, Corpus) are absent unless the harness carries their login.
+
+## Happy as spawner + viewport
+
+[Happy](https://github.com/happier-dev/happier) is an end-to-end-encrypted client for Claude Code
+and Codex, with a host **daemon** that spawns sessions (`spawn-happy-session` RPC) and a
+`happy-agent` CLI.
+
+- **Non-headless on purpose.** Workers run visible and mirror to your phone. Monitoring stops being
+  a chore and becomes a *backstop* — you glance when you want, not because nothing else is watching.
+- **File-state dodges Happy's weak spot.** Happy's session-resume is limited (fresh UUID per run).
+  Doesn't matter — state lives in files, so the foreman spawns a fresh session and rehydrates it
+  rather than reconnecting.
+- **The foreman is itself a Happy session.** So you have a **direct line to it** from anywhere.
+  Workers watched by the foreman; foreman watched by you. That is the concrete answer to
+  "who checks the checker" — **you do**, cheaply, because it's the one session you keep a line to.
+
+### The catch when the foreman is a full session
+
+A full session is a reasoning model — it can drift, the exact failure the foreman exists to catch.
+Two rules keep it honest:
+
+- **Judgment surface stays tiny.** The foreman routes, escalates, box-matches. Anything mechanical
+  it calls a script/hook for. It does *not* reason about the domain. The direct line makes it easy
+  for you to notice the moment it starts "helping."
+- **You're its backstop, cheaply.** Because it's thin and it's the one session you hold, watching
+  it is a glance, not log-reading. The regress stops at you by design.
+
+Net shape: the foreman is your proxy **downward** (guards the wall, drives workers) and your
+interface **upward** (the one thing you talk to). You stop managing N sessions and manage one —
+built small enough to trust at a glance.
+
+## Prove this first ⬒
+
+Before betting on Happy as the spawn channel, run one falsifying test: **script-spawn a single
+session via Happy's daemon and confirm an external orchestrator can BOTH drive it AND see it
+mirrored on your phone.** Happy's mirror is solid; an orchestrator's programmatic *grip* on a
+Happy-spawned session is the part their own open issues call rough. If it works, Happy is spawner
+and viewport in one. If not, the foreman drives via the Agent SDK and Happy just mirrors alongside.
+Either way you're not blocked — the test tells you which shape you're building.
 
 ## Open decisions
 
-1. **On-top harness vs on-the-side skill** — leaning on-top (your call); cost is a new platform.
-2. **Teeth** — hard-block vs loud-flag on gate advance.
-3. **Trip-wire tuning** — the rabbit-hole effort threshold.
-4. **Confirmed** — foreman stays thin; all judgment dispatched to independent checkers.
+1. **Teeth** ⬒ — hard-block vs loud-flag on gate advance.
+2. **Trip-wire tuning** ⬒ — the rabbit-hole effort threshold.
+3. **Prove first** ⬒ — the Happy orchestrator-grip test above.
+4. **Resolved** — on-top = orchestrator spawning full sessions; comms runs down the tree; foreman
+   is a thin Happy session you hold a direct line to; all judgment dispatched to independent checkers.
