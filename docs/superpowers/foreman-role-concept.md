@@ -1,9 +1,10 @@
-# Foreman — Concept (v2.1, post-review)
+# Foreman — Concept (v2.2, adapters verified)
 
 > **Status:** Fleshed-out concept, ready for submission to design. Incorporates: the operator
 > interview (2026-09-07), two Codex adversarial reviews (v1 and v2 — all 12 v2 findings applied),
-> memory-stack receipts (Hermes, PulseMark), and three research passes (Claude Code control
-> surface, Happy/Happier, per-harness bootstrap). Claims are tagged VERIFIED (receipt in hand),
+> memory-stack receipts (Hermes, PulseMark), and five research passes (Claude Code control
+> surface, Happy/Happier, per-harness bootstrap, Codex enforcement surface, interception
+> broker). Claims are tagged VERIFIED (receipt in hand),
 > DECLARED (operator's operational experience, stated as ground truth by the project owner), or
 > EXPERIMENT (needs an empirical test before design freeze).
 
@@ -111,10 +112,21 @@ as its capabilities allow, via an adapter. The contract, in strength order:
    (`--permission-prompt-tool` / SDK `canUseTool`) for approve/deny before execution. Two honest
    narrowings: (a) pre-allowed tools never prompt — interception requires a deliberately
    **fail-closed worker permission policy** that leaves gated actions unresolved (design
-   question); (b) the end-to-end loop — callback ➜ foreman session ➜ decision ➜ reply — needs a
-   broker that does not yet exist (EXPERIMENT + design question). Codex adapter: no equivalent
-   external routing is verified — per-harness interception capability inventory is a research
-   item.
+   question); (b) the end-to-end loop — callback ➜ foreman ➜ decision ➜ reply — needs a broker, and
+   **Happier already is one** (VERIFIED in its source): delegated approval is a protocol
+   concept; the MCP action `session_permission_respond` lets an agent session answer another
+   session's prompt; pending requests are discoverable (counts, details, and a
+   `permission_request` webhook to wake the foreman); and first-answer-wins semantics keep the
+   operator's phone able to see and override every prompt. Runtime confirmation remains
+   (EXPERIMENT 8).
+   Codex adapter (VERIFIED primitive): the `codex app-server` protocol makes the connected
+   client the approver — server➜client `requestApproval` JSON-RPC for commands, file changes,
+   permission escalations, and network hosts, with per-turn policy overrides. Happier already
+   drives this surface as its default Codex backend. Beneath it, Codex workers get an
+   OS-enforced floor Claude lacks: sandbox (bwrap/Seatbelt), execpolicy `forbidden` rules, and
+   `requirements.toml` caps. Watch items: app-server is tagged experimental (wire stability),
+   and `approvals_reviewer` must stay `user` so Codex's own LLM-approver feature never silently
+   replaces the foreman.
 2. **Spawn-time scoping** everywhere: workdir, tools/MCP allowlists, permission mode, model —
    the worker never holds capabilities its ticket doesn't need (VERIFIED for Claude; Happier
    adds per-session MCP selection at spawn).
@@ -257,16 +269,19 @@ spawns a fresh SA that rehydrates from the docs. Both paths exist; choosing is a
 5. Happier release-ring gating — which needed features are public-ring vs dev builds.
 6. Local spawn endpoint security posture on a shared host (loopback binding).
 7. Relay latency/throughput when one foreman drives several sessions.
-8. **The interception loop end-to-end:** permission callback ➜ broker ➜ foreman session ➜
-   decision ➜ reply — does a workable broker exist or need building?
-9. Per-harness interception inventory: what Codex (and other harnesses) offer as a layer-1
-   adapter, if anything.
+8. **The interception loop via Happier, end-to-end:** `session_permission_respond` callable
+   from the foreman's session-control surface in the shipped release, cross-session on one
+   account; wake path (webhook vs polling) and latency; whether the foreman can read the full
+   pending request (tool name + input), not just counts.
+9. **Codex app-server semantics:** does an unanswered `requestApproval` block indefinitely or
+   time out; does a mid-turn deny return control cleanly; how `granular` approval policy
+   interacts with an external approver; wire stability across releases (it is experimental).
 
 ## Open design questions (for the design phase)
 
-- The broker topology for the interception loop (experiment 8's design half).
 - The fail-closed worker permission policy: which actions are deliberately left unresolved so
-  they route to the foreman.
+  they route to the foreman. (Claude: the evaluation order means anything pre-allowed never
+  reaches the broker; Codex: `approval_policy` + execpolicy verdicts play the same role.)
 - Event sources for check moments 1, 2 and 4 (dispatch-only work-start vs heartbeats vs
   artifact diffs; rabbit-hole signal and threshold).
 - Handoff mechanics: takeover-existing-session vs fresh-spawn-from-docs (both verified
