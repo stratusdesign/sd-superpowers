@@ -31,6 +31,29 @@ This fork's V1 brief deliberately avoided building an orchestration layer. The f
 project owner. The V1 workflow (skills, gates, reviews) remains the process the foreman
 supervises; the foreman is the layer that makes it run without the operator in the middle.
 
+## Project structure (decided 2026-09-08)
+
+Three deliverables, three homes — split along one line: **the methodology is the shared script
+every session reads; the harness is the machinery that casts and drives it.**
+
+1. **sd-superpowers (methodology repo) — updated.** Gains the role vocabulary, the foreman role
+   definition, the process/methodology each role follows, and documentation + ticketing standards.
+   This is the canon every spawned session boots into, so any session — whatever seat it holds —
+   sees the whole cast and knows its own part and expected methodology. Held to sd-superpowers'
+   behavioral-testing bar (tested skill changes, not prose edits).
+
+2. **The foreman role — defined in the methodology (part of #1).** A named, known role, not just a
+   thing inside a harness. One overseer per project. "Orchestrator" describes its *function*;
+   **"foreman" is its name** — kept distinct from the "orchestration harness" (machinery) so role
+   and machinery never share a word. Orchestrator and foreman are the **same role**, not two seats.
+
+3. **Orchestration harness — new repo.** Happier + the foreman runtime + Hermes: the machinery
+   that spawns sessions and drives the methodology from above. Depends on sd-superpowers; does not
+   live inside it, and leaves sd-superpowers working standalone.
+
+The foreman is thus **defined in the script (#1) and implemented in the machinery (#3).** Each
+deliverable gets its own spec → plan → build cycle when design starts.
+
 ## The core idea
 
 The fork already believes in independent checking (co-designer, adversarial reviewer, verifier).
