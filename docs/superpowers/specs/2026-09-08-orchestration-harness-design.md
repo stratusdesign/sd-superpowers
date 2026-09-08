@@ -1,10 +1,10 @@
 # Spec B — Orchestration Harness v1: The Foreman Runtime
 
-> T-003 · Deliverable #3 · Status: draft v3 (post Codex review 1 + targeted re-review) ·
-> pending operator approval (3 open items).
+> T-003 · Deliverable #3 · Status: draft v4 (operator decisions 2026-09-08 applied) ·
+> pending operator approval.
 > Boundary: this spec owns the machinery (HOW the foreman runs) — spawning, driving, event
 > sources, escalation transport, recovery, repo layout. Duties and prohibitions are Spec A's;
-> artifact formats are Spec C's (one flagged exception: §Foreman journal). Rationale source:
+> artifact formats are Spec C's, unchanged. Rationale source:
 > `docs/superpowers/foreman-role-concept.md` (concept), tickets T-004/T-005 (experiment inputs).
 
 ## Goal
@@ -86,9 +86,9 @@ elsewhere.
 
 | # | Event | Source (mechanism + tag) | Foreman response | Persisted receipt | Failure behavior | Owner |
 |---|---|---|---|---|---|---|
-| 1 | A session doing work not tied to a valid assigned ticket in `in-progress` | Structural: workers exist only by foreman dispatch. Sweep: account session list diffed against dispatch receipts at every wake + rehydration (visibility VERIFIED). **Observes session identity only** — it catches unknown/unregistered sessions. A known session doing unrelated work inside itself is NOT observable here; it may later be detected by #2's diff gate, #4's envelope, or the completion checker — none of which guarantees detection. The concept's work-start/heartbeat contract is deliberately not built in v1 — deferred to M1 with dogfood data (open item) | Unknown session → escalate to operator (cannot attribute) | Sweep line in foreman journal; escalation receipt | Session list unavailable → fail closed: no dispatch, no acknowledgment; escalation per §Escalation availability | Foreman (process); operator if plan implicated |
-| 2 | Change to scope / design / a ticket's definition of done (incl. unauthorized status transitions) | Raised: worker message to foreman. Silent: deterministic diff gate — **baseline = the commit hash recorded in the most recent acknowledgment receipt** (Spec C receipts carry commit refs); sweep = `git diff <baseline> --` over the protected paths — baseline against the **working tree**, so committed AND uncommitted edits both appear — plus `git status --porcelain` there for untracked files. Protected: spec files (entire), ticket `## Scope` / `## Acceptance criteria` sections, `Status:` headers. **Authorization match is per-file and mechanical: a changed protected file is authorized iff a raise receipt newer than the baseline acknowledgment names that file path as its evidence-ref (Spec C grammar); anything else = breach flag** (scripts flag, never interpret). Whether an authorized change does what the raise said = checker judgment (concept §Script vs model) | Raised → route to decision-class owner (plan/scope → operator; content → sa). Unmatched hunk → process breach: block acknowledgment, commission checker on the departure, escalate | Receipt on the ticket; journal line for spec-level diffs | Diff sweep fails → no acknowledgment can be issued (gate requires sweep) — fail closed | Operator (plan); sa (content); foreman (breach) |
-| 3 | Irreversible / outside-world action | **Source = the raised event only** (worker's raise message; raising is a Spec A seat duty). **Unraised instances are unobservable pre-action in v1** — layer 1 is off; this is the concept's stated, operator-accepted consequence ("the one thing v1 cannot do is pre-empt"). Compensations reduce exposure but do not observe: layer-2 scoping (tool not granted ≠ tool misused), Hermes post-hoc verification (VERIFIED mounts + code graph) | Raised → escalate to operator; **gate progression freezes** (no acknowledgment, no transition, no further dispatch). No mechanical worker stop is claimed; stop candidate = session stop (E8), not relied on | Escalation receipt on ticket, journal line | Escalation transport degraded → gates stay frozen; §Escalation availability applies | Operator |
+| 1 | A live session with no live assignment behind it | Structural: **workers are ephemeral** — spawned by foreman dispatch for one ticket, torn down at signoff; only the SA session may persist (operator decision 2026-09-08). So a live worker session implies a live assignment. Sweep at wake/rehydration: account session list vs dispatch receipts (visibility VERIFIED) — flags unknown sessions and workers outliving their signoff. No work-start/heartbeat contract: with single-ticket ephemeral workers, session existence IS the work-start event (operator decision — the drift-inside-a-known-session scenario was manufactured) | Unknown session → escalate to operator (cannot attribute). Worker outliving signoff → teardown (lifecycle step 6) | Escalation receipt on the affected ticket; unattributable → STATUS note | Session list unavailable → fail closed: no dispatch, no acknowledgment; escalation per §Escalation availability | Foreman (process); operator if plan implicated |
+| 2 | Change to scope / design / a ticket's definition of done (incl. unauthorized status transitions) | Raised: worker message to foreman. Silent: deterministic diff gate — **baseline = the commit hash recorded in the most recent acknowledgment receipt** (Spec C receipts carry commit refs); sweep = `git diff <baseline> --` over the protected paths — baseline against the **working tree**, so committed AND uncommitted edits both appear — plus `git status --porcelain` there for untracked files. Protected: spec files (entire), ticket `## Scope` / `## Acceptance criteria` sections, `Status:` headers. **Authorization match is per-file and mechanical: a changed protected file is authorized iff a raise receipt newer than the baseline acknowledgment names that file path as its evidence-ref (Spec C grammar); anything else = breach flag** (scripts flag, never interpret). Whether an authorized change does what the raise said = checker judgment (concept §Script vs model) | Raised → route to decision-class owner (plan/scope → operator; content → sa). Unmatched hunk → process breach: block acknowledgment, commission checker on the departure, escalate | Receipts on the affected ticket; spec-level → STATUS note | Diff sweep fails → no acknowledgment can be issued (gate requires sweep) — fail closed | Operator (plan); sa (content); foreman (breach) |
+| 3 | Irreversible / outside-world action | **Source = the raised event only** (worker's raise message; raising is a Spec A seat duty). **Unraised instances are unobservable pre-action in v1** — layer 1 is off; this is the concept's stated, operator-accepted consequence ("the one thing v1 cannot do is pre-empt"). Compensations reduce exposure but do not observe: layer-2 scoping (tool not granted ≠ tool misused), Hermes post-hoc verification (VERIFIED mounts + code graph) | Raised → escalate to operator; **gate progression freezes** (no acknowledgment, no transition, no further dispatch). No mechanical worker stop is claimed; stop candidate = session stop (E8), not relied on | Escalation receipt on ticket | Escalation transport degraded → gates stay frozen; §Escalation availability applies | Operator |
 | 4 | Rabbit-hole (one ticket consuming far more than expected) | Effort envelope set at dispatch (wall-clock + turn count; values are config not spec — **E5** calibrates at M1), checked on `session_status_get` / `session_wait_idle` polls (catalogue VERIFIED; live semantics **E4/E8**) | Envelope breach is a signal, not a verdict → commission a scope checker (judgment, never script); verdict routes per acceptance owners | Envelope in dispatch receipt; breach + checker receipts | Polling unavailable → sweep cadence catches at next wake; gates stay closed meanwhile | Foreman (raise); operator (if plan change) |
 
 ## Escalation transport
@@ -100,19 +100,20 @@ elsewhere.
 - **Fallback: Hermes → Telegram — operator/Hermes-initiated until E6.** The notify path is live
   in operator infra (DECLARED), but the foreman cannot invoke it today: Hermes hosts no daemon,
   so no foreman→Hermes request channel exists (**E6**). What IS available when the driving
-  surface is down: the foreman writes the escalation into its own session and journal — both
-  visible on phone/web — and the operator (or the operator asking Hermes) closes the loop.
+  surface is down: the foreman writes the escalation into its own session and the affected
+  ticket — both visible (phone/web; git) — and the operator (or the operator asking Hermes)
+  closes the loop.
   Automatic fallback dispatch exists only after E6 passes.
 - **Blocking semantics (v1) — gate-blocking, not execution-stopping.** An open escalation
   freezes gate progression: the affected ticket cannot transition, no acknowledgment is issued,
   no further dispatch happens, and the worker gets no answer. It does **not** mechanically stop
   a running bypass worker — v1 has no pre-action stop (matrix #3); holding after a raise is the
   worker's seat duty (Spec A), and the machinery's guarantee is the gate alone. Escalations are
-  receipts; open ones survive foreman death via the journal.
+  receipts on the ticket; open ones survive foreman death there.
 
 ## Failure and recovery (invariants concretized)
 
-- **Durable state** = tickets, backlog, receipts, foreman journal, specs, git history. The
+- **Durable state** = tickets, backlog, receipts, STATUS, specs, git history. The
   foreman session holds nothing authoritative (concept invariant).
 - **Fail closed — scoped to what is actually enforced:** every gated act (dispatch,
   acknowledgment, status transition, answering a raise) is a foreman act. Dead foreman, broken
@@ -121,35 +122,25 @@ elsewhere.
   NOT stopped by foreman death — it runs its current work to completion and then waits
   unanswered (same v1 limit as matrix #3).
 - **Foreman death → respawn + rehydration** (normative procedure, lives in `foreman/FOREMAN.md`):
-  read PROCESS.md roles binding → backlog → all non-`done` tickets → journal tail; list live
+  read PROCESS.md roles binding → backlog → all non-`done` tickets → STATUS; list live
   sessions; reconcile (matrix #1 sweep). Orphan worker found: **stop it and redispatch fresh
   from the ticket** under the fresh-spawn preconditions (§Handoff); adopting a live orphan via
   takeover only after E1. Detection in v1 is operator/Hermes-initiated (manual); an automated
-  staleness watchdog on the journal heartbeat is deferred to M1 observation.
+  foreman-death watchdog is deferred to M1 observation.
 - **Checker failure** = unresolved check: report, retry, or operator-approved degraded proceed —
   receipt required, never silent substitution (concept invariant carried).
 
-### Foreman journal (format ownership: amendment submitted to Spec C)
+### Foreman notes — no new artifact (operator decision 2026-09-08)
 
-`foreman/journal.md`, append-only: non-ticket-scoped events — sweeps, spawns, pending
-escalations, heartbeats, discards. Its format belongs to Spec C (Spec C's boundary); the
-re-review confirmed that flagging the conflict is not resolving it. So: submitted for operator
-approval alongside this spec, as a Spec C amendment (amending an approved spec is a plan
-change — the operator's word applies it):
-
-> **Proposed Spec C §Receipts addition — Foreman journal.** Path: `foreman/journal.md`
-> (harness repo). Append-only. Non-ticket-scoped runtime events (sweep, spawn,
-> escalation-pending, heartbeat, discard), one line per event, exact same line grammar and
-> greppable anchors as ticket receipts. The journal is audit/index, never authority: ticket
-> headers remain authoritative.
-
-Approved → Spec B references Spec C §Foreman journal and defines no format. Rejected → the
-journal returns to design (this spec's sweeps and rehydration depend on it).
+The proposed separate foreman journal is **rejected**: it duplicated the existing system. The
+foreman's records land in the artifacts Spec C already defines — ticket-scoped events as
+receipts on the ticket (dispatch, escalation, disposition, discard, acknowledgment), infra and
+handover state in `docs/STATUS.md`. Spec C stays unchanged; this spec defines no format.
 
 ## Foreman session config (thinness, mechanically)
 
 - Its own layer-2 scoping: Happier MCP (session control) + repo read + write confined to
-  tickets/backlog/journal + git commit of those paths. No code-edit tools, no builder tooling.
+  tickets/backlog/STATUS + git commit of those paths. No code-edit tools, no builder tooling.
   Enforcement = spawn allowlist (surface per E3) + role-cast prohibitions (Spec A) + everything
   it does being receipts (audit).
 - Model: holds a line rather than chasing the problem; different family from the SA preferred
@@ -177,7 +168,6 @@ journal returns to design (this spec's sweeps and rehydration depend on it).
   docs/STATUS.md                infra/handover state (Spec C doc standard)
   docs/experiments/             E1–E9 results, one file each
   foreman/FOREMAN.md            foreman boot + rehydration procedure (normative, §Failure)
-  foreman/journal.md            append-only foreman receipts (§Foreman journal)
   adapters/claude.md  adapters/codex.md   per-harness adapter status vs the concept contract
   bin/                          thin spawn/sweep wrappers over happier CLI — scripts operate on
                                 explicit IDs and recorded evidence only (concept §Script vs model)
@@ -202,19 +192,15 @@ deep support) with inline-brief bootstrap fallback until E7; Codex layer-1 machi
 | E8 | Driving-surface shakedown: live semantics of `session_spawn_new`, `session_message_send`, `session_status_get`/`session_wait_idle`, session stop/teardown, exercised end-to-end on one worker | Every runtime mechanism; M1 entry |
 | E9 | Hermes-triggered foreman spawn, end-to-end on the host daemon | Hermes spawn trigger; operator-by-hand until then |
 
-## Open items for operator approval
+## Operator decisions (2026-09-08, recorded)
 
-1. The submitted Spec C journal amendment (§Foreman journal): approve or reject.
-2. Matrix #1's work-start/heartbeat contract deferred to M1 — confirm the deferral (the
-   concept asked for an event contract; v1 ships identity-only detection; #2/#4 and the
-   completion checker may catch what it misses, none guarantees it).
-3. **T-003 Scope wording (raised — re-review finding N1).** The ticket's Scope says
-   "escalation to phone (worker blocks)"; what v1 machinery actually delivers is
-   gate-progression freeze, not a mechanical worker stop (matrix #3, §Escalation). The sa does
-   not amend its own ticket's Scope unraised — this is the raise. Either: amend the Scope
-   wording to "escalation to phone (gate progression freezes)", or require a tested mechanical
-   stop — which makes session-stop within E8 a gating experiment. Concept restatement
-   ("v1 catches it after") sits with option one.
+1. **No separate foreman journal** — notes go into the existing artifacts (ticket receipts;
+   STATUS). Spec C unchanged. Applied: §Foreman notes.
+2. **Workers are ephemeral** — builder/checker sessions exist only for their scoped work and
+   its signoff; only the SA session may persist. The heartbeat/drift-in-a-known-session
+   scenario was manufactured and is dropped. Applied: matrix #1, lifecycle.
+3. **T-003 Scope wording amended** (operator-approved) — "worker blocks" → gate-progression
+   freeze; no mechanical stop claimed in v1. Applied: ticket Scope, matrix #3, §Escalation.
 
 ## V1 boundaries — honored
 
@@ -233,8 +219,8 @@ nothing above assumes Claude-only workers.
   throughout (unexercised MCP actions → E8; Hermes spawn → E9). ✔
 - V1 boundaries honored: §V1 boundaries. ✔
 - Fail-closed + recovery invariants concretized — and scoped to what the machinery actually
-  enforces (gates, not worker execution): §Failure and recovery. ✔ — conditional on open
-  item 3 (the ticket's "worker blocks" wording is raised for amendment, not self-amended).
+  enforces (gates, not worker execution): §Failure and recovery. ✔ (ticket Scope wording
+  amended with operator approval — §Operator decisions).
 - Codex review round 1: 10/10 applied. Targeted re-review: 8 resolved; finding 5 completed in
   this draft (working-tree sweep + per-file match rule); finding 8 restructured as a submitted
   Spec C amendment; N1 → open item 3; N2 applied. Reviews: `docs/superpowers/foreman/reviews/`.

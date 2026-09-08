@@ -10,7 +10,8 @@ Failure and recovery, Runtime foundation, V1 scope decisions, live-setup finding
 The foreman runtime: spawning workers via Happier daemon (`IS_SANDBOX=1`, spawn scoping), the
 foreman session's own config (Happier MCP; thinness via allowlist), check-moment event sources
 (dispatch-only work-start; artifact diffs; rabbit-hole signal TBD), escalation to phone
-(worker blocks), state rehydration from artifacts (disposable foreman), Hermes integration
+(gate progression freezes; no mechanical worker stop in v1 — wording amended with operator
+approval 2026-09-08), state rehydration from artifacts (disposable foreman), Hermes integration
 (spawn trigger + evidence checks), repo layout for the new project (minimum needed to express runtime boundaries — no more).
 
 ## Acceptance criteria
@@ -44,6 +45,9 @@ blocker resolutions pending, then operator approval.
 - 2026-09-08T14:26:31Z · spec-re-review · checker · 8-resolved-1-partial-1-unresolved-plus-N1-N2 · docs/superpowers/foreman/reviews/T-003-codex-review-2.md
 - 2026-09-08T14:30:00Z · finding-disposition · sa · 5-and-N2-applied-8-restructured-as-spec-c-amendment-draft-v3 · docs/superpowers/specs/2026-09-08-orchestration-harness-design.md
 - 2026-09-08T14:30:00Z · scope-amendment-raise · sa · T-003-scope-worker-blocks-vs-gate-freeze-to-operator · docs/superpowers/foreman/reviews/T-003-codex-review-2.md
+- 2026-09-08T15:05:00Z · operator-decision · operator · journal-rejected-use-existing-artifacts · conversation-2026-09-08
+- 2026-09-08T15:05:00Z · operator-decision · operator · workers-ephemeral-heartbeat-scenario-dropped · conversation-2026-09-08
+- 2026-09-08T15:05:00Z · scope-amendment · operator · worker-blocks-reworded-to-gate-freeze · conversation-2026-09-08
 
 Re-review (2026-09-08, round 2): 8/10 resolved; finding 5 (diff-gate determinism) completed in
 draft v3 (working-tree sweep + per-file authorization match); finding 8 resolved by submitting
