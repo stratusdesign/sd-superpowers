@@ -25,7 +25,7 @@
 
 | ID | Title | Deliverable | Status |
 |---|---|---|---|
-| T-006 | Behavioral RED baselines in fresh sessions (plan Task 0) | #1 | open |
+| T-006 | Behavioral RED baselines in fresh sessions (plan Task 0) | #1 | in-progress |
 | T-007 | role-cast skill (plan Task 1) | #1 | open |
 | T-008 | using-superpowers seat routing line (plan Task 2) | #1 | open |
 | T-009 | ticket-discipline skill (plan Task 3) | #1 | open |

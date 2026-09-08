@@ -1,6 +1,6 @@
 # T-006 — Behavioral RED baselines in fresh sessions (Plan A Task 0)
 
-Status: open · Deliverable: #1 · Owner: builder
+Status: in-progress · Deliverable: #1 · Owner: builder
 
 ## Spec reference
 Spec A (approved): docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md
