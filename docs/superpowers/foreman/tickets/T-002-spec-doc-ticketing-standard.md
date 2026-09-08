@@ -1,6 +1,6 @@
 # T-002 — Spec C: documentation + ticketing standard
 
-Status: review · Deliverable: #1 · Owner: sa
+Status: done · Deliverable: #1 · Owner: sa
 
 ## Spec reference
 Concept: "Ticketing and documentation (inherited, working pattern)"; PulseMark
@@ -24,3 +24,9 @@ scripts stay mechanical — concept, Script vs model).
 **Spec:** docs/superpowers/specs/2026-09-08-ticketing-doc-standard-design.md
 Draft v2 — Codex review round 1 applied (12 findings), targeted re-review round 2 passed
 (finding 7 resolved by this artifact). Awaiting operator approval.
+
+## Receipts
+- 2026-09-08T13:33:19Z · codex-review-r1 · checker · 12-findings-reported · task-a5214e962a2783adb
+- 2026-09-08T13:33:19Z · codex-review-r2-targeted · checker · 11-of-12-resolved · task-a6a001cc011356ab1
+- 2026-09-08T13:33:19Z · operator-review-r3 · operator · 6-findings-reported-and-applied · commit-bc8aecb
+- 2026-09-08T13:33:19Z · approval · operator · approved · conversation-2026-09-08

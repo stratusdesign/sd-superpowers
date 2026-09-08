@@ -1,6 +1,6 @@
 # T-001 — Spec A: sd-superpowers methodology update
 
-Status: review · Deliverable: #1 · Owner: sa
+Status: done · Deliverable: #1 · Owner: sa
 
 ## Spec reference
 Concept `docs/superpowers/foreman-role-concept.md`: Project structure #1–#2, Roles, Authority,
@@ -25,3 +25,9 @@ preserved), and where the role canon lives so spawned sessions load it.
 **Spec:** docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md
 Draft v2 — Codex review round 1 applied (12 findings), targeted re-review round 2 passed
 (finding 7 resolved by this artifact). Awaiting operator approval.
+
+## Receipts
+- 2026-09-08T13:33:19Z · codex-review-r1 · checker · 12-findings-reported · task-a5214e962a2783adb
+- 2026-09-08T13:33:19Z · codex-review-r2-targeted · checker · 11-of-12-resolved · task-a6a001cc011356ab1
+- 2026-09-08T13:33:19Z · operator-review-r3 · operator · 6-findings-reported-and-applied · commit-bc8aecb
+- 2026-09-08T13:33:19Z · approval · operator · approved · conversation-2026-09-08
