@@ -1,0 +1,113 @@
+- generic:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - generic:
+                                      - generic:
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic [ref=f6e26]:
+                                                  - generic [ref=f6e27]: Sessions
+                                                  - button [ref=f6e322] [cursor=pointer]:
+                                                    - generic [ref=f6e31]: happier.stratus3.co
+                                                - generic [ref=f6e35]:
+                                                  - generic [ref=f6e36] [cursor=pointer]
+                                                  - generic [ref=f6e41] [cursor=pointer]
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - tablist:
+                                                - tab:
+                                                  - generic: Happier
+                                                - tab [selected]:
+                                                  - generic: Direct
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic:
+                                                  - button:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: Browse provider sessions
+                                                        - generic: Choose a machine, provider, and session to open it here.
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic:
+                                                          - generic:
+                                                            - generic:
+                                                              - button:
+                                                                - generic:
+                                                                  - generic:
+                                                                    - generic: Backup your secret key
+                                                                    - generic: Your secret key is the only way to recover your account. Save it in a secure place like a password manager.
+                                                      - generic:
+                                                        - generic:
+                                                          - generic:
+                                                            - generic: Drafts
+                                                            - generic:
+                                                              - generic:
+                                                                - button:
+                                                                  - generic:
+                                                                    - generic: t004
+                                                                    - generic:
+                                                                      - button
+                                                  - generic:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic:
+                                                          - generic:
+                                                            - button:
+                                                              - generic: Archived Sessions
+                            - generic [ref=f6e290]:
+                              - generic [ref=f6e294]:
+                                - generic [ref=f6e295] [cursor=pointer]
+                                - generic [ref=f6e302] [cursor=pointer]
+                                - generic [ref=f6e308] [cursor=pointer]
+                              - button [ref=f6e323] [cursor=pointer]
+  - dialog [active]:
+    - generic [ref=f6e335]:
+      - generic [ref=f6e336]:
+        - generic [ref=f6e337]: online
+        - generic [ref=f6e471]:
+          - button "Start another" [ref=f6e472] [cursor=pointer]
+          - button "Delete draft" [ref=f6e477] [cursor=pointer]
+      - generic [ref=f6e342]:
+        - textbox "What would you like to work on?" [ref=f6e347]
+        - generic [ref=f6e350]:
+          - generic [ref=f6e351]:
+            - generic [ref=f6e355]:
+              - generic [ref=f6e356] [cursor=pointer]: Use CLI settings
+              - button "Build" [ref=f6e363] [cursor=pointer]
+              - generic [ref=f6e372] [cursor=pointer]
+              - generic [ref=f6e378] [cursor=pointer]: MCP
+              - generic [ref=f6e385] [cursor=pointer]: Automate
+              - generic [ref=f6e391] [cursor=pointer]
+              - button "Default session type" [ref=f6e397] [cursor=pointer]:
+                - generic [ref=f6e403]: Happier
+            - generic [ref=f6e405]:
+              - button "Start New Session" [disabled]
+          - generic [ref=f6e415]:
+            - generic [ref=f6e416] [cursor=pointer]: upbeat-gangu…
+            - generic [ref=f6e424] [cursor=pointer]: /tmp/claude-0/-home-sd-superpowers/c7a6f342-47d8-4de6-9a1c-38a4bdf2487c/scratchpad/t004
+            - generic [ref=f6e431] [cursor=pointer]: "Resume Claude session: 2836faab…545d5f18"

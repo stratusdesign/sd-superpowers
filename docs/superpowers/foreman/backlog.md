@@ -10,7 +10,7 @@
 | T-001 | Spec A: sd-superpowers methodology update (role cast, foreman role, process changes) | #1 | open |
 | T-002 | Spec C: documentation + ticketing standard (shared schema, PulseMark-derived) | #1 | open |
 | T-003 | Spec B: orchestration harness v1 (foreman runtime: spawn, check-moments, escalation, MCP, Hermes) | #3 | open |
-| T-004 | Experiment: session takeover/resume of an existing Claude session (feeds handoff design in T-003) | #3 | open |
+| T-004 | Experiment: session takeover/resume of an existing Claude session (feeds handoff design in T-003) | #3 | done |
 | T-005 | Experiment: superpowers bootstrap in Happier-daemon-spawned sessions (T-001 boot contract + T-003 spawn design depend on it) | #1,#3 | open |
 
 **Order:** T-004 → T-001 ∥ T-002 (shared boundary reconciled first) → T-005 → T-003.

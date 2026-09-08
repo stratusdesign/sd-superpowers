@@ -1,0 +1,96 @@
+- generic:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - generic:
+                                      - generic:
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic [ref=f6e26]:
+                                                  - generic [ref=f6e27]: Sessions
+                                                  - button [ref=f6e322] [cursor=pointer]:
+                                                    - generic [ref=f6e31]: happier.stratus3.co
+                                                - generic [ref=f6e35]:
+                                                  - generic [ref=f6e36] [cursor=pointer]
+                                                  - generic [ref=f6e41] [cursor=pointer]
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - tablist:
+                                                - tab:
+                                                  - generic: Happier
+                                                - tab [selected]:
+                                                  - generic: Direct
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic:
+                                                  - button:
+                                                    - generic:
+                                                      - generic:
+                                                        - generic: Browse provider sessions
+                                                        - generic: Choose a machine, provider, and session to open it here.
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic:
+                                                  - generic:
+                                                    - generic:
+                                                      - generic: Select a session
+                                                      - generic: Pick a session from the sidebar to view it here.
+                                                  - generic:
+                                                    - generic:
+                                                      - button:
+                                                        - generic: Enter URL manually
+                            - generic [ref=f6e290]:
+                              - generic [ref=f6e294]:
+                                - generic [ref=f6e295] [cursor=pointer]
+                                - generic [ref=f6e302] [cursor=pointer]
+                                - generic [ref=f6e308] [cursor=pointer]
+                              - button [ref=f6e323] [cursor=pointer]
+  - dialog:
+    - generic [ref=f6e335]:
+      - generic [ref=f6e336]: online
+      - generic [ref=f6e342]:
+        - textbox "What would you like to work on?" [ref=f6e347]
+        - generic [ref=f6e350]:
+          - generic [ref=f6e351]:
+            - generic [ref=f6e355]:
+              - generic [ref=f6e356] [cursor=pointer]: Use CLI settings
+              - button "Build" [ref=f6e363] [cursor=pointer]
+              - generic [ref=f6e372] [cursor=pointer]
+              - generic [ref=f6e378] [cursor=pointer]: MCP
+              - generic [ref=f6e385] [cursor=pointer]: Automate
+              - generic [ref=f6e391] [cursor=pointer]
+              - button "Default session type" [ref=f6e397] [cursor=pointer]:
+                - generic [ref=f6e403]: Happier
+            - generic [ref=f6e405]:
+              - button "Start New Session" [disabled]
+          - generic [ref=f6e415]:
+            - generic [ref=f6e416] [cursor=pointer]: upbeat-gangu…
+            - generic [ref=f6e424] [cursor=pointer]: /root
+            - generic [ref=f6e431] [cursor=pointer]: Resume Claude session
+    - generic [ref=f6e447]:
+      - generic [ref=f6e448]:
+        - textbox "Paste Claude session ID…" [active] [ref=f6e450]
+        - button "Browse sessions" [ref=f6e451] [cursor=pointer]
+      - generic [ref=f6e458]:
+        - generic [ref=f6e459] [cursor=pointer]: Paste
+        - generic [ref=f6e467] [cursor=pointer]: Save
+      - generic [ref=f6e469]: You can find session IDs in the Session Info screen.

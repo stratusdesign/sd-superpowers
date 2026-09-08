@@ -1,0 +1,28 @@
+- generic:
+  - dialog [active]:
+    - generic [ref=f7e14]:
+      - generic [ref=f7e15]:
+        - generic [ref=f7e16]: online
+        - generic [ref=f7e150]:
+          - button "Start another" [ref=f7e151] [cursor=pointer]
+          - button "Delete draft" [disabled]
+      - generic [ref=f7e21]:
+        - textbox "What would you like to work on?" [ref=f7e26]: From our earlier conversation, tell me the codeword and the project animal. Then write a file named takeover-proof.txt in the current directory containing exactly the codeword.
+        - generic [ref=f7e29]:
+          - generic [ref=f7e30]:
+            - generic [ref=f7e34]:
+              - generic [ref=f7e35] [cursor=pointer]: Use CLI settings
+              - button "Build" [ref=f7e42] [cursor=pointer]
+              - generic [ref=f7e51] [cursor=pointer]
+              - generic [ref=f7e57] [cursor=pointer]: MCP
+              - generic [ref=f7e64] [cursor=pointer]: Automate
+              - generic [ref=f7e70] [cursor=pointer]
+              - button "Default session type" [ref=f7e76] [cursor=pointer]:
+                - generic [ref=f7e82]: Happier
+            - generic [ref=f7e84]:
+              - button "Start New Session" [disabled]:
+                - progressbar [ref=f7e171]
+          - generic [ref=f7e94]:
+            - generic [ref=f7e95] [cursor=pointer]: upbeat-gangu…
+            - generic [ref=f7e103] [cursor=pointer]: /tmp/claude-0/-home-sd-superpowers/c7a6f342-47d8-4de6-9a1c-38a4bdf2487c/scratchpad/t004
+            - generic [ref=f7e110] [cursor=pointer]: "Resume Claude session: 2836faab…545d5f18"
