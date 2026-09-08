@@ -62,8 +62,9 @@ EXPERIMENT (E#, listed in §Experiments). Every mechanism below carries one.
    workdir + model + MCP selection + spawn brief.
 4. **Work.** Seat duties per Spec A; statuses and done-claims per Spec C. The foreman never
    messages content into a worker beyond dispatch, answers to raises, and gate outcomes.
-5. **Completion.** Done-claim appended → `review` → foreman commissions an independent checker
-   (neutral brief from artifacts + standing rubric only) → findings dispositioned per acceptance
+5. **Completion.** Done-claim appended → `review` → foreman commissions the matching reviewer
+   seat — sa work → sa-reviewer, builder work → code-reviewer (Spec A) — with a neutral brief
+   (artifacts + standing rubric only) → findings dispositioned per acceptance
    owners → acknowledgment → `done`. All steps are receipts (Spec C).
 6. **Teardown.** Foreman stops the session (`happier session stop` exists — VERIFIED from
    source/docs; live semantics E8); session id stays in the receipts for audit.
@@ -89,9 +90,9 @@ elsewhere.
 | # | Event | Source (mechanism + tag) | Foreman response | Persisted receipt | Failure behavior | Owner |
 |---|---|---|---|---|---|---|
 | 1 | A live session with no live assignment behind it | Structural: **workers are ephemeral** — spawned by foreman dispatch for one ticket, torn down at signoff; only the SA session may persist (operator decision 2026-09-08). So a live worker session implies a live assignment. Sweep at wake/rehydration: account session list vs dispatch receipts (visibility VERIFIED) — flags unknown sessions and workers outliving their signoff. No work-start/heartbeat contract: with single-ticket ephemeral workers, session existence IS the work-start event (operator decision — the drift-inside-a-known-session scenario was manufactured) | Unknown session → escalate to operator (cannot attribute). Worker outliving signoff → teardown (lifecycle step 6) | Escalation receipt on the affected ticket; unattributable → STATUS note | Session list unavailable → fail closed: no dispatch, no acknowledgment; escalation per §Escalation availability | Foreman (process); operator if plan implicated |
-| 2 | Change to scope / design / a ticket's definition of done (incl. unauthorized status transitions) | Raised: worker message to foreman. Silent: caught at **signoff** — every worker's output gets an independent review (lifecycle step 5), and the checker brief always asks: did anything outside the ticket's files change; were spec files or ticket `## Scope` / `## Acceptance criteria` / `Status:` headers touched without a matching raise receipt? Workers are ephemeral and one-at-a-time, so the exposure window is one ticket's flight and signoff always runs. No standing watcher (operator decision 2026-09-08 — it duplicated the signoff review) | Raised → route to decision-class owner (plan/scope → operator; content → sa). Unraised change found at signoff → process breach: block acknowledgment, escalate | Receipts on the affected ticket | Signoff review is mandatory before `done` (Spec C lifecycle) — no review, no acknowledgment: fail closed | Operator (plan); sa (content); foreman (breach) |
-| 3 | Irreversible / outside-world action | **Source = the raised event only** (worker's raise message; raising is a Spec A seat duty). **Unraised instances are unobservable pre-action in v1** — layer 1 is off; this is the concept's stated, operator-accepted consequence ("the one thing v1 cannot do is pre-empt"). Compensations reduce exposure but do not observe: layer-2 scoping (tool not granted ≠ tool misused), Hermes post-hoc verification (VERIFIED mounts + code graph) | Raised → escalate to operator; **gate progression freezes** (no acknowledgment, no transition, no further dispatch). No mechanical worker stop is claimed; stop candidate = session stop (E8), not relied on | Escalation receipt on ticket | Escalation transport degraded → gates stay frozen; §Escalation availability applies | Operator |
-| 4 | Rabbit-hole (one ticket consuming far more than expected) | Foreman judgment at check-in: polling a worker (`session_status_get` / `session_wait_idle` — catalogue VERIFIED; live semantics E8), the foreman judges whether time-on-ticket is out of proportion. No formal per-ticket budget or breach bookkeeping (operator decision 2026-09-08 — formalize only if dogfooding shows judgment isn't enough) | Smells long → commission a scope checker (judgment, never script); verdict routes per acceptance owners | Checker commission + verdict receipts on the ticket | Polling unavailable → caught at next wake sweep; gates stay closed meanwhile | Foreman (raise); operator (if plan change) |
+| 2 | Change to scope / design / a ticket's definition of done (incl. unauthorized status transitions) | Raised: worker message to foreman. Silent: caught at **signoff** — every worker's output gets an independent review (lifecycle step 5), and the reviewer brief always asks: did anything outside the ticket's files change; were spec files or ticket `## Scope` / `## Acceptance criteria` / `Status:` headers touched without a matching raise receipt? Workers are ephemeral and one-at-a-time, so the exposure window is one ticket's flight and signoff always runs. No standing watcher (operator decision 2026-09-08 — it duplicated the signoff review) | Raised → route to decision-class owner (plan/scope → operator; content → sa). Unraised change found at signoff → process breach: block acknowledgment, escalate | Receipts on the affected ticket | Signoff review is mandatory before `done` (Spec C lifecycle) — no review, no acknowledgment: fail closed | Operator (plan); sa (content); foreman (breach) |
+| 3 | Irreversible / outside-world action | **Source = the raised event only** (worker's raise message; raising is a Spec A seat duty). **Unraised instances are unobservable pre-action in v1** — layer 1 is off; this is the concept's stated, operator-accepted consequence ("the one thing v1 cannot do is pre-empt"). Compensations reduce exposure but do not observe: layer-2 scoping (tool not granted ≠ tool misused), post-hoc review at signoff | Raised → escalate to operator; **gate progression freezes** (no acknowledgment, no transition, no further dispatch). No mechanical worker stop is claimed; stop candidate = session stop (E8), not relied on | Escalation receipt on ticket | Escalation transport degraded → gates stay frozen; §Escalation availability applies | Operator |
+| 4 | Rabbit-hole (one ticket consuming far more than expected) | Foreman judgment at check-in: polling a worker (`session_status_get` / `session_wait_idle` — catalogue VERIFIED; live semantics E8), the foreman judges whether time-on-ticket is out of proportion. No formal per-ticket budget or breach bookkeeping (operator decision 2026-09-08 — formalize only if dogfooding shows judgment isn't enough) | Smells long → commission a code-reviewer scope pass (judgment, never script); verdict routes per acceptance owners | Commission + verdict receipts on the ticket | Polling unavailable → caught at next wake sweep; gates stay closed meanwhile | Foreman (raise); operator (if plan change) |
 
 ## Escalation transport
 
@@ -130,7 +131,7 @@ elsewhere.
   from the ticket** under the fresh-spawn preconditions (§Handoff); adopting a live orphan via
   takeover only after E1. Detection in v1 is operator/Hermes-initiated (manual); an automated
   foreman-death watchdog is deferred to M1 observation.
-- **Checker failure** = unresolved check: report, retry, or operator-approved degraded proceed —
+- **Reviewer failure** = unresolved review: report, retry, or operator-approved degraded proceed —
   receipt required, never silent substitution (concept invariant carried).
 
 ### Foreman notes — no new artifact (operator decision 2026-09-08)
@@ -157,14 +158,11 @@ handover state in `docs/STATUS.md`. Spec C stays unchanged; this spec defines no
 
 ## Hermes integration
 
-- **Spawn trigger:** wiring VERIFIED (authentication, MCP entry, cross-visibility; requester and
-  runner recorded separately — audit distinguishes "Hermes asked" from "host ran"); end-to-end
-  Hermes-triggered spawn deferred — operator spawns by hand in v1 (operator decision).
-- **Evidence:** Hermes verifies claims against project mounts + code graph without trusting the
-  claimant (VERIFIED in operator infra). The foreman→Hermes *request channel* is unbuilt and
-  deferred (see §Escalation): foreman-commissioned verification runs as fresh checker sessions
-  with repo read access (available now); Hermes evidence stays operator-initiated. This respects "Hermes talks to no workers in normal operation"
-  (operator-set).
+Hermes is **infrastructure, not a seat** (operator decision 2026-09-08 — the verifier seat was
+manufactured and is removed from Spec A). What remains: spawn wiring VERIFIED (authentication,
+MCP entry, cross-visibility; requester and runner recorded separately — audit distinguishes
+"Hermes asked" from "host ran"); end-to-end Hermes-triggered spawn deferred — operator spawns
+by hand in v1. Hermes talks to no workers in normal operation (operator-set).
 
 ## Repo layout (new harness repo — minimum to express runtime boundaries)
 
@@ -205,7 +203,7 @@ Hermes-triggered foreman spawn (operator spawns by hand in v1). E-numbering kept
 
 1. **No separate foreman journal** — notes go into the existing artifacts (ticket receipts;
    STATUS). Spec C unchanged. Applied: §Foreman notes.
-2. **Workers are ephemeral** — builder/checker sessions exist only for their scoped work and
+2. **Workers are ephemeral** — builder/reviewer sessions exist only for their scoped work and
    its signoff; only the SA session may persist. The heartbeat/drift-in-a-known-session
    scenario was manufactured and is dropped. Applied: matrix #1, lifecycle.
 3. **T-003 Scope wording amended** (operator-approved) — "worker blocks" → gate-progression

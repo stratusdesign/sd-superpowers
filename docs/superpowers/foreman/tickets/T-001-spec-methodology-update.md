@@ -32,3 +32,4 @@ Draft v2 — Codex review round 1 applied (12 findings), targeted re-review roun
 - 2026-09-08T13:33:19Z · operator-review-r3 · operator · 6-findings-reported-and-applied · commit-bc8aecb
 - 2026-09-08T13:33:19Z · approval · operator · approved · conversation-2026-09-08
 - 2026-09-08T15:55:00Z · operator-amendment · operator · verifier-seat-generalized-and-foreman-write-boundary-sharpened · docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md
+- 2026-09-08T16:35:00Z · operator-amendment · operator · verifier-removed-checker-split-into-sa-reviewer-and-code-reviewer-advisor-never-auto-launched · docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md
