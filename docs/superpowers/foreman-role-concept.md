@@ -44,6 +44,21 @@ not automatically make briefs neutral. Checker briefs derive from artifacts and 
 rubrics only — never from producer or foreman advocacy about what to find or not find. (This is
 the fork's existing neutral-brief rule, inherited unchanged.)
 
+## Trust stance (operator-set, 2026-09-08)
+
+This is a **process-discipline system, not a security-containment system.** Workers run as root
+by explicit decision; a root process that turned adversarial would not need the permission API to
+do harm, so "worker abuses the control plane" is not the threat model. The foreman exists to catch
+**honest drift** — a well-meaning session leaving scope, rabbit-holing, or skipping process — and
+its gates are discipline, audit, and visibility, not containment. Security containment of
+adversarial agents is explicitly out of scope for v1. Single shared account and the internal-dev
+web ring are accepted for v1 (watch items, not blockers).
+
+**Operator interaction rule:** there are defined times when the operator interacts with a spawned
+session directly; outside those, talking to workers is the foreman's job. Prompt-answering is
+account-scoped and first-answer-wins — attribution comes from the audit trail, precedence from
+this operating rule, not from machinery.
+
 ## Topology — a hub, not a chain
 
 ```text
@@ -55,7 +70,8 @@ Foreman ──► Checkers (commissioned per check)
 Hermes ──► spawns foremen · independent evidence source beneath everything
 ```
 
-- The foreman is the **only role that holds sessions**. The SA writes tickets but never
+- The foreman is the **sole normal controller of project worker sessions** (Hermes spawns and
+  can recover them; the operator drops in at defined times). The SA writes tickets but never
   dispatches them; the foreman hands work to builders and can slot an independent check between
   spec and build. The spec's author never controls the party implementing it.
 - All agent-to-agent influence flows through the foreman or through artifacts. There are no side
@@ -116,8 +132,9 @@ as its capabilities allow, via an adapter. The contract, in strength order:
    **Happier already is one** (VERIFIED in its source): delegated approval is a protocol
    concept; the MCP action `session_permission_respond` lets an agent session answer another
    session's prompt; pending requests are discoverable (counts, details, and a
-   `permission_request` webhook to wake the foreman); and first-answer-wins semantics keep the
-   operator's phone able to see and override every prompt. Runtime confirmation remains
+   `permission_request` webhook to wake the foreman); and first-answer-wins semantics let the
+   operator's phone see every prompt and answer any still-open one (participation, not
+   revocation — an answered prompt is final). Runtime confirmation remains
    (EXPERIMENT 8).
    Codex adapter (VERIFIED primitive): the `codex app-server` protocol makes the connected
    client the approver — server➜client `requestApproval` JSON-RPC for commands, file changes,
@@ -132,8 +149,9 @@ as its capabilities allow, via an adapter. The contract, in strength order:
    adds per-session MCP selection at spawn).
 3. **Artifact-level gates** everywhere: ticket status transitions, Builder Reports, stage
    completions — harness-independent by construction, since they live in files.
-4. **Post-hoc verification** everywhere: Hermes' read-only mounts + code graph let any claim be
-   verified against reality without trusting the claimant (VERIFIED in operator infra).
+4. **Post-hoc verification** everywhere: Hermes' independent evidence access (project mounts —
+   currently `:ro` as a container fact, not a role constraint — plus code graph) lets any claim
+   be verified against reality without trusting the claimant (VERIFIED in operator infra).
 
 A harness with a weak adapter (today: Codex) runs under 2–4 with tighter spawn scoping; the
 concept never depends on layer 1 existing for every worker.
@@ -232,7 +250,7 @@ with JSON output) and Agent SDK (`ClaudeSDKClient`, concurrent sessions). Spawn-
 worker is rich: permission mode, allowed tools, MCP config, model, workdir, injected system
 prompt. Gap: per-skill enable/disable is not granular (EXPERIMENT / design-around).
 
-**Happy layer — Happier is the leading candidate, selection conditional on experiments 2–5.**
+**Happy layer — Happier, deployed self-hosted 2026-09-08 (see findings below).**
 The ecosystem split: slopus/happy works; happier-dev/happier (independent rewrite, more active)
 has the stronger orchestrator surface. Individually VERIFIED from repo code/docs (2026-09-07):
 `happier session` CLI (create/send/history/wait/status/stop, per-session MCP selection at
@@ -282,9 +300,12 @@ spawns a fresh SA that rehydrates from the docs. Both paths exist; choosing is a
 Happier stood up self-hosted (happier.stratus3.co, VPN-only) and connected from CLI, web, and
 Android — dual attach confirmed live. Two experiments resolved, one blocked:
 
-- **VERIFIED — dual attach (exp. 2):** operator's phone + web client + a driven session, all on one
+- **PARTIALLY VERIFIED — dual attach (exp. 2):** simultaneous attachment proven live; mid-turn
+  interjection while an orchestrator drives is still untested. Operator's phone + web client + a
+  driven session, all on one
   account, simultaneously. Passes.
-- **VERIFIED — respond action exists (part of exp. 8):** `session.permission.respond` is present
+- **PARTIALLY VERIFIED — respond action exists (part of exp. 8):** invocation not yet exercised;
+  `session.permission.respond` is present
   and callable in the live action catalog (`happier session actions list`).
 - **BLOCKED — the permission-gate loop (exp. 8), INVESTIGATE FURTHER:** a worker spawned through
   the Happier daemon **as root crashes on launch**. Claude refuses `--dangerously-skip-permissions`
@@ -295,9 +316,9 @@ Android — dual attach confirmed live. Two experiments resolved, one blocked:
   **Operator decision (2026-09-08):** workers run **as root for now** — per-user permission
   isolation would be a large project of its own and is out of scope.
 
-  **Counter-intuitive consequence to exploit:** running as root actually *forbids* bypass mode, so
-  a root worker is *forced* into a permission-gated mode — which is exactly what the foreman gate
-  wants. The old Happy daemon already runs Claude as root successfully with
+  **Precision:** running as root *forbids* bypass mode — the observed result is fail-stop (crash),
+  not a fallback to gated mode. A gated root worker is what the foreman gate wants; getting
+  Happier to *launch* one is the open investigation. The old Happy daemon already runs Claude as root successfully with
   `--permission-prompt-tool stdio --permission-mode auto`. The investigation is therefore narrow:
   make Happier's daemon spawn workers in that gated mode instead of yolo/bypass (launch profile,
   account default, or a spawn flag that actually overrides). Not a permissions-management project —
@@ -329,8 +350,8 @@ Android — dual attach confirmed live. Two experiments resolved, one blocked:
   reaches the broker; Codex: `approval_policy` + execpolicy verdicts play the same role.)
 - Event sources for check moments 1, 2 and 4 (dispatch-only work-start vs heartbeats vs
   artifact diffs; rabbit-hole signal and threshold).
-- Handoff mechanics: takeover-existing-session vs fresh-spawn-from-docs (both verified
-  available).
+- Handoff mechanics: takeover-existing-session vs fresh-spawn-from-docs (takeover verified in
+  code/docs, not yet exercised).
 - The foreman's own session config: which tools/MCPs it gets; how its thinness is enforced
   (its own spawn scoping is the obvious lever).
 - Which existing fork skills move commissioning up to the foreman vs stay SA-run in
