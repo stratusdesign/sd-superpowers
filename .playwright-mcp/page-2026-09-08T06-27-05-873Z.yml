@@ -1,0 +1,21 @@
+- generic [ref=f4e1]:
+  - generic [ref=f4e14]:
+    - generic [ref=f4e22]:
+      - generic: Add your phone
+      - generic [ref=f4e30]:
+        - generic [ref=f4e31]: Add your phone
+        - generic [ref=f4e32]: Scan this QR code with the Happier mobile app to sign in on your phone.
+        - generic [ref=f4e33]: This QR code expired. Generate a new one.
+        - button [ref=f4e1396] [cursor=pointer]:
+          - generic [ref=f4e1358]: Generate new QR code
+    - generic [ref=f4e1362]:
+      - generic [ref=f4e1363] [cursor=pointer]
+      - generic [ref=f4e1370] [cursor=pointer]
+      - generic [ref=f4e1376] [cursor=pointer]
+  - dialog [ref=f4e1399]:
+    - heading "Dialog" [level=2] [ref=f4e1400]
+    - generic [ref=f4e1406]:
+      - generic [ref=f4e1407]:
+        - generic [ref=f4e1408]: Success
+        - generic [ref=f4e1409]: Done
+      - button "OK" [active] [ref=f4e1411] [cursor=pointer]

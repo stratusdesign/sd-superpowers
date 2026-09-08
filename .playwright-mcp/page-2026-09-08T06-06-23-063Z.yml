@@ -1,0 +1,61 @@
+- generic [ref=f2e14]:
+  - generic [ref=f2e22]:
+    - generic: Account
+    - generic [ref=f2e28]:
+      - generic [ref=f2e30]:
+        - generic [ref=f2e31]: Account Information
+        - generic [ref=f2e34]:
+          - generic [ref=f2e36]:
+            - generic [ref=f2e37]: Status
+            - generic [ref=f2e39]: Active
+          - button "Anonymous ID 46b265852a6a63f9" [ref=f2e41] [cursor=pointer]:
+            - generic [ref=f2e42]:
+              - generic [ref=f2e43]: Anonymous ID
+              - generic [ref=f2e45]: 46b265852a6a63f9
+          - button "Public ID cmts9kxbd0002pj07auwuh1u5" [ref=f2e47] [cursor=pointer]:
+            - generic [ref=f2e48]:
+              - generic [ref=f2e49]: Public ID
+              - generic [ref=f2e51]: cmts9kxbd0002pj07auwuh1u5
+      - button "Add your phone Show a QR code to sign in on your phone" [ref=f2e58] [cursor=pointer]:
+        - generic [ref=f2e66]:
+          - generic [ref=f2e67]: Add your phone
+          - generic [ref=f2e68]: Show a QR code to sign in on your phone
+      - generic [ref=f2e70]:
+        - generic [ref=f2e71]: Profile
+        - generic [ref=f2e80]:
+          - generic [ref=f2e81]: GitHub
+          - generic [ref=f2e82]: GitHub OAuth is not configured on this server.
+      - generic [ref=f2e84]:
+        - generic [ref=f2e85]: Backup
+        - button "Backup your secret key Tap to hide" [active] [ref=f2e181] [cursor=pointer]:
+          - generic [ref=f2e98]:
+            - generic [ref=f2e99]: Backup your secret key
+            - generic [ref=f2e100]: Tap to hide
+        - generic [ref=f2e108]: Your secret key is the only way to recover your account. Save it in a secure place like a password manager.
+      - generic [ref=f2e188] [cursor=pointer]:
+        - generic [ref=f2e189]: SECRET KEY (TAP TO COPY)
+        - generic [ref=f2e195]: M4ZJA-SYBOC-DJJK6-DASIQ-CJKN7-K4Q4J-5IZIO-73B2O-GPXQY-DUNUK-CQ
+      - generic [ref=f2e111]:
+        - generic [ref=f2e112]: Privacy
+        - generic [ref=f2e115]:
+          - generic [ref=f2e117]:
+            - generic [ref=f2e118]:
+              - generic [ref=f2e119]: Analytics
+              - generic [ref=f2e120]: Anonymous usage data is shared
+            - switch [checked] [ref=f2e122] [cursor=pointer]
+          - generic [ref=f2e126]:
+            - generic [ref=f2e127]:
+              - generic [ref=f2e128]: Crash reports
+              - generic [ref=f2e129]: Crash reports are shared
+            - switch [checked] [ref=f2e131] [cursor=pointer]
+        - generic [ref=f2e134]: Help improve the app by sharing anonymous usage data. No personal information is collected.
+      - generic [ref=f2e137]:
+        - generic [ref=f2e138]: Danger Zone
+        - button "Logout Sign out and clear local data" [ref=f2e142] [cursor=pointer]:
+          - generic [ref=f2e150]:
+            - generic [ref=f2e151]: Logout
+            - generic [ref=f2e152]: Sign out and clear local data
+  - generic [ref=f2e160]:
+    - generic [ref=f2e161] [cursor=pointer]
+    - generic [ref=f2e167] [cursor=pointer]
+    - generic [ref=f2e173] [cursor=pointer]

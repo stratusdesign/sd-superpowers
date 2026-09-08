@@ -1,0 +1,2 @@
+[     684ms] [ERROR] Manifest: Line: 1, column: 1, Syntax error. @ https://happier.stratus3.co/manifest.webmanifest:0
+[   64051ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ https://happier.stratus3.co/v1/auth/pairing/status?pairId=cmtsad78y0010pj076nu3zl4y:0

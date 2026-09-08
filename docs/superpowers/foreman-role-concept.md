@@ -52,7 +52,7 @@ You ──► Foreman
 Foreman ──► SA/Architect
 Foreman ──► Builder(s)
 Foreman ──► Checkers (commissioned per check)
-Hermes ──► spawns foremen · independent read-only verifier beneath everything
+Hermes ──► spawns foremen · independent evidence source beneath everything
 ```
 
 - The foreman is the **only role that holds sessions**. The SA writes tickets but never
@@ -77,7 +77,7 @@ Hermes ──► spawns foremen · independent read-only verifier beneath everyt
 | **SA / Architect** | worker session | Technical delivery: architecture, specs, tickets, doc maintenance, direct small fixes. Modeled on PulseMark `ARCHITECT.md` (VERIFIED). |
 | **Builder(s)** | worker session, one at a time in v1 | Implements tickets; appends Builder Reports incl. deviations; never modifies specs. Modeled on PulseMark `BUILDER.md` (VERIFIED). |
 | **Checkers** | fresh sessions, commissioned per check | Judge one question each: scope drift, doc/code sync, review of a spec or diff. Routed by fit and independence, model-agnostic. |
-| **Hermes** | existing container | Spawns foremen; independent read-only evidence source (project mounts + read-only code graph) to verify any claim without trusting the claimant. VERIFIED live in operator infra. |
+| **Hermes** | existing container | Spawns foremen (incl. via Happier MCP); independent evidence source (project mounts + code graph) to verify any claim without trusting the claimant. Full agent — not restricted to read-only (operator decision 2026-09-08); it simply doesn't talk to workers in normal operation. VERIFIED live in operator infra. |
 
 ## Authority — by domain, not a stack
 
