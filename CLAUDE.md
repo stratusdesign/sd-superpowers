@@ -99,9 +99,11 @@ Skills are not prose — they are code that shapes agent behavior. If you modify
 - Show before/after eval results in your PR
 - Do not modify carefully-tuned content (Red Flags tables, rationalization lists, "human partner" language) without evidence the change is an improvement
 
+**Evaluation is a behavioral requirement, not a mandated toolchain.** For local or fork development, the `superpowers:writing-skills` RED-GREEN-REFACTOR workflow may be run with fresh isolated agent/subagent sessions and recorded before/after evidence. Do **not** infer that `superpowers-evals`, Quorum, API keys, extra credentials, or any external eval infrastructure are required unless the operator/project explicitly chooses them or a contribution target explicitly requires formal harness evidence.
+
 ## Eval harness
 
-Skill-behavior evals live in [superpowers-evals](https://github.com/prime-radiant-inc/superpowers-evals/), cloned into `evals/` — see `evals/README.md` for setup. Drill (the harness) drives real tmux sessions of Claude Code / Codex / Gemini CLI and judges skill compliance with an LLM verifier. Plugin-infrastructure tests still live at `tests/`.
+`superpowers-evals` / Quorum is the upstream formal eval lab, available when formal harness runs are useful or explicitly required; it is not a prerequisite for every skill change. Skill-behavior evals live in [superpowers-evals](https://github.com/prime-radiant-inc/superpowers-evals/), cloned into `evals/` — see `evals/README.md` for setup. Drill (the harness) drives real tmux sessions of Claude Code / Codex / Gemini CLI and judges skill compliance with an LLM verifier. Plugin-infrastructure tests still live at `tests/`.
 
 ## Understand the Project Before Contributing
 
