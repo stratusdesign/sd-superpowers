@@ -19,7 +19,9 @@ brainstorming auto-triggers) must pass unchanged.
 
 ## The role cast — canonical seat table
 
-Aliases in parentheses are recognized in spawn briefs.
+Aliases in parentheses are human/documentation conveniences only — spawn briefs carry canonical
+seat names exclusively (wire grammar: Spec C §Spawn brief); whoever writes a brief normalizes
+aliases before writing.
 
 | Seat (aliases) | Obligations | Prohibitions |
 |---|---|---|
@@ -31,8 +33,14 @@ Aliases in parentheses are recognized in spawn briefs.
 | **checker** | Answers exactly the commissioned question from artifacts + standing rubric; reports findings with evidence | Never rewrites artifacts; never expands its question; no memory across commissions (fresh context) |
 | **verifier** (hermes) | Independent evidence on demand; spawns foremen | No worker contact in normal operation (operator-set); never the reviewer and evidence-source for the same claim it produced |
 
+**Seat→holder binding:** this table is generic; the per-project assignment of each seat to a
+concrete holder (model, session type, or human) is recorded in that project's `PROCESS.md` roles
+table (format requirement: Spec C §Documentation standard). The binding is part of the plan —
+changing it is a plan change and belongs to the operator.
+
 Cross-seat rules carried verbatim from the concept: artifact rule (real = in doc/ticket AND
-acknowledged — acknowledger: operator pre-M1, foreman post-M1); raised ≠ approved (acceptance
+acknowledged — acknowledger: the foreman when one supervises the project, the operator
+otherwise); raised ≠ approved (acceptance
 owners: plan/scope → operator; content findings → sa; gate/process breaches → foreman); neutral
 briefs; escalation ladder producer → foreman → operator.
 
@@ -41,7 +49,7 @@ foreman commissions a checker pass over the deviation → sa dispositions (pass,
 ticket citing the origin) → all steps recorded as receipts (format: Spec C §Receipts).
 
 **Gate receipts (duty side):** the acting seat produces the receipt; the acknowledger
-countersigns (operator pre-M1, foreman post-M1). Format: Spec C §Receipts.
+countersigns (foreman when present, operator otherwise). Format: Spec C §Receipts.
 
 ## Seat loading — two paths, T-005-conditional
 
