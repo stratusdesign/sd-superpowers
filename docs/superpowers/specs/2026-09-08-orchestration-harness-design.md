@@ -151,17 +151,9 @@ handover state in `docs/STATUS.md`. Spec C stays unchanged; this spec defines no
   extended to the foreman seat — Spec A prohibition updated same day). No code-edit tools, no
   builder tooling. Enforcement = spawn allowlist + role-cast prohibitions (Spec A) + everything
   it does being receipts (audit).
-- **Model — selection rule, not vibes:**
-  1. Must be drivable as a Happier session: today that means Claude Code or Codex CLI (the two
-     VERIFIED backends).
-  2. The foreman never authors domain solutions, so it does not need the strongest reasoner —
-     it needs rule-holding: follow PROCESS, refuse to improvise, stay thin. Mid-tier is
-     acceptable; discipline beats brilliance in this seat.
-  3. Different family from the project's SA so blind spots don't align (concept routing).
-  4. The seat→model map is assigned **per project**, by the operator, in that project's
-     PROCESS.md roles table — the spec names criteria only, never models (operator rule,
-     2026-09-08: the runtime stays platform/model agnostic). Changing a binding is a plan
-     change (operator).
+- **Model:** defined per project in that project's PROCESS.md roles table. Nothing more.
+  (Operator rule, 2026-09-08 — the runtime is model agnostic; changing a binding is a plan
+  change.)
 
 ## Hermes integration
 
