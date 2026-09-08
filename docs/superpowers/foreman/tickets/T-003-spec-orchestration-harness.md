@@ -48,6 +48,14 @@ blocker resolutions pending, then operator approval.
 - 2026-09-08T15:05:00Z · operator-decision · operator · journal-rejected-use-existing-artifacts · conversation-2026-09-08
 - 2026-09-08T15:05:00Z · operator-decision · operator · workers-ephemeral-heartbeat-scenario-dropped · conversation-2026-09-08
 - 2026-09-08T15:05:00Z · scope-amendment · operator · worker-blocks-reworded-to-gate-freeze · conversation-2026-09-08
+- 2026-09-08T15:40:00Z · operator-decision · operator · simplification-pass-all-4-trims-approved · conversation-2026-09-08
+
+Simplification pass (2026-09-08, operator-directed): all four trims approved and applied in
+draft v5 — standing rules-tampering watcher removed (signoff review asks the question);
+experiments cut to load-bearing five (E1–E4, E8); rabbit-hole envelope replaced by foreman
+judgment at check-in; harness repo layout reduced to five files. Operator decisions on the
+three open items also applied in v4 (journal rejected; workers ephemeral; Scope wording
+amended). Awaiting operator approval.
 
 Re-review (2026-09-08, round 2): 8/10 resolved; finding 5 (diff-gate determinism) completed in
 draft v3 (working-tree sweep + per-file authorization match); finding 8 resolved by submitting
