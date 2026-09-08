@@ -33,6 +33,9 @@ here; anything semantic is a checker judgment (concept: Script vs model).
     **Exactly one** `**Deviations from spec:**` line per report; value is `none` or prose.
     Re-work appends a numbered `## Builder Report (2)` etc. — reports are never edited.
   - Experiment tickets: `## Result` (same review gate; prose body).
+  - Spec tickets: the produced spec document is the done-claim; the ticket appends `## Result`
+    containing a `**Spec:** <path>` line (+ review-round notes). Entering `review` requires that
+    section, same as any done-claim.
 - Optional `## Receipts` section — see §Receipts.
 
 ## Backlog index (normative)

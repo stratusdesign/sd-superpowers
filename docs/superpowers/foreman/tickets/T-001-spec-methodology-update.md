@@ -19,3 +19,9 @@ preserved), and where the role canon lives so spawned sessions load it.
 - Foreman-less operation remains fully working (explicit standalone path).
 - Role definitions readable by a session at boot (mechanism named).
 - Passes Codex adversarial review + operator approval.
+
+## Result
+
+**Spec:** docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md
+Draft v2 — Codex review round 1 applied (12 findings), targeted re-review round 2 passed
+(finding 7 resolved by this artifact). Awaiting operator approval.
