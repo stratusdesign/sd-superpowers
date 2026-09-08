@@ -123,7 +123,9 @@ Hermes ──► spawns foremen · independent evidence source beneath everythin
 Enforcement is defined as a harness-independent contract; each harness implements it as deeply
 as its capabilities allow, via an adapter. The contract, in strength order:
 
-1. **Pre-action interception** where the harness supports it. Claude Code adapter (VERIFIED
+1. **Pre-action interception** where the harness supports it. **(Deferred in v1 — see the
+   2026-09-08 finding below: workers run bypass-mode under root via `IS_SANDBOX=1`, so this layer
+   is not active until the move-off-root project.)** Claude Code adapter (VERIFIED
    primitive): a session's **unresolved permission prompts** can be routed to an external tool
    (`--permission-prompt-tool` / SDK `canUseTool`) for approve/deny before execution. Two honest
    narrowings: (a) pre-allowed tools never prompt — interception requires a deliberately
@@ -272,6 +274,9 @@ spawns a fresh SA that rehydrates from the docs. Both paths exist; choosing is a
 - Builder ambiguity: PulseMark behavior kept (implement best interpretation + deviation note →
   foreman-routed checker pass).
 - Enforcement: model-agnostic contract with per-harness adapters; never Claude-only by design.
+- Worker spawn: **bypass mode via `IS_SANDBOX=1`** (path A); layer-1 permission gate deferred.
+- Move workers off root, and re-enable the gated permission loop (path B): **later separate
+  project**, not v1.
 - Budget/token-awareness: **out of v1.**
 - Cross-project resource arbitration: **out of v1** — parked; natural future seat is Hermes'
   layer, above per-project foremen.
@@ -307,22 +312,31 @@ Android — dual attach confirmed live. Two experiments resolved, one blocked:
 - **PARTIALLY VERIFIED — respond action exists (part of exp. 8):** invocation not yet exercised;
   `session.permission.respond` is present
   and callable in the live action catalog (`happier session actions list`).
-- **BLOCKED — the permission-gate loop (exp. 8), INVESTIGATE FURTHER:** a worker spawned through
-  the Happier daemon **as root crashes on launch**. Claude refuses `--dangerously-skip-permissions`
-  under root, and Happier's daemon-create path puts workers in that bypass mode even when
-  `--permission-mode default` is passed explicitly (reproduced twice, argv confirmed from the
-  claude debug log). So no pending prompt is ever produced, and the foreman has nothing to answer.
+- **RESOLVED (root-caused) — the permission-gate loop (exp. 8):** a worker spawned through the
+  Happier daemon **as root crashed on launch**. Root cause found and verified:
+  `apps/cli/src/backends/claude/remote/claudeRemoteAgentSdk.ts:762` hardcodes
+  `allowDangerouslySkipPermissions: true` on every daemon-spawned Claude session. That single flag
+  (`--allow-dangerously-skip-permissions`) trips Claude's root guard — proven in isolation: the
+  flag alone + a gated mode crashes as root; the same command without it runs fine as root. The
+  requested permission mode was never the problem. The flag exists so the phone can toggle yolo
+  mid-session; it is pure cost for our use.
 
-  **Operator decision (2026-09-08):** workers run **as root for now** — per-user permission
-  isolation would be a large project of its own and is out of scope.
+  **Two paths proven:**
+  - **A (chosen for v1):** set `IS_SANDBOX=1` on worker spawns — Claude then accepts bypass under
+    root and the worker runs (verified: worker replied on demand). Workers run in **bypass mode /
+    no per-action prompts**, so the foreman's permission-*answer* loop is **not used in v1**.
+  - **B (deferred):** remove/gate line 762 (local dist patch, or upstream PR to make it
+    conditional) → gated root workers, full permission-answer loop available. Not taken now to
+    avoid forking Happier's install.
 
-  **Precision:** running as root *forbids* bypass mode — the observed result is fail-stop (crash),
-  not a fallback to gated mode. A gated root worker is what the foreman gate wants; getting
-  Happier to *launch* one is the open investigation. The old Happy daemon already runs Claude as root successfully with
-  `--permission-prompt-tool stdio --permission-mode auto`. The investigation is therefore narrow:
-  make Happier's daemon spawn workers in that gated mode instead of yolo/bypass (launch profile,
-  account default, or a spawn flag that actually overrides). Not a permissions-management project —
-  just steering Happier's spawn mode.
+  **Operator decisions (2026-09-08):** ship **A** for v1. Moving workers off root is a **later,
+  separate project**; B is revisited then (or if a project needs a hard pre-action stop).
+
+  **Consequence for enforcement:** layer-1 pre-action interception is **off in v1**. The foreman
+  enforces via layers 2–4 (spawn scoping, artifact/ticket gates, Hermes post-hoc verification),
+  the check-moments, and escalation. This matches the trust stance (process-discipline, not
+  containment): drift is caught at ticket/scope/artifact boundaries, not by gating each tool call.
+  The one thing v1 cannot do is *pre-empt* a genuinely irreversible action — it catches it after.
 
 ### MCP control surface wired (2026-09-08, later)
 
