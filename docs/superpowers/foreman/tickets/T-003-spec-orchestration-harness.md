@@ -49,6 +49,7 @@ blocker resolutions pending, then operator approval.
 - 2026-09-08T15:05:00Z · operator-decision · operator · workers-ephemeral-heartbeat-scenario-dropped · conversation-2026-09-08
 - 2026-09-08T15:05:00Z · scope-amendment · operator · worker-blocks-reworded-to-gate-freeze · conversation-2026-09-08
 - 2026-09-08T15:40:00Z · operator-decision · operator · simplification-pass-all-4-trims-approved · conversation-2026-09-08
+- 2026-09-08T15:55:00Z · operator-review · operator · 2-findings-applied-model-precision-and-write-boundary · docs/superpowers/specs/2026-09-08-orchestration-harness-design.md
 
 Simplification pass (2026-09-08, operator-directed): all four trims approved and applied in
 draft v5 — standing rules-tampering watcher removed (signoff review asks the question);

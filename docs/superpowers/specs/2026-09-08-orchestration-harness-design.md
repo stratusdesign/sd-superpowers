@@ -142,12 +142,26 @@ handover state in `docs/STATUS.md`. Spec C stays unchanged; this spec defines no
 
 ## Foreman session config (thinness, mechanically)
 
-- Its own layer-2 scoping: Happier MCP (session control) + repo read + write confined to
-  tickets/backlog/STATUS + git commit of those paths. No code-edit tools, no builder tooling.
-  Enforcement = spawn allowlist (surface per E3) + role-cast prohibitions (Spec A) + everything
+- **Write boundary (operator rule, 2026-09-08):** the foreman may write **operational state
+  artifacts** — receipts, `Status:` headers, backlog index rows, STATUS.md, escalation
+  records — and never **project intent artifacts** — specs, ticket `## Scope` /
+  `## Acceptance criteria`, architecture docs. Mechanically: allowlist covers
+  tickets/backlog/STATUS paths + git commit of those (depth per E3); the intent sections inside
+  tickets are out of bounds to it exactly as they are to the builder (Spec C immutability rule,
+  extended to the foreman seat — Spec A prohibition updated same day). No code-edit tools, no
+  builder tooling. Enforcement = spawn allowlist + role-cast prohibitions (Spec A) + everything
   it does being receipts (audit).
-- Model: holds a line rather than chasing the problem; different family from the SA preferred
-  (concept routing). Binding recorded in the harness repo's PROCESS.md roles table (Spec C).
+- **Model — selection rule, not vibes:**
+  1. Must be drivable as a Happier session: today that means Claude Code or Codex CLI (the two
+     VERIFIED backends).
+  2. The foreman never authors domain solutions, so it does not need the strongest reasoner —
+     it needs rule-holding: follow PROCESS, refuse to improvise, stay thin. Mid-tier is
+     acceptable; discipline beats brilliance in this seat.
+  3. Different family from the project's SA so blind spots don't align (concept routing). With
+     two supported backends this is concrete: SA on Claude → foreman on Codex, and vice versa.
+  4. The concrete model id is bound per-project in PROCESS.md's roles table at spawn time;
+     changing it is a plan change (operator).
+  V1 default for this project: SA = strongest available Claude; foreman = Codex.
 
 ## Hermes integration
 

@@ -1,7 +1,6 @@
 # Spec C — Documentation + Ticketing Standard
 
-> T-002 · Deliverable #1 · Status: draft v2 (post Codex review 1) · pending targeted re-review +
-> operator approval.
+> T-002 · Deliverable #1 · Status: **approved** (operator, 2026-09-08 — receipts in T-002).
 > Boundary: this spec owns artifact formats and lifecycle (WHAT). Duties are Spec A's and are
 > referenced only. Baseline: PulseMark contract (verified on disk).
 
@@ -120,4 +119,4 @@ normalized alongside this draft).
 - One schema for humans and scripts: anchors + authority rules defined. ✔
 - Deviation pipeline: format + event defined here; routing in Spec A (explicit cross-refs). ✔
 - Adopted/adapted table with reasons. ✔
-- Gate: review round 1 applied; targeted re-review + operator approval pending.
+- Gate: passed — review rounds + operator approval 2026-09-08 (receipts in T-002).

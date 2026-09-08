@@ -1,7 +1,7 @@
 # Spec A — sd-superpowers Methodology Update: Role Cast + Foreman
 
-> T-001 · Deliverable #1 · Status: draft v2 (post Codex review 1) · pending targeted re-review +
-> operator approval.
+> T-001 · Deliverable #1 · Status: **approved** (operator, 2026-09-08 — receipts in T-001);
+> amended 2026-09-08 on operator direction: verifier seat generalized, foreman write boundary.
 > Boundary: this spec owns roles, duties, and skill changes (WHO). Artifact formats are owned by
 > Spec C and referenced by name. Rationale source: `docs/superpowers/foreman-role-concept.md`.
 
@@ -27,11 +27,11 @@ aliases before writing.
 |---|---|---|
 | **operator** (owner) | Owns the plan; answers escalations; approves specs/plans; acknowledges gates pre-M1; acceptance | none — but steering is real only as artifacts (concept artifact rule) |
 | **advisor** (strategic-advisor) | Turns operator intent into documentation updates | No session control; no dispatch; no direct worker contact |
-| **foreman** | Holds worker sessions; dispatches tickets; commissions every check/review with neutral briefs; holds gates; routes deviation events; escalates per ladder; acknowledges artifacts post-M1 | Never authors domain solutions; never edits specs/code; never answers its own commissions |
+| **foreman** | Holds worker sessions; dispatches tickets; commissions every check/review with neutral briefs; holds gates; routes deviation events; escalates per ladder; acknowledges artifacts post-M1; writes operational state artifacts (receipts, STATUS, escalation records) | Never authors domain solutions; never writes project intent artifacts (specs, acceptance criteria, architecture) or code; never answers its own commissions |
 | **sa** (architect) | Architecture, specs, tickets, doc accuracy (docs match reality, never reverse); small direct fixes per fix-vs-spec judgment; dispositions checker findings on content | Never dispatches builders; never commissions reviews of its own work; never approves its own done-claims; never changes scope unraised |
 | **builder** | Executes assigned ticket; runs seat-appropriate process skills (TDD etc.); appends Builder Report (format: Spec C); records deviations, implements best interpretation | Never edits Scope/Acceptance-criteria sections; never claims done (report → review state); never picks up unassigned work |
 | **checker** | Answers exactly the commissioned question from artifacts + standing rubric; reports findings with evidence | Never rewrites artifacts; never expands its question; no memory across commissions (fresh context) |
-| **verifier** (hermes) | Independent evidence on demand; spawns foremen | No worker contact in normal operation (operator-set); never the reviewer and evidence-source for the same claim it produced |
+| **verifier** | Independent evidence on demand; infrastructure duties (e.g. spawning foremen) come from the per-project holder binding, not the seat | No worker contact in normal operation (operator-set); never the reviewer and evidence-source for the same claim it produced |
 
 **Seat→holder binding:** this table is generic; the per-project assignment of each seat to a
 concrete holder (model, session type, or human) is recorded in that project's `PROCESS.md` roles
@@ -129,5 +129,4 @@ Before/after eval results documented per CONTRIBUTING.
 - Standalone preserved: R1 + "does not change" list. ✔
 - Boot-readable role canon with mechanism named: §Seat loading (explicitly T-005-conditional
   with named fallback). ✔ conditional
-- Gate: Codex review round 1 done (12 findings applied); targeted re-review + operator approval
-  pending.
+- Gate: passed — Codex rounds 1–2 + operator approval 2026-09-08 (receipts in T-001).
