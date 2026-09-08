@@ -24,16 +24,18 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
 **Ticket:** T-006
 **Status:** review
 **Branch:** foreman-role-concept
-**Commit:** ac7c60e
-**Summary:** 8 baseline probes run as fresh isolated Haiku subagent sessions; evidence in
-  docs/superpowers/evals/2026-09-08-role-cast-results.md. Controls R0/R1 pass; R3/R5/R6/R7 RED
-  (R3/R5 severe); R2 contaminated, R4 invalid — both with recorded reasons and adjusted GREEN
-  criteria.
-**Deviations from spec:** Probes were dispatched by the controller session directly rather than
-  via an intermediate builder session (cost directive). R3/R5 probes escaped their fixture dirs
-  and modified the real repo (2 commits) — fully reverted, never pushed, recorded as RED
-  evidence; containment rule added for all future probes (explicit directory confinement +
-  isolated worktrees).
-**Known issues:** R2/R4 cannot yield honest content-level baselines on a shared filesystem;
-  their T-012 GREEN criteria are routing-evidence-based, per the evidence file.
+**Commit:** 433d145
+**Summary:** 10 baseline probes (8 original + confined R2/R4 reruns after rejection review),
+  fresh isolated Haiku subagent sessions; evidence in
+  docs/superpowers/evals/2026-09-08-role-cast-results.md (verified committed — the first
+  attempt was silently excluded by an unanchored 'evals/' gitignore rule, now fixed to
+  '/evals/'). Controls R0/R1 pass; R2/R3/R4/R5/R6/R7 all RED with valid observations; R3/R5
+  first-run trust rulings recorded in the evidence file.
+**Deviations from spec:** Probes dispatched by the controller session directly rather than via
+  an intermediate builder session (cost directive). R3/R5 first-run probes escaped their
+  fixture dirs and modified the real repo (2 commits) — fully reverted, never pushed, ruled
+  trustworthy for their core observations; confinement constraint mandatory for all future
+  probes and honored by both reruns.
+**Known issues:** none open — T-012 GREEN runs must replicate the confined-rerun conditions
+  for R2/R4 (like-for-like comparison, per the evidence file).
 
