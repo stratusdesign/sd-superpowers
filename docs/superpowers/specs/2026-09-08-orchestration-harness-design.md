@@ -157,11 +157,11 @@ handover state in `docs/STATUS.md`. Spec C stays unchanged; this spec defines no
   2. The foreman never authors domain solutions, so it does not need the strongest reasoner —
      it needs rule-holding: follow PROCESS, refuse to improvise, stay thin. Mid-tier is
      acceptable; discipline beats brilliance in this seat.
-  3. Different family from the project's SA so blind spots don't align (concept routing). With
-     two supported backends this is concrete: SA on Claude → foreman on Codex, and vice versa.
-  4. The concrete model id is bound per-project in PROCESS.md's roles table at spawn time;
-     changing it is a plan change (operator).
-  V1 default for this project: SA = strongest available Claude; foreman = Codex.
+  3. Different family from the project's SA so blind spots don't align (concept routing).
+  4. The seat→model map is assigned **per project**, by the operator, in that project's
+     PROCESS.md roles table — the spec names criteria only, never models (operator rule,
+     2026-09-08: the runtime stays platform/model agnostic). Changing a binding is a plan
+     change (operator).
 
 ## Hermes integration
 
