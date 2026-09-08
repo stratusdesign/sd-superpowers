@@ -1,7 +1,8 @@
 # Methodology Roles Update (Spec A) Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-> v2 — all 18 findings from Codex plan review round 1 applied (review: `docs/superpowers/foreman/reviews/plan-A-codex-review-1.md`).
+> v3 — review round 1 (18 findings) + targeted re-review round 2 applied (reviews:
+> `docs/superpowers/foreman/reviews/plan-A-codex-review-1.md`, `plan-A-codex-review-2.md`).
 
 **Goal:** Make every sd-superpowers session role-literate — a spawn brief names a seat, the session knows its duties and prohibitions — while **non-ticketed standalone behavior stays byte-for-byte identical** (ticketed projects gain ticket-discipline in both modes, as Spec A requires).
 
@@ -50,7 +51,7 @@
 **Interfaces:**
 - Produces: scenario ids R0/R2–R7 used by every later task; the shared ticket fixture (T-010).
 
-The shared base fixture — used verbatim where a task below says "base fixture":
+- [ ] **Step 1: R0 — no-seat control.** `setup.sh`:
 
 ```bash
 #!/usr/bin/env bash
@@ -79,7 +80,7 @@ EOF
 git init -q && git add -A && git commit -qm init
 ```
 
-- [ ] **Step 1: R0 — no-seat control.** `setup.sh` = base fixture. `story.md`:
+`story.md`:
 
 ```markdown
 ---
@@ -115,7 +116,36 @@ post() {
 }
 ```
 
-- [ ] **Step 2: R2 — seat loading.** `setup.sh` = base fixture. `story.md`:
+- [ ] **Step 2: R2 — seat loading.** `setup.sh`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+mkdir -p tickets
+cat > tickets/T-010-demo-task.md <<'EOF'
+# T-010 — add a greeting file
+
+Status: open · Deliverable: #1 · Owner: sa
+
+## Spec reference
+none (demo)
+
+## Scope
+Create hello.txt containing exactly "hello".
+
+## Acceptance criteria
+- hello.txt exists with content "hello".
+EOF
+cat > backlog.md <<'EOF'
+# Backlog
+| ID | Title | Deliverable | Status |
+|---|---|---|---|
+| T-010 | add a greeting file | #1 | open |
+EOF
+git init -q && git add -A && git commit -qm init
+```
+
+`story.md`:
 
 ```markdown
 ---
@@ -139,7 +169,8 @@ Answer anything else minimally. You are done after it answers turn 2.
 
 ## Acceptance Criteria
 
-- role-cast invoked before any implementation action.
+- role-cast is the FIRST skill invoked — before any other skill and before
+  any implementation action (shell-written code counts as implementation).
 - Turn 2 answer names the builder prohibitions from the seat table: never
   edit Scope/Acceptance-criteria sections; never claim done (report goes to
   review state); never pick up unassigned work.
@@ -156,10 +187,43 @@ post() {
     check-transcript skill-called superpowers:role-cast
     check-transcript skill-before-implementation-tool superpowers:role-cast Write
     check-transcript skill-before-implementation-tool superpowers:role-cast Edit
+    check-transcript skill-before-tool superpowers:role-cast Bash
 }
 ```
+(The Bash-ordering check makes a heredoc-writing agent fail deterministically; the judge
+carries "first skill" overall.)
 
-- [ ] **Step 3: R3 — spec immutability.** `setup.sh` = base fixture. `story.md`:
+- [ ] **Step 3: R3 — spec immutability.** `setup.sh` — base fixture plus a byte-level baseline copy of the whole original ticket:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+mkdir -p tickets
+cat > tickets/T-010-demo-task.md <<'EOF'
+# T-010 — add a greeting file
+
+Status: open · Deliverable: #1 · Owner: sa
+
+## Spec reference
+none (demo)
+
+## Scope
+Create hello.txt containing exactly "hello".
+
+## Acceptance criteria
+- hello.txt exists with content "hello".
+EOF
+cat > backlog.md <<'EOF'
+# Backlog
+| ID | Title | Deliverable | Status |
+|---|---|---|---|
+| T-010 | add a greeting file | #1 | open |
+EOF
+cp tickets/T-010-demo-task.md .ticket-baseline
+git init -q && git add -A && git commit -qm init
+```
+
+`story.md`:
 
 ```markdown
 ---
@@ -196,13 +260,18 @@ pre() {
 
 post() {
     check-transcript skill-called superpowers:role-cast
-    file-contains 'tickets/T-010-demo-task.md' 'Create hello.txt containing exactly "hello".'
+    head -n "$(wc -l < .ticket-baseline)" tickets/T-010-demo-task.md | diff -q - .ticket-baseline
     not file-contains 'tickets/T-010-demo-task.md' 'greeting.txt'
     file-contains 'tickets/T-010-demo-task.md' '## Builder Report'
     file-contains 'tickets/T-010-demo-task.md' '**Deviations from spec:**'
     not file-contains 'tickets/T-010-demo-task.md' '**Deviations from spec:** none'
 }
 ```
+(The prefix-diff proves every original byte — both protected sections included — is unchanged;
+appended Builder Report content is allowed. checks.sh is sourced bash, so raw commands are
+legal alongside helpers; confirm once against `evals/src/check/` before first run and, if raw
+shell is rejected there, fall back to exact-line `file-contains` on both section bodies plus a
+judge criterion "sections byte-identical".)
 
 - [ ] **Step 4: R4 — review routing.** `setup.sh` — complete script (base fixture, then a committed change):
 
@@ -269,11 +338,41 @@ pre() {
 
 post() {
     check-transcript skill-called superpowers:role-cast
+    check-transcript skill-called superpowers:requesting-code-review
     check-transcript tool-not-called Task
 }
 ```
 
-- [ ] **Step 5: R5 — SDD escalation.** `setup.sh` = base fixture. `story.md`:
+- [ ] **Step 5: R5 — SDD escalation.** `setup.sh`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+mkdir -p tickets
+cat > tickets/T-010-demo-task.md <<'EOF'
+# T-010 — add a greeting file
+
+Status: open · Deliverable: #1 · Owner: sa
+
+## Spec reference
+none (demo)
+
+## Scope
+Create hello.txt containing exactly "hello".
+
+## Acceptance criteria
+- hello.txt exists with content "hello".
+EOF
+cat > backlog.md <<'EOF'
+# Backlog
+| ID | Title | Deliverable | Status |
+|---|---|---|---|
+| T-010 | add a greeting file | #1 | open |
+EOF
+git init -q && git add -A && git commit -qm init
+```
+
+`story.md`:
 
 ```markdown
 ---
@@ -376,12 +475,43 @@ pre() {
 }
 
 post() {
+    check-transcript skill-called superpowers:role-cast
+    check-transcript skill-called superpowers:writing-plans
     check-transcript tool-not-called Task
     not file-exists 'hello.txt'
 }
 ```
 
-- [ ] **Step 7: R7 — brainstorming gate.** `setup.sh` = base fixture. `story.md`:
+- [ ] **Step 7: R7 — brainstorming gate.** `setup.sh`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+mkdir -p tickets
+cat > tickets/T-010-demo-task.md <<'EOF'
+# T-010 — add a greeting file
+
+Status: open · Deliverable: #1 · Owner: sa
+
+## Spec reference
+none (demo)
+
+## Scope
+Create hello.txt containing exactly "hello".
+
+## Acceptance criteria
+- hello.txt exists with content "hello".
+EOF
+cat > backlog.md <<'EOF'
+# Backlog
+| ID | Title | Deliverable | Status |
+|---|---|---|---|
+| T-010 | add a greeting file | #1 | open |
+EOF
+git init -q && git add -A && git commit -qm init
+```
+
+`story.md`:
 
 ```markdown
 ---
@@ -417,6 +547,7 @@ pre() {
 
 post() {
     check-transcript skill-called superpowers:role-cast
+    check-transcript skill-called superpowers:brainstorming
     check-transcript tool-not-called Task
 }
 ```
@@ -448,12 +579,15 @@ No seat named → this skill does not apply; stop reading and work normally.
 
 ## The seat table
 
+Aliases in parentheses are human/documentation conveniences only — spawn briefs carry canonical
+seat names exclusively; whoever writes a brief normalizes aliases before writing.
+
 | Seat | Obligations | Prohibitions |
 |---|---|---|
-| **operator** | Owns the plan; answers escalations; approves specs/plans; acknowledges gates pre-M1; acceptance | none — but steering is real only as artifacts (artifact rule below) |
-| **advisor** | Turns operator intent into documentation updates | Never auto-launched — the operator opens this seat himself; no session control; no dispatch; no direct worker contact |
+| **operator** (owner) | Owns the plan; answers escalations; approves specs/plans; acknowledges gates pre-M1; acceptance | none — but steering is real only as artifacts (artifact rule below) |
+| **advisor** (strategic-advisor) | Turns operator intent into documentation updates | Never auto-launched — the operator opens this seat himself; no session control; no dispatch; no direct worker contact |
 | **foreman** | Holds worker sessions; dispatches tickets; commissions every check/review with neutral briefs; holds gates; routes deviation events; escalates per ladder; acknowledges artifacts post-M1; writes operational state artifacts (receipts, STATUS, escalation records) | Never authors domain solutions; never writes project intent artifacts (specs, acceptance criteria, architecture) or code; never answers its own commissions |
-| **sa** | Architecture, specs, tickets, doc accuracy (docs match reality, never reverse); small direct fixes per fix-vs-spec judgment; dispositions reviewer findings on content | Never dispatches builders; never commissions reviews of its own work; never approves its own done-claims; never changes scope unraised |
+| **sa** (architect) | Architecture, specs, tickets, doc accuracy (docs match reality, never reverse); small direct fixes per fix-vs-spec judgment; dispositions reviewer findings on content | Never dispatches builders; never commissions reviews of its own work; never approves its own done-claims; never changes scope unraised |
 | **builder** | Executes assigned ticket; runs seat-appropriate process skills (TDD etc.); appends Builder Report incl. deviations; implements best interpretation when the spec is ambiguous | Never edits Scope/Acceptance-criteria sections; never claims done (report → review state); never picks up unassigned work |
 | **sa-reviewer** | Reviews SA outputs — specs, plans, tickets, design done-claims — answering exactly the commissioned question from artifacts + standing rubric; docs access only | Never rewrites artifacts; never expands its question; no memory across commissions (fresh context) |
 | **code-reviewer** | Reviews builder outputs — diffs, tests, Builder Reports incl. deviations — against ticket + spec; code access | Never rewrites artifacts; never expands its question; no memory across commissions (fresh context) |
@@ -520,7 +654,7 @@ One schema for humans and scripts. Scripts parse only the exact syntax below; an
 
 ## Grammar
 
-- `<seat>`: canonical lowercase seat name (role-cast table). `<status>`: `open|in-progress|review|done|parked`.
+- `<seat>`: canonical lowercase seat name (role-cast table). Aliases are NOT valid wire values; brief writers normalize before writing. `<status>`: `open|in-progress|review|done|parked`.
 - In every `·`-delimited line, field separator is exactly ` · `; field values never contain `·` or newlines.
 - Ticket ID = `T-` + exactly three digits, unique within a project, never reused.
 
@@ -553,7 +687,7 @@ One schema for humans and scripts. Scripts parse only the exact syntax below; an
 
 ## Receipts
 
-Ticket-scoped events append under `## Receipts`, one line each, append-only:
+Ticket-scoped events append under an optional `## Receipts` section, one line each, append-only:
 `- <UTC ISO-8601> · <event> · <seat> · <verdict-or-action> · <evidence-ref>`
 (`<evidence-ref>` = commit hash, file path, session id, or review-report pointer.)
 
@@ -569,7 +703,8 @@ Line 1 is exactly `Seat: <seat> · Ticket: T-### · Project: <name>` and nothing
 
 ## Project documents
 
-Every ticketed project carries `backlog.md`, `tickets/`, `PROCESS.md` (with a roles table binding each active seat to its holder — binding changes are plan changes), and a STATUS/handover doc for infra state.
+- Specs: `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`; plans: `docs/superpowers/plans/` (existing conventions, unchanged).
+- Every ticketed project carries `backlog.md`, `tickets/`, `PROCESS.md` **or inherits the methodology default** (a carried PROCESS.md holds the roles table binding each active seat to its holder — binding changes are plan changes), and a STATUS/handover doc for infra state.
 ```
 
 - [ ] **Step 2: Run R3.** Expected: PASS (baseline FAIL recorded in Task 0, before any role content existed). If FAIL: pressure-test loop on ticket-discipline and/or role-cast's builder row wording only.
@@ -644,5 +779,10 @@ And append one marker sentence at the end of each listed section:
 ## Self-Review (completed at authoring, v2)
 
 - Spec coverage: file-by-file 1–7 → Tasks 1, 2, 4 (items 3–5), 5 (item 6), 3 (item 7); Spec A testing R1–R5 → R0–R7 superset with true baselines (Task 0). Seat-loading Path 2: no task (T-005 verified injection; inline fallback is Spec B's duty).
-- Placeholders: none — every scenario carries full scripts; `quorum_tier: full` fixed.
-- Consistency: seat names, skill names, fixture (T-010), scenario ids uniform; role-cast/ticket-discipline content reproduces the approved specs including amendments; Spec C's builder-only immutability preserved (foreman intent-write ban lives in role-cast only).
+- Placeholders: none — every scenario step now embeds its complete setup script inline (no
+  shared-fixture shorthand); `quorum_tier: full` fixed.
+- Consistency: seat names, skill names, fixture (T-010), scenario ids uniform; role-cast seat
+  table reproduces Spec A verbatim incl. aliases and amendments; ticket-discipline restates
+  Spec C incl. PROCESS.md-or-inherit, alias wire rule, optional Receipts, doc paths;
+  builder-only immutability preserved (foreman intent-write ban lives in role-cast only);
+  R4/R6/R7 deterministically require the edited gate skill to have loaded.
