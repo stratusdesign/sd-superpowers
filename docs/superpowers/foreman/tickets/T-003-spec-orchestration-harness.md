@@ -11,9 +11,11 @@ The foreman runtime: spawning workers via Happier daemon (`IS_SANDBOX=1`, spawn 
 foreman session's own config (Happier MCP; thinness via allowlist), check-moment event sources
 (dispatch-only work-start; artifact diffs; rabbit-hole signal TBD), escalation to phone
 (worker blocks), state rehydration from artifacts (disposable foreman), Hermes integration
-(spawn trigger + evidence checks), repo layout for the new project.
+(spawn trigger + evidence checks), repo layout for the new project (minimum needed to express runtime boundaries — no more).
 
 ## Acceptance criteria
+- Check-moment matrix: each event → source, foreman response, persisted receipt, failure
+  behavior, owner.
 - Every mechanism cites a verified receipt from the concept or names an experiment.
 - V1 boundaries honored (one project, one builder, bypass workers, no budget-awareness).
 - Fail-closed + recovery invariants concretized.

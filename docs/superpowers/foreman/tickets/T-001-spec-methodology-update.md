@@ -14,7 +14,8 @@ which gain foreman-awareness (commissioning moves up when a foreman is present; 
 preserved), and where the role canon lives so spawned sessions load it.
 
 ## Acceptance criteria
-- Spec names every skill/doc file touched and the behavioral change per file.
+- Spec names every skill/doc file touched and the behavioral change per file, with explicit
+  behavior cases for BOTH modes: foreman-present and standalone.
 - Foreman-less operation remains fully working (explicit standalone path).
 - Role definitions readable by a session at boot (mechanism named).
 - Passes Codex adversarial review + operator approval.

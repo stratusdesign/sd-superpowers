@@ -11,6 +11,9 @@
 | T-002 | Spec C: documentation + ticketing standard (shared schema, PulseMark-derived) | #1 | open |
 | T-003 | Spec B: orchestration harness v1 (foreman runtime: spawn, check-moments, escalation, MCP, Hermes) | #3 | open |
 | T-004 | Experiment: session takeover/resume of an existing Claude session (feeds handoff design in T-003) | #3 | open |
+| T-005 | Experiment: superpowers bootstrap in Happier-daemon-spawned sessions (T-001 boot contract + T-003 spawn design depend on it) | #1,#3 | open |
+
+**Order:** T-004 → T-001 ∥ T-002 (shared boundary reconciled first) → T-005 → T-003.
 
 ## Phase 2 — Plans (after specs approved)
 
@@ -27,3 +30,6 @@ Generated from Phase 2. Not enumerated yet (YAGNI).
   move-off-root project.
 - Move workers off root + gated permission loop (path B) — separate later project.
 - Cross-project arbitration / budget-awareness — out of v1 (concept).
+- Remaining concept experiments dispositioned: ring-gating checks fold into T-003 where a
+  mechanism depends on a gated feature; spawn-endpoint security — covered by VPN-only posture,
+  revisit at M1; relay latency/throughput — measure at M1, not before.

@@ -13,6 +13,7 @@ and what makes tickets machine-readable by the foreman (explicit IDs on commits/
 scripts stay mechanical — concept, Script vs model).
 
 ## Acceptance criteria
+- Normative schema (field list, formats) + a status transition table — not prose description.
 - One schema serves humans and foreman scripts (IDs, statuses parseable).
 - Deviation-note pipeline specified (builder implements best interpretation + notes → checker pass → SA).
 - Adopted-verbatim vs adapted-from-PulseMark decisions listed with reasons.

@@ -14,9 +14,12 @@
 | Independent reviewer | Codex (fresh context per review) | Adversarial review of each spec/plan/diff |
 | Evidence | Hermes + repo/tests/receipts | Verification without trusting the claimant |
 
-Rules carried from the concept: reviewed party never scopes its own review brief (neutral brief:
-artifacts + standing rubric only); nothing is real until it lands in a doc/ticket; operator
-steering enters as artifacts.
+Rules carried from the concept: reviewed party never scopes its own review brief — neutral briefs
+derive from artifacts + the standing rubric only (rubric: coherence, completeness vs cited
+sections, evidence-label accuracy, over-engineering, gameable criteria). Brief commissioning:
+Owner before M1 (delegable to SA strictly via the standing rubric), foreman after M1. Nothing is
+real until it lands in a doc/ticket **and is acknowledged** — by the Owner before M1, by the
+foreman after M1. Operator steering enters as artifacts.
 
 ## Flow (per deliverable)
 
@@ -29,7 +32,7 @@ implementation plan (writing-plans) → tickets → build → verification → o
 
 ## Ticket standard (PulseMark-derived)
 
-Every ticket: Status · Deliverable · Spec reference · Acceptance criteria.
+Every ticket: Status · Deliverable · Owner · Spec reference · Acceptance criteria.
 Builder appends a **Report** on completion: status, branch, commit, summary, **deviations from
 spec**, known issues. Ambiguous spec → implement best interpretation + deviation note (never
 block); deviation notes get a review pass. Builders never edit the Spec section.

@@ -11,5 +11,10 @@ design conversation → foreman assumes control). Result decides T-003's handoff
 takeover vs fresh-spawn-from-docs.
 
 ## Acceptance criteria
-- Ran against a real pre-existing session; outcome + receipts recorded here.
-- Recommendation (takeover / fresh-spawn / both) written into T-003 input.
+- Target session is a genuine non-Happier-born Claude session with real prior conversation;
+  provenance (session id, origin, turn count) recorded.
+- After takeover: prior conversational state demonstrably intact (worker correctly answers a
+  question about earlier turns), AND a foreman-issued follow-up instruction completes.
+- Failure modes and fallback behavior recorded, not just the happy path.
+- Recommendation written into T-003 input — "both" is only valid as fresh-spawn-as-fallback,
+  never as two co-equal production paths.
