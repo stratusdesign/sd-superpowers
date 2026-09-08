@@ -26,6 +26,11 @@ foreman after M1. Operator steering enters as artifacts.
 spec → Codex adversarial review → synthesis → operator approval →
 implementation plan (writing-plans) → tickets → build → verification → operator acceptance
 
+**Review applies to every done-claim, not just specs.** Experiment results, completion claims,
+and their interpretations get the same independent Codex review before a ticket is marked done —
+the party that ran the work never certifies its own conclusions. (Added 2026-09-08 after T-004
+was self-certified — the exact conflict this project exists to remove.)
+
 - Specs: `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
 - Plans: `docs/superpowers/plans/`
 - Tickets: `docs/superpowers/foreman/tickets/T-###-<slug>.md`, indexed in `backlog.md`
