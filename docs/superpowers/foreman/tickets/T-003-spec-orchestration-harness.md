@@ -29,3 +29,15 @@ Draft v1 (2026-09-08). T-004 input applied (takeover = leading candidate gated o
 fresh-spawn default until then). T-005 input applied (bootstrap verified on default
 daemon-create route; inline fallback retained for untested routes). Experiments E1–E7 named;
 none gate M0. Codex adversarial review pending.
+
+Review round 1 (2026-09-08): Codex, fresh context, neutral brief — 2 blockers, 6 material,
+2 minor; all 10 accepted by sa and applied in draft v2 (observability limits stated per check
+moment; blocking narrowed to gate progression; diff-gate baseline defined; E8/E9 added;
+fallback transport narrowed; journal ownership flagged as an operator decision). Verbatim
+findings: docs/superpowers/foreman/reviews/T-003-codex-review-1.md. Targeted re-review of
+blocker resolutions pending, then operator approval.
+
+## Receipts
+- 2026-09-08T13:50:00Z · dispatch · operator · execute-T-003-per-PROCESS · conversation-2026-09-08
+- 2026-09-08T14:19:09Z · spec-review · checker · 2-blocker-6-material-2-minor · docs/superpowers/foreman/reviews/T-003-codex-review-1.md
+- 2026-09-08T14:25:00Z · finding-disposition · sa · all-10-accepted-applied-draft-v2 · docs/superpowers/specs/2026-09-08-orchestration-harness-design.md
