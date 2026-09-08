@@ -1,16 +1,20 @@
-# T-006 — Eval scenarios R0, R2–R7 authored + baselines recorded (plan Task 0)
+# T-006 — Behavioral RED baselines in fresh sessions (Plan A Task 0)
 
-Status: parked · Deliverable: #1 · Owner: builder
-Parked: harness testing removed from this fork's internal work — no API keys / external infra anywhere (operator, 2026-09-08); scenario commit reverted in evals clone
+Status: open · Deliverable: #1 · Owner: builder
 
 ## Spec reference
 Spec A (approved): docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md
 Plan (authoritative detail): docs/superpowers/plans/2026-09-08-methodology-roles-update.md — Task 0
 
 ## Scope
-Execute plan Task 0 exactly as written, all steps in order.
+Before any Spec A skill change is implemented, run the Plan A behavioral baseline scenarios in fresh isolated agent/subagent sessions using the project's already-available authenticated harness/session routes. Record observed behavior as RED/control evidence.
+
+This ticket does **not** require Quorum, `superpowers-evals`, API keys, new credentials, an eval appliance, or any external testing infrastructure. Formal upstream Quorum evaluation is optional and outside this fork's implementation path.
 
 ## Acceptance criteria
-- All seven scenario dirs exist with full story.md/setup.sh/checks.sh as specified.
-- Baseline run ids recorded for every scenario incl. R1.
-- Committed with the plan's Task-0 commit message.
+- R0–R7 baseline scenarios from Plan A Task 0 are exercised in fresh sessions.
+- R0/R1 are recorded as standalone controls; no role/foreman behavior may surface.
+- For behavior-changing scenarios R2–R7, actual pre-change behavior is recorded rather than inferred. If a scenario already exhibits the target behavior, it is not falsely marked RED; narrow/replace that scenario until it tests a real pre-change gap or record that no gap exists.
+- Baseline evidence is written to `docs/superpowers/evals/2026-09-08-role-cast-results.md` with scenario, prompt, observed behavior, verdict, and session/evidence reference.
+- No skill files are modified under this ticket.
+- Committed before T-007 starts.
