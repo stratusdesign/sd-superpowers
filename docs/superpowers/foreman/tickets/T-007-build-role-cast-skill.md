@@ -11,5 +11,5 @@ Execute plan Task 1 exactly as written, all steps in order.
 
 ## Acceptance criteria
 - skills/role-cast/SKILL.md matches the plan's content block exactly.
-- Static gates pass; R0 and R1 still pass.
+- No-seat check passes (plan §standard check).
 - Committed.

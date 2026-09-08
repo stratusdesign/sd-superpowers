@@ -11,5 +11,5 @@ Execute plan Task 5 exactly as written, all steps in order.
 
 ## Acceptance criteria
 - Only the plan's exact paragraph appears in the diff.
-- R4 passes; R0 and R1 still pass.
+- Review-routing seat check passes.
 - Committed.

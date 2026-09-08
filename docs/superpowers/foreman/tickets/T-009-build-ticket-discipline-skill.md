@@ -11,5 +11,5 @@ Execute plan Task 3 exactly as written, all steps in order.
 
 ## Acceptance criteria
 - skills/ticket-discipline/SKILL.md matches the plan's content block exactly.
-- R3 passes; R0 and R1 still pass.
+- Scope-refusal seat check passes.
 - Committed.

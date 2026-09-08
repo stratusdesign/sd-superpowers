@@ -11,5 +11,5 @@ Execute plan Task 2 exactly as written, all steps in order.
 
 ## Acceptance criteria
 - Exactly one line added in ## Skill Priority; no other diff in the file.
-- R2 passes; R0 and R1 still pass.
+- Seat check and no-seat check pass (plan §standard check).
 - Committed.

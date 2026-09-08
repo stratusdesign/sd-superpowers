@@ -1,4 +1,4 @@
-# T-012 — Pressure-testing, full 3x sweep, evidence record (plan Task 6)
+# T-012 — Verification sweep: all in-session checks (plan Task 6)
 
 Status: open · Deliverable: #1 · Owner: builder
 
@@ -10,6 +10,5 @@ Plan (authoritative detail): docs/superpowers/plans/2026-09-08-methodology-roles
 Execute plan Task 6 exactly as written, all steps in order.
 
 ## Acceptance criteria
-- All eight scenarios pass 3 independent runs each; both static gates pass.
-- docs/superpowers/evals/2026-09-08-role-cast-results.md records baselines + after-runs + wording fixes.
-- Committed.
+- All five in-session checks pass on fresh subagents.
+- Any wording fixes committed.

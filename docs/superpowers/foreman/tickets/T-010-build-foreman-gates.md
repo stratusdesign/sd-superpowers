@@ -11,5 +11,5 @@ Execute plan Task 4 exactly as written, all steps in order.
 
 ## Acceptance criteria
 - Only the plan's exact insertions appear in the three skills' diffs.
-- R5, R6, R7 pass; R0, R1, R2 still pass.
+- SDD-escalation seat check and no-seat check pass.
 - Committed.

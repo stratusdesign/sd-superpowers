@@ -1,6 +1,7 @@
 # T-006 — Eval scenarios R0, R2–R7 authored + baselines recorded (plan Task 0)
 
-Status: open · Deliverable: #1 · Owner: builder
+Status: parked · Deliverable: #1 · Owner: builder
+Parked: harness testing removed from this fork's internal work — no API keys / external infra anywhere (operator, 2026-09-08); scenario commit reverted in evals clone
 
 ## Spec reference
 Spec A (approved): docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md
