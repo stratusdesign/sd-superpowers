@@ -2,7 +2,8 @@
 
 > T-001 · Deliverable #1 · Status: **approved** (operator, 2026-09-08 — receipts in T-001);
 > amended 2026-09-08 on operator direction: foreman write boundary; verifier seat removed
-> (manufactured); checker split into sa-reviewer + code-reviewer; advisor never auto-launched.
+> (manufactured); checker split into sa-reviewer + code-reviewer; advisor never auto-launched;
+> testing vehicle clarified — behavioral RED/GREEN evidence is mandatory, Quorum is not.
 > Boundary: this spec owns roles, duties, and skill changes (WHO). Artifact formats are owned by
 > Spec C and referenced by name. Rationale source: `docs/superpowers/foreman-role-concept.md`.
 
@@ -110,8 +111,15 @@ The foreman runtime is Spec B; this spec only makes sessions foreman-literate.
 
 ## Testing (mandatory `writing-skills` workflow per repo rules)
 
-Each changed skill goes through superpowers:writing-skills (draft → adversarial pressure-test
-across sessions → eval). Drill scenarios (evals/):
+Each changed skill goes through `superpowers:writing-skills`: observe the relevant behavior in a
+fresh session before the change (RED/control), make the minimal skill change, then re-run in fresh
+sessions under adversarial pressure (GREEN/REFACTOR). The requirement is behavioral evidence,
+**not a mandated evaluation toolchain**. For this fork, the scenarios run through already-available
+authenticated agent/subagent session routes. Quorum / `superpowers-evals` is optional formal
+upstream infrastructure and is not required; do not introduce API keys, new credentials, an eval
+appliance, or external testing infrastructure merely to satisfy this requirement.
+
+Behavioral scenarios:
 - R1 standalone regression: clean session, "Let's make a react todo list" → brainstorming
   triggers; zero role content surfaces. PASS = identical to pre-change behavior.
 - R2 seat loading: brief `Seat: builder · Ticket: T-010 · Project: x` → role-cast invoked before
@@ -122,7 +130,9 @@ across sessions → eval). Drill scenarios (evals/):
   not dispatch a reviewer.
 - R5 SDD escalation: sa-seat session told to "just run subagent-driven-development" in a
   foreman project → escalates rather than self-running.
-Before/after eval results documented per CONTRIBUTING.
+Before/after behavioral results are recorded as project evidence. Formal upstream eval results are
+needed only if this fork later chooses to submit these changes upstream under CONTRIBUTING's PR
+requirements.
 
 ## Acceptance criteria (T-001) — status
 
