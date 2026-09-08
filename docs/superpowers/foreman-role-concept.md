@@ -303,6 +303,25 @@ Android — dual attach confirmed live. Two experiments resolved, one blocked:
   account default, or a spawn flag that actually overrides). Not a permissions-management project —
   just steering Happier's spawn mode.
 
+### MCP control surface wired (2026-09-08, later)
+
+`happier mcp serve` verified as the foreman's driving surface — 53 tools including
+`session_permission_respond`, `session_user_action_answer`, `session_spawn_new`,
+`session_message_send`, `session_status_get`, `session_wait_idle`.
+
+- **Claude Code — VERIFIED live:** a session hosting the MCP server called `session_list`
+  successfully (one-line mcp-config).
+- **Codex — configured** (`[mcp_servers.happier]`, same stdio pattern as its gortex entry);
+  not yet exercised.
+- **Hermes — wired as a second machine:** happier CLI installed in its container, authenticated
+  as its own machine identity on the account, MCP entry registered in its config. Sessions are
+  account-scoped, so everything any party spawns is visible on every client (verified: Hermes
+  listed the host's sessions from inside its container). Requester and runner are recorded
+  separately — the audit trail distinguishes "Hermes asked" from "host ran".
+- Operator decision: Hermes is a full agent (not read-only); it holds session-control but does
+  not talk to workers in normal operation. Foreman = a Happier session the operator can talk to
+  directly; Hermes spawns it (targeting the host machine's daemon, since the container runs none).
+
 ## Open design questions (for the design phase)
 
 - The fail-closed worker permission policy: which actions are deliberately left unresolved so
