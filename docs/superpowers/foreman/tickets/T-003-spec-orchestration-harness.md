@@ -41,3 +41,14 @@ blocker resolutions pending, then operator approval.
 - 2026-09-08T13:50:00Z · dispatch · operator · execute-T-003-per-PROCESS · conversation-2026-09-08
 - 2026-09-08T14:19:09Z · spec-review · checker · 2-blocker-6-material-2-minor · docs/superpowers/foreman/reviews/T-003-codex-review-1.md
 - 2026-09-08T14:25:00Z · finding-disposition · sa · all-10-accepted-applied-draft-v2 · docs/superpowers/specs/2026-09-08-orchestration-harness-design.md
+- 2026-09-08T14:26:31Z · spec-re-review · checker · 8-resolved-1-partial-1-unresolved-plus-N1-N2 · docs/superpowers/foreman/reviews/T-003-codex-review-2.md
+- 2026-09-08T14:30:00Z · finding-disposition · sa · 5-and-N2-applied-8-restructured-as-spec-c-amendment-draft-v3 · docs/superpowers/specs/2026-09-08-orchestration-harness-design.md
+- 2026-09-08T14:30:00Z · scope-amendment-raise · sa · T-003-scope-worker-blocks-vs-gate-freeze-to-operator · docs/superpowers/foreman/reviews/T-003-codex-review-2.md
+
+Re-review (2026-09-08, round 2): 8/10 resolved; finding 5 (diff-gate determinism) completed in
+draft v3 (working-tree sweep + per-file authorization match); finding 8 resolved by submitting
+a concrete Spec C amendment for operator approval instead of a flag; new N1 (spec vs this
+ticket's Scope wording "worker blocks") raised to operator as spec open item 3 — sa does not
+amend its own Scope unraised; new N2 (overbroad "leaks to") applied. Verbatim:
+docs/superpowers/foreman/reviews/T-003-codex-review-2.md. Awaiting operator approval — three
+open items listed in the spec.
