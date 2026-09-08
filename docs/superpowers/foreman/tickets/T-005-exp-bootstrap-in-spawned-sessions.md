@@ -1,6 +1,6 @@
 # T-005 — Experiment: superpowers bootstrap in Happier-daemon-spawned sessions
 
-Status: open · Deliverable: #1, #3 · Owner: SA
+Status: open · Deliverable: #1,#3 · Owner: sa
 
 ## Spec reference
 Concept experiments list item 1; T-001 (boot-readable role canon) and T-003 (worker spawn design)

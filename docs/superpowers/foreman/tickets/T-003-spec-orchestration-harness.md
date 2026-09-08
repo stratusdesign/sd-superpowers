@@ -1,6 +1,6 @@
 # T-003 — Spec B: orchestration harness v1
 
-Status: open · Deliverable: #3 (new repo) · Owner: SA
+Status: open · Deliverable: #3 · Owner: sa
 
 ## Spec reference
 Concept: Topology, Enforcement (layers 2–4 active; layer 1 deferred), Check moments, Escalation,

@@ -1,94 +1,114 @@
 # Spec C — Documentation + Ticketing Standard
 
-> T-002 · Deliverable #1 · Status: draft, pending Codex review + operator approval.
-> Boundary: this spec owns artifact formats and lifecycle (the WHAT). Role duties are owned by
-> Spec A and referenced only. Derived from the PulseMark contract (verified working baseline:
-> `/home/pulsemark/architect-wd/pulsemark/architect/ARCHITECT.md`, `builder/BUILDER.md`).
+> T-002 · Deliverable #1 · Status: draft v2 (post Codex review 1) · pending targeted re-review +
+> operator approval.
+> Boundary: this spec owns artifact formats and lifecycle (WHAT). Duties are Spec A's and are
+> referenced only. Baseline: PulseMark contract (verified on disk).
 
 ## Goal
 
-One schema that serves humans and foreman scripts: humans read it naturally; deterministic
-scripts parse status, IDs, and receipts without a model. (Concept: "Script vs model" — scripts
-operate only on explicit identifiers and recorded evidence.)
+One schema serving humans and deterministic scripts. Scripts parse only explicit syntax defined
+here; anything semantic is a checker judgment (concept: Script vs model).
 
-## Normative schema
+## Grammar conventions
 
-### Ticket file
-- Path: `<project>/tickets/T-###-<kebab-slug>.md`. IDs zero-padded three digits, unique per
-  project, never reused.
+- `<seat>` = a seat name from Spec A's table (lowercase).
+- `<status>` = `open|in-progress|review|done|parked`.
+- Header values MUST NOT contain `·` or newlines. Field separator is exactly ` · `.
+- Ticket ID = `T-` + exactly three digits (`T-\d{3}`), unique within a project, never reused.
+  v1 is single-project; cross-project namespacing is deferred to Spec B if ever needed.
+
+## Ticket file (normative)
+
+- Path: `<project>/tickets/T-###-<kebab-slug>.md`
 - Line 1: `# T-### — <title>`
-- Line 3 (machine-read header, exact format):
-  `Status: <status> · Deliverable: <ref> · Owner: <seat>`
-- Required sections, in order: `## Spec reference` · `## Scope` · `## Acceptance criteria`
-- Appended by builder on completion: `## Builder Report` with labeled lines:
-  `**Status:**` `**Branch:**` `**Commit:**` `**Summary:**` `**Deviations from spec:**`
-  `**Known issues:**`
-- Experiment tickets append `## Result` instead of a Builder Report (same review gate).
-- The `## Scope` and `## Acceptance criteria` sections are immutable by the builder seat
-  (Spec A defines the seat rule; this spec defines which bytes are protected).
+- Line 3 (exact): `Status: <status> · Deliverable: <refs> · Owner: <seat>`
+  where `<refs>` = `#N` or comma-list `#N,#M` (no spaces).
+- Required sections in order: `## Spec reference` · `## Scope` · `## Acceptance criteria`
+- `## Scope` and `## Acceptance criteria` are byte-immutable to the builder seat (duty: Spec A).
+- Completion artifact, appended:
+  - Build tickets: `## Builder Report` — labeled single-line fields, each starting the line:
+    `**Status:**` `**Branch:**` `**Commit:**` `**Summary:**` `**Deviations from spec:**`
+    `**Known issues:**`. Continuation of a long value: following lines indented two spaces.
+    **Exactly one** `**Deviations from spec:**` line per report; value is `none` or prose.
+    Re-work appends a numbered `## Builder Report (2)` etc. — reports are never edited.
+  - Experiment tickets: `## Result` (same review gate; prose body).
+- Optional `## Receipts` section — see §Receipts.
 
-### Backlog index
-- Path: `<project>/backlog.md`. One table per phase: `| ID | Title | Deliverable | Status |`.
-- Index only — detail lives in ticket files. Status here mirrors the ticket header (the ticket
-  file is authoritative on conflict; scripts flag divergence).
+## Backlog index (normative)
 
-### Status lifecycle
-`open → in-progress → review → done`, plus `parked` (from any state, back to `open`).
+- Path: `<project>/backlog.md`; per-phase table `| ID | Title | Deliverable | Status |`.
+- Index only. **The ticket header is authoritative**; scripts flag backlog/ticket divergence as
+  an error rather than resolving it.
+
+## Status lifecycle
 
 | From | To | Trigger |
 |---|---|---|
-| open | in-progress | work dispatched/started |
-| in-progress | review | done-claim recorded (Report/Result appended) |
-| review | done | independent review passed + findings applied + acknowledged |
+| open | in-progress | work dispatched (duty: Spec A) |
+| in-progress | review | done-claim artifact appended (Report/Result) |
+| review | done | independent review passed, findings applied, **acknowledged** (acknowledger per Spec A: operator pre-M1, foreman post-M1) |
 | review | in-progress | review found material issues |
-| any | parked | deliberate deferral, reason recorded in ticket |
-| parked | open | revived |
+| open / in-progress / review | parked | deliberate deferral; a `Parked: <reason>` line added under the header |
+| parked | open | revived (the only exit) |
 
-No state skips: a done-claim never jumps to `done` (PROCESS rule: the party that ran the work
-never certifies its own conclusions).
+`done` is terminal. No state skips — in particular a done-claim can never jump `in-progress →
+done` (the review state is mandatory; PROCESS rule).
 
-### Machine-readability contract
-- Ticket ID token `T-###` MUST appear in every commit message and Builder Report for work on that
-  ticket — scripts map commits→tickets purely syntactically; semantic "does this work belong to
-  its ticket" stays a checker judgment (concept: Script vs model).
-- `Status:` header greppable: `^Status: <status> ·` exactly.
-- Deviation detection: the literal `**Deviations from spec:**` line; value `none` or prose.
-  Any non-`none` value is the event that triggers the deviation pipeline.
+## Receipts (normative format; duties in Spec A)
 
-## Deviation pipeline (format side)
+Ticket-scoped events (gate passed, review verdict, deviation disposition, acknowledgment) are
+appended as lines under `## Receipts`:
 
-Builder implements best interpretation, records it under `**Deviations from spec:**` (what, why,
-interpretation chosen). The note is the machine-visible event; routing (foreman → checker → SA →
-pass or corrective ticket) is Spec A/B territory. A corrective ticket cites the originating
-`T-###`.
+`- <UTC ISO-8601> · <event> · <seat> · <verdict-or-action> · <evidence-ref>`
+
+`<evidence-ref>` = commit hash, file path, session id, or review-report pointer. One line per
+event; append-only.
+
+## Spawn brief (normative format; sending is Spec B, obeying is Spec A)
+
+`Seat: <seat> · Ticket: T-### · Project: <name>` — optionally followed by free-form task text.
+
+## Machine-readability contract
+
+- `T-###` token MUST appear in every commit message and Builder Report for that ticket's work.
+  Scripts map commits→tickets syntactically only.
+- Greppable anchors, exact: `^Status: ` header · `^\*\*Deviations from spec:\*\*` ·
+  `^## Builder Report` · `^## Result` · `^## Receipts` · receipt lines `^- \d{4}-`.
+- A non-`none` deviation value is the machine-visible event that triggers deviation routing
+  (routing is Spec A's).
 
 ## Documentation standard
 
 - Specs: `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`; plans: `docs/superpowers/plans/`
-  (existing sd-superpowers conventions, unchanged).
-- Every project carries: `backlog.md`, `tickets/`, `PROCESS.md` (or inherits the methodology
+  (existing conventions, unchanged).
+- Every project carries `backlog.md`, `tickets/`, `PROCESS.md` (or inherits the methodology
   default), and a STATUS/handover doc for infra state.
-- Doc accuracy is owned by the SA seat; docs are updated to match reality, never the reverse
-  (PulseMark rule, adopted verbatim). Sync verification is commissioned independently since the
-  SA wrote both (Spec A).
+- Doc-accuracy ownership and sync-check commissioning are duties: Spec A.
+
+## Migration
+
+The standard applies from adoption. A project adopting it brings existing tickets/backlog into
+conformance in the adopting commit — done for this project (T-001..T-005 headers and backlog
+normalized alongside this draft).
 
 ## Adopted vs adapted from PulseMark
 
 | Item | Decision | Why |
 |---|---|---|
-| Backlog as lightweight index | adopted verbatim | worked in production |
-| Ticket spec immutable to builder | adopted verbatim | protects the contract |
-| Builder Report appended to ticket | adopted verbatim | the done-claim artifact |
-| Deviation note + implement-best-interpretation | adopted verbatim | operator decision (non-blocking flow) |
-| Emoji statuses (📋 etc.) | replaced with words | greppability beats glyphs |
-| Fix-vs-spec judgment rules | referenced (Spec A, SA seat) | role duty, not format |
-| review state | added | done-claim review rule (PROCESS) is new |
-| Machine-read header + T-### commit token | added | foreman scripts need syntax, not inference |
+| Backlog as lightweight index | adopted | worked in production |
+| Ticket spec immutable to builder | adopted | protects the contract |
+| Builder Report appended | adopted + numbered re-work reports | done-claim artifact; append-only history |
+| Deviation note, implement-best-interpretation | adopted | operator decision (non-blocking) |
+| Emoji statuses | replaced with words | greppability |
+| Fix-vs-spec judgment | referenced (Spec A) | duty, not format |
+| `review` state | added | done-claim review rule is new |
+| Machine header, `T-###` token, receipts, spawn brief | added | foreman scripts need syntax |
 
-## Acceptance criteria (from T-002)
+## Acceptance criteria (T-002) — status
 
-- Normative schema + transition table: above, formats exact.
-- Humans + scripts served by one schema: header/token/section contracts defined.
-- Deviation pipeline specified at format level.
-- Adopted/adapted decisions listed with reasons.
-- Gate: Codex adversarial review, then operator approval.
+- Normative schema + transition table: above, with grammar conventions. ✔
+- One schema for humans and scripts: anchors + authority rules defined. ✔
+- Deviation pipeline: format + event defined here; routing in Spec A (explicit cross-refs). ✔
+- Adopted/adapted table with reasons. ✔
+- Gate: review round 1 applied; targeted re-review + operator approval pending.

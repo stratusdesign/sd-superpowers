@@ -1,6 +1,6 @@
 # T-004 — Experiment: takeover/resume of an existing Claude session
 
-Status: open · Deliverable: #3 · Owner: SA
+Status: done · Deliverable: #3 · Owner: sa
 
 ## Spec reference
 Concept: "Design-phase handoff" + experiments list item 3.
@@ -19,7 +19,7 @@ takeover vs fresh-spawn-from-docs.
 - Recommendation written into T-003 input — "both" is only valid as fresh-spawn-as-fallback,
   never as two co-equal production paths.
 
-## Result — RAN 2026-09-08, independently reviewed (Codex) 2026-09-08 (status: done)
+## Result — RAN 2026-09-08, independently reviewed (Codex) 2026-09-08
 
 **Native-session import/resume demonstrated; two seeded facts survived.** ("Takeover" here means
 import-and-respawn per Happier's mechanism — process continuity is not claimed. Recalling two

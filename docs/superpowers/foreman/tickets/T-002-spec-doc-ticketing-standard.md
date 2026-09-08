@@ -1,6 +1,6 @@
 # T-002 — Spec C: documentation + ticketing standard
 
-Status: open · Deliverable: #1 · Owner: SA
+Status: review · Deliverable: #1 · Owner: sa
 
 ## Spec reference
 Concept: "Ticketing and documentation (inherited, working pattern)"; PulseMark

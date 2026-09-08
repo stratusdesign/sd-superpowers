@@ -1,6 +1,6 @@
 # T-001 — Spec A: sd-superpowers methodology update
 
-Status: open · Deliverable: #1 (methodology repo) · Owner: SA
+Status: review · Deliverable: #1 · Owner: sa
 
 ## Spec reference
 Concept `docs/superpowers/foreman-role-concept.md`: Project structure #1–#2, Roles, Authority,
