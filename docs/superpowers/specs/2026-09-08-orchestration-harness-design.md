@@ -1,7 +1,6 @@
 # Spec B — Orchestration Harness v1: The Foreman Runtime
 
-> T-003 · Deliverable #3 · Status: draft v5 (operator decisions + simplification pass
-> 2026-09-08 applied) · pending operator approval.
+> T-003 · Deliverable #3 · Status: **approved** (operator, 2026-09-08 — receipts in T-003).
 > Boundary: this spec owns the machinery (HOW the foreman runs) — spawning, driving, event
 > sources, escalation transport, recovery, repo layout. Duties and prohibitions are Spec A's;
 > artifact formats are Spec C's, unchanged. Rationale source:
@@ -232,7 +231,6 @@ nothing above assumes Claude-only workers.
 - Fail-closed + recovery invariants concretized — and scoped to what the machinery actually
   enforces (gates, not worker execution): §Failure and recovery. ✔ (ticket Scope wording
   amended with operator approval — §Operator decisions).
-- Codex review round 1: 10/10 applied. Targeted re-review: 8 resolved; finding 5 completed in
-  this draft (working-tree sweep + per-file match rule); finding 8 restructured as a submitted
-  Spec C amendment; N1 → open item 3; N2 applied. Reviews: `docs/superpowers/foreman/reviews/`.
-  Operator approval: pending.
+- Codex review round 1: 10/10 applied. Targeted re-review: all resolved (reviews:
+  `docs/superpowers/foreman/reviews/`). Operator rounds: simplification pass + role-cast
+  revision applied. Operator approval: **granted 2026-09-08**.

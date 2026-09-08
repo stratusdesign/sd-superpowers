@@ -1,6 +1,6 @@
 # T-003 — Spec B: orchestration harness v1
 
-Status: review · Deliverable: #3 · Owner: sa
+Status: done · Deliverable: #3 · Owner: sa
 
 ## Spec reference
 Concept: Topology, Enforcement (layers 2–4 active; layer 1 deferred), Check moments, Escalation,
@@ -53,6 +53,7 @@ blocker resolutions pending, then operator approval.
 - 2026-09-08T16:05:00Z · operator-veto · operator · default-model-binding-removed-criteria-only-per-project-map · conversation-2026-09-08
 - 2026-09-08T16:15:00Z · operator-veto · operator · model-criteria-removed-entirely-PROCESS-md-binding-only · conversation-2026-09-08
 - 2026-09-08T16:35:00Z · operator-decision · operator · role-cast-revision-applied-to-spec-b-hermes-infrastructure-only · conversation-2026-09-08
+- 2026-09-08T16:50:00Z · acknowledgment · operator · spec-b-approved-ticket-done · conversation-2026-09-08
 
 Simplification pass (2026-09-08, operator-directed): all four trims approved and applied in
 draft v5 — standing rules-tampering watcher removed (signoff review asks the question);
