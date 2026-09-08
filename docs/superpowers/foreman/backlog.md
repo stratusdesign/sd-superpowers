@@ -17,11 +17,23 @@
 
 ## Phase 2 — Plans (after specs approved)
 
-Implementation plan per approved spec (writing-plans skill). Tickets generated from plans.
+- Plan A (Spec A + Spec C's skill vehicle): `docs/superpowers/plans/2026-09-08-methodology-roles-update.md`
+  — done (2 Codex review rounds applied); tickets T-006..T-012 generated.
+- Plan B (Spec B, harness repo): blocked on M0 repo creation (operator).
 
-## Phase 3 — Build
+## Phase 3 — Build (sd-superpowers, from Plan A)
 
-Generated from Phase 2. Not enumerated yet (YAGNI).
+| ID | Title | Deliverable | Status |
+|---|---|---|---|
+| T-006 | Eval scenarios R0, R2–R7 + baselines (plan Task 0) | #1 | open |
+| T-007 | role-cast skill (plan Task 1) | #1 | open |
+| T-008 | using-superpowers seat routing line (plan Task 2) | #1 | open |
+| T-009 | ticket-discipline skill (plan Task 3) | #1 | open |
+| T-010 | Foreman-present gates: brainstorming/writing-plans/SDD (plan Task 4) | #1 | open |
+| T-011 | requesting-code-review foreman routing (plan Task 5) | #1 | open |
+| T-012 | Pressure-testing + full sweep + evidence (plan Task 6) | #1 | open |
+
+**Order:** strictly T-006 → T-007 → T-008 → T-009 → T-010 → T-011 → T-012 (baselines first; one builder at a time).
 
 ## Parked
 
