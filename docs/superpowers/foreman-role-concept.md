@@ -277,6 +277,32 @@ spawns a fresh SA that rehydrates from the docs. Both paths exist; choosing is a
    time out; does a mid-turn deny return control cleanly; how `granular` approval policy
    interacts with an external approver; wire stability across releases (it is experimental).
 
+## Findings from live setup (2026-09-08)
+
+Happier stood up self-hosted (happier.stratus3.co, VPN-only) and connected from CLI, web, and
+Android — dual attach confirmed live. Two experiments resolved, one blocked:
+
+- **VERIFIED — dual attach (exp. 2):** operator's phone + web client + a driven session, all on one
+  account, simultaneously. Passes.
+- **VERIFIED — respond action exists (part of exp. 8):** `session.permission.respond` is present
+  and callable in the live action catalog (`happier session actions list`).
+- **BLOCKED — the permission-gate loop (exp. 8), INVESTIGATE FURTHER:** a worker spawned through
+  the Happier daemon **as root crashes on launch**. Claude refuses `--dangerously-skip-permissions`
+  under root, and Happier's daemon-create path puts workers in that bypass mode even when
+  `--permission-mode default` is passed explicitly (reproduced twice, argv confirmed from the
+  claude debug log). So no pending prompt is ever produced, and the foreman has nothing to answer.
+
+  **Operator decision (2026-09-08):** workers run **as root for now** — per-user permission
+  isolation would be a large project of its own and is out of scope.
+
+  **Counter-intuitive consequence to exploit:** running as root actually *forbids* bypass mode, so
+  a root worker is *forced* into a permission-gated mode — which is exactly what the foreman gate
+  wants. The old Happy daemon already runs Claude as root successfully with
+  `--permission-prompt-tool stdio --permission-mode auto`. The investigation is therefore narrow:
+  make Happier's daemon spawn workers in that gated mode instead of yolo/bypass (launch profile,
+  account default, or a spawn flag that actually overrides). Not a permissions-management project —
+  just steering Happier's spawn mode.
+
 ## Open design questions (for the design phase)
 
 - The fail-closed worker permission policy: which actions are deliberately left unresolved so
