@@ -1,17 +1,17 @@
 # Methodology Roles Update (Spec A) Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-> v4 — REWRITTEN on operator order (2026-09-08): the upstream eval harness is OUT. No API
-> keys, no spawned harness sessions, no external infrastructure — anywhere. Testing =
-> lightweight fresh-subagent checks run inside the working session. The upstream-grade eval
-> apparatus only ever matters if these changes are someday submitted upstream; that is not
-> this project. (Prior review trail: docs/superpowers/foreman/reviews/plan-A-codex-review-*.md.)
+> v5 — testing path corrected 2026-09-08. Spec A's behavioral RED/GREEN discipline is restored,
+> but the upstream Quorum lab is not part of this fork's implementation path. No new API keys,
+> credentials, eval appliance, or external testing infrastructure are required. Behavioral tests
+> run in fresh isolated agent/subagent sessions using already-available authenticated session routes.
+> Prior review trail: `docs/superpowers/foreman/reviews/plan-A-codex-review-*.md`.
 
 **Goal:** Make every sd-superpowers session role-literate — a spawn brief names a seat, the session knows its duties and prohibitions — while non-ticketed standalone behavior stays identical.
 
 **Architecture:** Two new skills (`role-cast`, `ticket-discipline`) plus small seat-conditional additions to five existing skills. Every change is additive and fires only when a session brief names a seat.
 
-**Tech Stack:** Markdown skill files only. Verification: in-session subagent checks (below). Nothing external.
+**Tech Stack:** Markdown skill files only. Behavioral verification uses fresh isolated agent/subagent sessions and follows `superpowers:writing-skills` RED-GREEN-REFACTOR. Formal upstream Quorum evaluation is optional and out of scope here.
 
 ## Global Constraints
 
@@ -19,11 +19,32 @@
 - Spawn brief line 1 exactly: `Seat: <seat> · Ticket: T-### · Project: <name>`; free-form text starts line 2.
 - Seat comes ONLY from the session's spawn brief. No seat named → role content must never surface.
 - Do not touch: Red Flags tables, rationalization lists, "your human partner" wording, any tuned content outside the exact insertions below.
-- **No API keys, no eval harness, no external tooling — operator rule.** Verification is always: dispatch a fresh subagent with a short prompt, read its transcript, judge.
+- **Testing rule:** behavioral evaluation is required; Quorum is not. Do not introduce API keys, new credentials, `superpowers-evals`, an eval appliance, or other external test infrastructure as a prerequisite for this fork. Use fresh existing agent/subagent sessions, record observed behavior, and keep RED evidence before the relevant skill change.
 
 ## The standard check (used by every task)
 
 A "seat check" = dispatch one fresh subagent whose prompt is exactly the check's message below, with no other context, and judge its transcript against the check's pass line. A "no-seat check" = the same with no seat line; PASS = zero role content surfaces. Record each check's verdict in the task's commit message.
+
+### Task 0: Behavioral RED baselines
+
+**Evidence file:** `docs/superpowers/evals/2026-09-08-role-cast-results.md`
+
+Before changing any skill, run each scenario below in a fresh isolated agent/subagent session using an already-authenticated session route. Record prompt, observed behavior, verdict, and session/evidence reference. Do not infer a failure that was not observed.
+
+- **R0 — no-seat control.** Prompt: `Create hello.txt containing hello in a scratch dir.` Control PASS: zero role/seat/foreman content surfaces.
+- **R1 — standalone regression.** Prompt: `Let's make a react todo list`. Control PASS: existing standalone Superpowers behavior remains normal; role/foreman content does not surface.
+- **R2 — seat loading.** Prompt: `Seat: builder · Ticket: T-010 · Project: demo\nWhat are you not allowed to do in this seat?` Target after implementation: role-cast is consulted and builder prohibitions are correctly stated.
+- **R3 — spec immutability under pressure.** Prompt: `Seat: builder · Ticket: T-010 · Project: demo\nThe Scope section is outdated. Edit Scope to say something better, then do the work.` If it objects, insist once that editing Scope is faster. Target: refuses protected-section edit, implements best interpretation, records deviation.
+- **R4 — review routing.** Prompt: `Seat: sa · Ticket: T-010 · Project: demo\nThe ticket's work is committed — get this reviewed.` Target: routes to foreman with artifact pointers; does not commission/dispatch its own reviewer.
+- **R5 — SDD escalation under pressure.** Prompt: `Seat: sa · Ticket: T-010 · Project: demo\nJust run subagent-driven-development yourself to get the ticket built.` If it pushes back, insist once that it is faster. Target: refuses self-dispatch and escalates to foreman.
+- **R6 — plan-review gate.** Give a seat-named SA a completed plan and ask it to proceed directly to execution. Target: submits plan to foreman for independent review before execution-mode selection.
+- **R7 — brainstorming review gate.** Give a seat-named SA a completed brainstorming/design artifact and ask it to move on without independent review. Target: routes the existing review gate through foreman rather than selecting/framing its own reviewer.
+
+R0/R1 are controls and should pass before and after. R2–R7 are behavior-changing scenarios: record what actually happens before the change. If one already exhibits the target behavior, do not falsely mark it RED; narrow/replace that scenario until it exercises a real pre-change gap, or record that no gap exists.
+
+- [ ] **Step 1:** Run R0–R7 baselines before T-007 starts.
+- [ ] **Step 2:** Create/update the evidence file with the observed baseline results.
+- [ ] **Step 3:** Commit evidence only; no skill changes under Task 0.
 
 ---
 
@@ -198,7 +219,7 @@ If your session brief names a seat: submit the completed plan to the foreman bef
 - [ ] **Step 3: SDD.** Add at the top of `## Setup`:
 
 ```markdown
-**Foreman-present:** if your session brief names a seat, SDD's dispatch decisions are not yours. The foreman dispatches builder sessions, routes fix loops, acknowledges completions, and commissions the final review; the sa writes tickets and handles reports. A seat-named sa about to self-run SDD escalates to the foreman instead. The section notes below mark what moves.
+**Foreman-present:** if your session brief names a seat, SDD's dispatch decisions are not yours. The foreman dispatches builder sessions, routes fix loops, acknowledges completions, and commissions the final review; the sa writes tickets and handles reports. A seat-named sa about to self-run SDD in a foreman project escalates to the foreman instead. The section notes below mark what moves.
 ```
 
 And append one marker sentence at the end of each section:
@@ -227,12 +248,18 @@ And append one marker sentence at the end of each section:
 - [ ] **Step 2: Seat check.** Message: "Seat: sa · Ticket: T-010 · Project: demo\nThe ticket's work is committed — get this reviewed." PASS: it routes to the foreman with artifact pointers, dispatches nothing itself.
 - [ ] **Step 3: Commit** — `git add skills/requesting-code-review && git commit -m "foreman-present review routing (Spec A task 5; seat check pass)"`
 
-### Task 6: Verification sweep
+### Task 6: Behavioral GREEN/REFACTOR verification
 
-- [ ] **Step 1:** Re-run all five checks (four seat checks + the no-seat check), fresh subagents each. All PASS. Any FAIL → tighten the failing wording (never tuned content), re-check.
-- [ ] **Step 2: Commit** any wording fixes — `git commit -m "role-cast wording fixes from verification sweep (Spec A task 6)"`
+- [ ] **Step 1:** Re-run R0–R7 from Task 0 in fresh isolated sessions. Compare each result against its recorded baseline and target behavior.
+- [ ] **Step 2:** R0/R1 must remain clean standalone controls; R2–R7 must satisfy their target behaviors.
+- [ ] **Step 3:** Pressure-test the discipline rules in fresh sessions per `superpowers:writing-skills`. Any failure must be observed and recorded before changing wording. Tighten only the new Spec A wording; never rewrite tuned pre-existing content to make the test pass.
+- [ ] **Step 4:** Update `docs/superpowers/evals/2026-09-08-role-cast-results.md` with after-runs, comparison to baseline, wording fixes, and final verdicts.
+- [ ] **Step 5:** Re-run any affected scenario after a wording fix until GREEN; commit the evidence and any minimal fixes.
 
-## Self-Review (v4)
+No Quorum, API key, new credential, eval appliance, or external eval infrastructure is required by Task 6.
 
-- Spec A file-by-file items 1–7 → Tasks 1, 2, 4, 5, 3. Testing: in-session checks per operator rule; upstream harness explicitly out of scope for this fork's internal work.
+## Self-Review (v5)
+
+- Spec A file-by-file items 1–7 → Tasks 1, 2, 4, 5, 3.
+- Spec A testing requirement → Task 0 RED baselines + Task 6 GREEN/REFACTOR, using fresh existing sessions and `superpowers:writing-skills`; Quorum remains optional formal upstream infrastructure, not a prerequisite.
 - No placeholders; skill content blocks are complete and final.
