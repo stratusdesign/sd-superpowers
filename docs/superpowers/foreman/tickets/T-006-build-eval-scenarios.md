@@ -102,3 +102,10 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
 **Known issues:** Transcripts remain server-side (gitignored), path+hash referenced; committing
   them to the repo stays withheld pending operator word.
 
+## Receipts
+- 2026-09-08T22:30:00Z · review-rejection · operator · round-1-evidence-not-committed-R2-R4-invalid · conversation-2026-09-08
+- 2026-09-09T00:10:00Z · spec-review · sa-reviewer · round-2-FAIL-transcript-auditability · docs/superpowers/foreman/reviews/ (rounds logged in ledger)
+- 2026-09-09T01:00:00Z · spec-review · sa-reviewer · round-3-FAIL-confinement-wording-and-overclaims · ledger
+- 2026-09-09T01:40:00Z · spec-review · sa-reviewer · round-4-FAIL-R0-R1-isolation-R4c-count · ledger
+- 2026-09-09T02:20:00Z · spec-review · sa-reviewer · round-5-PASS-no-findings · cbec882
+
