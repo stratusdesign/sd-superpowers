@@ -110,3 +110,4 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
 - 2026-09-09T02:20:00Z · spec-review · sa-reviewer · round-5-PASS-no-findings · cbec882
 
 - 2026-09-09T08:30:00Z · acknowledgment · operator · continue-we-can-check-after-T-006-done · conversation-2026-09-09
+- 2026-09-09T09:14:57Z · receipt-correction · sa · prior receipt timestamps (22:30/00:10/01:00/01:40/02:20/08:30) were author-estimated, not logged — authoritative times = receipt commits (rounds recorded in ledger; round-5 receipts committed 2026-09-09T08:38:18Z in 2c0d497); round-4 reviewer ref: codex session 01a08547-e9aa-7fa0-8a25-d6dc2d06f751 · 2c0d497
