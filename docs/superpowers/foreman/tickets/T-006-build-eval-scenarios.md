@@ -83,3 +83,22 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
   auditable on this machine, not durable from the repo alone. Committing raw session
   transcripts to the repo is withheld deliberately; operator can order it.
 
+## Builder Report (4)
+
+**Ticket:** T-006
+**Status:** review
+**Branch:** foreman-role-concept
+**Commit:** cbec882
+**Summary:** Round-4 findings resolved. Day-one controls rerun under the v3 standard: R0b
+  (in-fixture write, zero role content) and R1b (built directly in-fixture, zero role content;
+  brainstorming not visibly triggered — route-damping caveat recorded) are now the binding
+  controls, both scan-clean. All eight binding runs (R0b R1b R2b R3b R4b R5b R6 R7) pass both
+  mechanical checks (zero repo-path tool inputs; all writes in-fixture — R6/R7 proactively
+  re-scanned). R4c's violation count corrected to six matching tool inputs; scan limits stated
+  plainly in the evidence (corroborating, combined with full tool-body reads for disputed
+  runs).
+**Deviations from spec:** Supersedes Report (3)'s "four repo reads" count (six) and its
+  implicit treatment of day-one R0/R1 as binding. Reports 1–3 left unedited per Spec C.
+**Known issues:** Transcripts remain server-side (gitignored), path+hash referenced; committing
+  them to the repo stays withheld pending operator word.
+
