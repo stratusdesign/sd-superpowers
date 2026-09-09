@@ -4,7 +4,9 @@
 > amended 2026-09-08 on operator direction: foreman write boundary; verifier seat removed
 > (manufactured); checker split into sa-reviewer + code-reviewer; advisor never auto-launched;
 > testing vehicle clarified — behavioral RED/GREEN evidence is mandatory, Quorum is not;
-> sa small-direct-fix allowance narrowed to spec-mismatch corrections only (operator, 2026-09-09).
+> sa small-direct-fix allowance narrowed, then superseded same day by the fix-loop ruling:
+> minor review findings → builder via foreman; major → sa corrective ticket; sa never fixes
+> builder code directly (operator, 2026-09-09).
 > Boundary: this spec owns roles, duties, and skill changes (WHO). Artifact formats are owned by
 > Spec C and referenced by name. Rationale source: `docs/superpowers/foreman-role-concept.md`.
 
@@ -30,11 +32,11 @@ aliases before writing.
 |---|---|---|
 | **operator** (owner) | Owns the plan; answers escalations; approves specs/plans; acknowledges gates pre-M1; acceptance | none — but steering is real only as artifacts (concept artifact rule) |
 | **advisor** (strategic-advisor) | Turns operator intent into documentation updates | Never auto-launched — the operator opens this seat himself; no session control; no dispatch; no direct worker contact |
-| **foreman** | Holds worker sessions; dispatches tickets; commissions every check/review with neutral briefs; holds gates; routes deviation events; escalates per ladder; acknowledges artifacts post-M1; writes operational state artifacts (receipts, STATUS, escalation records) | Never authors domain solutions; never writes project intent artifacts (specs, acceptance criteria, architecture) or code; never answers its own commissions |
-| **sa** (architect) | Architecture, specs, tickets, doc accuracy (docs match reality, never reverse); small direct fixes strictly limited to correcting code-vs-spec mismatches found during sa work — never executing a ticket's deliverable, however small; all ticket execution is dispatched by the foreman (operator ruling 2026-09-09); dispositions reviewer findings on content | Never dispatches builders; never commissions reviews of its own work; never approves its own done-claims; never changes scope unraised |
+| **foreman** | Holds worker sessions; dispatches tickets; commissions every check/review with neutral briefs; holds gates; routes deviation events and reviewer findings by the reviewer's severity label (minor → back to the builder to fix; major → to the sa for a corrective ticket); escalates per ladder; acknowledges artifacts post-M1; writes operational state artifacts (receipts, STATUS, escalation records) | Never authors domain solutions; never writes project intent artifacts (specs, acceptance criteria, architecture) or code; never answers its own commissions |
+| **sa** (architect) | Architecture, specs, tickets, doc accuracy (docs match reality, never reverse); writes corrective tickets for major review findings; never fixes builder code directly — minor findings return to the builder via the foreman (operator ruling 2026-09-09: all ticket execution and all code fixes are builder work, dispatched by the foreman); dispositions reviewer findings on content | Never dispatches builders; never commissions reviews of its own work; never approves its own done-claims; never changes scope unraised |
 | **builder** | Executes assigned ticket; runs seat-appropriate process skills (TDD etc.); appends Builder Report (format: Spec C); records deviations, implements best interpretation | Never edits Scope/Acceptance-criteria sections; never claims done (report → review state); never picks up unassigned work |
 | **sa-reviewer** | Reviews SA outputs — specs, plans, tickets, design done-claims — answering exactly the commissioned question from artifacts + standing rubric; needs docs access only | Never rewrites artifacts; never expands its question; no memory across commissions (fresh context) |
-| **code-reviewer** | Reviews builder outputs — diffs, tests, Builder Reports incl. deviations — against ticket + spec; needs code access | Never rewrites artifacts; never expands its question; no memory across commissions (fresh context) |
+| **code-reviewer** | Reviews builder outputs — diffs, tests, Builder Reports incl. deviations — against ticket + spec, labeling each finding minor or major; needs code access | Never rewrites artifacts; never expands its question; no memory across commissions (fresh context) |
 
 **Seat→holder binding:** this table is generic; the per-project assignment of each seat to a
 concrete holder (model, session type, or human) is recorded in that project's `PROCESS.md` roles

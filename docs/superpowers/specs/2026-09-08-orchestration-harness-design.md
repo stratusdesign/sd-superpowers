@@ -63,8 +63,10 @@ EXPERIMENT (E#, listed in §Experiments). Every mechanism below carries one.
    messages content into a worker beyond dispatch, answers to raises, and gate outcomes.
 5. **Completion.** Done-claim appended → `review` → foreman commissions the matching reviewer
    seat — sa work → sa-reviewer, builder work → code-reviewer (Spec A) — with a neutral brief
-   (artifacts + standing rubric only) → findings dispositioned per acceptance
-   owners → acknowledgment → `done`. All steps are receipts (Spec C).
+   (artifacts + standing rubric only) → findings routed by severity label:
+   minor → back to the builder to fix; major → to the sa for a corrective ticket (operator
+   ruling 2026-09-09) → dispositions per acceptance owners → acknowledgment → `done`. All
+   steps are receipts (Spec C).
 6. **Teardown.** Foreman stops the session (`happier session stop` exists — VERIFIED from
    source/docs; live semantics E8); session id stays in the receipts for audit.
 

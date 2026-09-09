@@ -76,3 +76,21 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
   path typo (second occurrence of the same typo class; both recorded).
 **Known issues:** none open.
 
+## Builder Report (4)
+
+**Ticket:** T-012
+**Status:** review
+**Branch:** foreman-role-concept
+**Commit:** (this commit)
+**Summary:** Batch-review staleness fixed (G6b row closed against G6c; observation 1 updated to
+  the rulings; G5b "verbatim" claim corrected to abbreviated-quote). Second operator ruling
+  applied: fix-loop routing (minor → builder via foreman; major → sa corrective ticket; sa
+  never fixes builder code) mirrored identically in role-cast, Spec A, and Spec B step 5.
+  G5b/G6c stand without rerun — their binding refuse-and-escalate behavior is conformant a
+  fortiori under the stricter rule.
+**Deviations from spec:** Supersedes Report (3)'s "Evidence table and Result updated" and
+  "Known issues: none open" (both premature when written).
+**Known issues:** none open.
+
+- 2026-09-09T09:29:50Z · operator-decision · operator · fix-loop-routing-minor-to-builder-major-to-sa-ticket-sa-never-fixes-code · conversation-2026-09-09
+
