@@ -27,3 +27,5 @@ Execute plan Task 2 exactly as written, all steps in order.
   serves full interactive sessions.
 **Known issues:** none beyond the recorded observations in the evidence file.
 
+## Receipts
+- 2026-09-09T10:30:00Z · spec-review · sa-reviewer · wrap-up-review-PASS (T-007..T-011 round 1; T-012 after corrections + micro-verify) · df12400

@@ -55,3 +55,5 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
   T-010 4d4a7ed · T-011 bf17b62 · T-012 evidence 6ea983e/49e08b0 + this correction.
 **Known issues:** none beyond the recorded observations.
 
+## Receipts
+- 2026-09-09T10:30:00Z · spec-review · sa-reviewer · wrap-up-review-PASS (T-007..T-011 round 1; T-012 after corrections + micro-verify) · df12400

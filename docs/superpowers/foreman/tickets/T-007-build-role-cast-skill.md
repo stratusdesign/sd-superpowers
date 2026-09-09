@@ -28,3 +28,5 @@ Execute plan Task 1 exactly as written, all steps in order.
   pattern). Task check and T-012 after-run merged into one run per scenario.
 **Known issues:** none beyond the recorded observations in the evidence file.
 
+## Receipts
+- 2026-09-09T10:30:00Z · spec-review · sa-reviewer · wrap-up-review-PASS (T-007..T-011 round 1; T-012 after corrections + micro-verify) · df12400
