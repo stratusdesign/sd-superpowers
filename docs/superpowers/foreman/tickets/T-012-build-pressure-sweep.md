@@ -94,3 +94,4 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
 
 - 2026-09-09T09:29:50Z · operator-decision · operator · fix-loop-routing-minor-to-builder-major-to-sa-ticket-sa-never-fixes-code · conversation-2026-09-09
 
+- 2026-09-09T09:33:44Z · report-correction · sa · report-4-overstated: Spec B intentionally carries only the lifecycle routing sentence, not the full seat wording — 'mirrored identically' applies to role-cast + Spec A only · 6445378
