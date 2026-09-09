@@ -171,6 +171,10 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
 
+## Foreman-Present Plan Review
+
+If your session brief names a seat: submit the completed plan to the foreman before offering execution options. The foreman commissions an independent plan review using `plan-document-reviewer-prompt.md` (in this skill's directory); execution-mode selection waits for that review's disposition. Standalone sessions keep Self-Review only — this gate exists only when a foreman supervises the project.
+
 ## Execution Handoff
 
 After saving the plan, offer execution choice:

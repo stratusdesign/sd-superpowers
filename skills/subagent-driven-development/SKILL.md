@@ -109,6 +109,8 @@ digraph process {
 
 ## Setup
 
+**Foreman-present:** if your session brief names a seat, SDD's dispatch decisions are not yours. The foreman dispatches builder sessions, routes fix loops, acknowledges completions, and commissions the final review; the sa writes tickets and handles reports. A seat-named sa about to self-run SDD in a foreman project escalates to the foreman instead. The section notes below mark what moves.
+
 Ensure the work happens in an isolated workspace: use
 superpowers:using-git-worktrees to create one or verify the existing one.
 Never start implementation on a main/master branch without your human
@@ -344,6 +346,8 @@ nonterminal result follows the failure handling in Model Selection.
 
 Template: [implementer-prompt.md](implementer-prompt.md)
 
+(Foreman-present: dispatch belongs to the foreman — request it, do not spawn.)
+
 ### 2. Handle the report
 
 Implementer subagents report one of four statuses. Handle each appropriately:
@@ -369,6 +373,8 @@ review package.
 If the implementer asks questions — before starting or mid-task — answer
 clearly and completely, provide additional context if needed, and don't
 rush it into implementation.
+
+(Foreman-present: report handling stays with you unchanged.)
 
 ### 3. Review the task
 
@@ -420,6 +426,8 @@ lacks. If you confirm an item is a real gap, treat it as a failed spec
 review — it enters the fix loop with the other findings.
 
 Template: [task-reviewer-prompt.md](task-reviewer-prompt.md)
+
+(Foreman-present: review commissioning moves to the foreman; you supply artifacts only.)
 
 ### 4. The fix loop
 
@@ -524,6 +532,8 @@ Adjudicate only at the cap. Adjudicating earlier to end a loop is
 pre-judging with a different name. Every adjudication is a ledger entry —
 a silent discard is forbidden.
 
+(Foreman-present: fix-loop routing goes through the foreman.)
+
 ### 5. Complete the task
 
 When the review comes back clean — or every open finding is parked with a
@@ -537,6 +547,8 @@ message as your other bookkeeping:
 Then mark the todo complete and move on. Never move to the next task while
 the review has open Critical/Important issues that are neither fixed nor
 parked-with-ruling at the cap.
+
+(Foreman-present: completion is acknowledged by the foreman, not self-marked.)
 
 ## Final Review
 
@@ -577,6 +589,8 @@ Adjudicate any residual findings as in the task loop's breaker: park with
 rulings, or stop on load-bearing ones. There is no second fix wave —
 residual load-bearing findings surface to your human partner when
 finishing-a-development-branch presents the options.
+
+(Foreman-present: the final review is commissioned by the foreman.)
 
 ## Finish
 

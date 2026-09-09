@@ -28,10 +28,10 @@ You MUST create a task for each of these items and complete them in order:
 5. **Ask clarifying questions** — as a single question, a small thematic batch, or a concise list; understand purpose/constraints/success criteria. When co-design is active, the SA and the independent co-designer draft questions blind, then the SA merges, dedupes, and presents.
 6. **Propose 2-3 approaches** — with trade-offs and your recommendation. When co-design is active, the SA and the independent co-designer develop approaches blind, then the SA synthesizes the simplest complete candidate.
 7. **Present candidate design** — in sections scaled to their complexity, validate each section with the user
-8. **Review and synthesize design** — after the full candidate is coherent, run constructive and adversarial review, synthesize against evidence and user intent, then get final user approval (see below)
+8. **Review and synthesize design** — after the full candidate is coherent, run constructive and adversarial review, synthesize against evidence and user intent, then get final user approval (see below) (Foreman-present: if your brief names a seat, the review is commissioned by the foreman — submit your artifacts to it and do not choose the reviewer or write the review brief; gate mechanics otherwise identical.)
 9. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
 10. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
-11. **Review and synthesize written spec** — run an independent adversarial/completeness review, verify and apply findings, and establish the canonical spec
+11. **Review and synthesize written spec** — run an independent adversarial/completeness review, verify and apply findings, and establish the canonical spec (Foreman-present: if your brief names a seat, the review is commissioned by the foreman — submit your artifacts to it and do not choose the reviewer or write the review brief; gate mechanics otherwise identical.)
 12. **User reviews written spec** — ask user to review the canonical spec before proceeding
 13. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
