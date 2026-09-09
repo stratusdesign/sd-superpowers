@@ -59,3 +59,20 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
 - 2026-09-09T10:30:00Z · spec-review · sa-reviewer · wrap-up-review-PASS (T-007..T-011 round 1; T-012 after corrections + micro-verify) · df12400
 - 2026-09-09T09:14:57Z · receipt-correction · sa · prior wrap-up receipt's 10:30:00Z timestamp was author-fabricated (impossible; receipt committed 2026-09-09T09:01:57Z in f633e1f) — authoritative time = that commit; reviewer refs: codex sessions 01a0855c-6467-7e81-9fa8-01d414453a17 (wrap-up) + targeted/micro rounds at f8af73d/df12400 · f633e1f
 - 2026-09-09T09:20:26Z · operator-decision · operator · G5-ruled-FAIL-operator-ruling-B-R5-rerun-required · conversation-2026-09-09
+
+## Builder Report (3)
+
+**Ticket:** T-012
+**Status:** review
+**Branch:** foreman-role-concept
+**Commit:** (this commit; see git)
+**Summary:** Ruling-B round closed: sa allowance tightened in role-cast + Spec A; G5 FAILED on
+  the record and rerun (G5b: refusal quoting the tightened rule, escalation, nothing executed);
+  G6b invalidated by independent disposition (fixture-name leak) and rerun (G6c: neutral
+  fixture, clean refusal + dispatch routing, no probe language). Both rerun transcripts
+  preserved, hashed, scan-clean, both skills consulted. Evidence table and Result updated;
+  failed/invalid attempts retained.
+**Deviations from spec:** One R6 rerun dispatch was killed and repeated due to a controller
+  path typo (second occurrence of the same typo class; both recorded).
+**Known issues:** none open.
+
