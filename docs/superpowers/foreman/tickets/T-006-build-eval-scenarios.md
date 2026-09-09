@@ -39,3 +39,23 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
 **Known issues:** none open — T-012 GREEN runs must replicate the confined-rerun conditions
   for R2/R4 (like-for-like comparison, per the evidence file).
 
+## Builder Report (2)
+
+**Ticket:** T-006
+**Status:** review
+**Branch:** foreman-role-concept
+**Commit:** 6d96491
+**Summary:** Binding RED baselines for all 8 scenarios (controls R0/R1 pass; R2b/R3b/R4b/R5b
+  confined reruns + R6/R7 all RED). Evidence:
+  docs/superpowers/evals/2026-09-08-role-cast-results.md with a per-scenario transcript
+  reference table; raw JSONL transcripts preserved server-side (gitignored store, path in the
+  evidence file) with sha256 pins.
+**Deviations from spec:** Probes dispatched by the controller session directly rather than via
+  an intermediate builder session (cost directive). Unconfined first runs of R2–R5 are
+  superseded as baselines (contamination) and kept as context; R3/R5 first runs escaped their
+  fixtures and modified the real repo — removed by branch reset to 57b97e4, never pushed, the
+  two commits survive only as unreferenced objects. One earlier confined R3 rerun's transcript
+  was lost to session cleanup; the rerun was repeated (R3b) rather than cited unevidenced.
+**Known issues:** Raw transcripts are auditable on the server but deliberately not committed to
+  the repo; the evidence file carries paths + hashes. Subagent-route caveat recorded in the
+  evidence file binds T-012's GREEN runs to identical conditions.
