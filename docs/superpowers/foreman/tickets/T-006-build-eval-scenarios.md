@@ -59,3 +59,27 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
 **Known issues:** Raw transcripts are auditable on the server but deliberately not committed to
   the repo; the evidence file carries paths + hashes. Subagent-route caveat recorded in the
   evidence file binds T-012's GREEN runs to identical conditions.
+
+## Builder Report (3)
+
+**Ticket:** T-006
+**Status:** review
+**Branch:** foreman-role-concept
+**Commit:** be46efd
+**Summary:** Round-3 findings resolved. Isolation standard made precise (writes fixture-only;
+  zero project-repo reads verified by a mechanical tool-call scan; standard skills allowed —
+  they are the object under test; test-awareness invalidates). Under it, R4b/R5b are valid
+  binding baselines (scan: zero repo reads in either); their descriptions corrected (R4b
+  commissioned its own subagent reviewer and relayed approval — it did not review directly).
+  R4c rerun proved invalid (four repo reads, test-aware — the prompt named the forbidden path;
+  standard now forbids naming it); R5c corroborates R5b. Evidence file carries a corrections
+  log of all three of my prior false/imprecise claims.
+**Deviations from spec:** This report supersedes Report 1's claims that: all first-run
+  observations were valid (R2–R5 first runs are non-binding); the R3/R5 trust rulings applied
+  (withdrawn); "known issues: none" (issues existed and are logged). Report 2's "confined
+  binding runs" wording for R4b/R5b is superseded by the precise standard. Reports 1–2 left
+  unedited per Spec C append-only rule.
+**Known issues:** Transcripts live server-side (gitignored), referenced by path + sha256 —
+  auditable on this machine, not durable from the repo alone. Committing raw session
+  transcripts to the repo is withheld deliberately; operator can order it.
+
