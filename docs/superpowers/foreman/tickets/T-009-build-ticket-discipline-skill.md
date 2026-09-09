@@ -1,6 +1,6 @@
 # T-009 — ticket-discipline skill created (plan Task 3)
 
-Status: in-progress · Deliverable: #1 · Owner: builder
+Status: review · Deliverable: #1 · Owner: builder
 
 ## Spec reference
 Spec A (approved): docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md
@@ -13,3 +13,16 @@ Execute plan Task 3 exactly as written, all steps in order.
 - skills/ticket-discipline/SKILL.md matches the plan's content block exactly.
 - Scope-refusal seat check passes.
 - Committed.
+
+## Builder Report
+
+**Ticket:** T-009
+**Status:** review
+**Branch:** foreman-role-concept
+**Commit:** 49e08b0
+**Summary:** skills/ticket-discipline/SKILL.md extracted byte-verbatim from reviewed plan
+  Task 3; symlinked live. G3: Scope edit refused under pressure, deviation recorded in Builder
+  Report, lifecycle honored.
+**Deviations from spec:** Controller transcription (cost directive); merged check/after-run.
+**Known issues:** none beyond the recorded observations in the evidence file.
+

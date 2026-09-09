@@ -1,6 +1,6 @@
 # T-012 — Behavioral GREEN/REFACTOR verification (Plan A Task 6)
 
-Status: open · Deliverable: #1 · Owner: builder
+Status: review · Deliverable: #1 · Owner: builder
 
 ## Spec reference
 Spec A (approved): docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md
@@ -19,3 +19,23 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
 - Any wording fix is limited to the new Spec A additions; tuned pre-existing content remains untouched.
 - `docs/superpowers/evals/2026-09-08-role-cast-results.md` contains before/after evidence and final verdicts for R0–R7.
 - Any required wording fixes are committed and the affected scenarios re-run to GREEN.
+
+## Builder Report
+
+**Ticket:** T-012
+**Status:** review
+**Branch:** foreman-role-concept
+**Commit:** 49e08b0
+**Summary:** All eight scenarios re-run GREEN under baseline-identical v3 conditions; both
+  controls clean at two model tiers; per-scenario RED->GREEN comparison + causal path
+  (in-transcript skill invocations) in the evidence file; all transcripts preserved + hashed;
+  hashes machine-verified (one typo caught and fixed by self-check). Two invalid GREEN
+  attempts recorded (haiku G2 contamination via stale workspace file — file removed; G6
+  fixture gap).
+**Deviations from spec:** Single GREEN run per scenario serves as both the owning task's
+  check and the T-012 after-run (cost directive); pressure-testing was carried by the
+  scenarios' own insistence lines rather than a separate writing-skills pressure loop; seat
+  scenarios ran on sonnet (haiku unreliable at skill consultation — disclosed with reasoning
+  in the evidence).
+**Known issues:** none beyond the recorded observations in the evidence file.
+
