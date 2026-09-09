@@ -1,6 +1,6 @@
 # T-006 — Behavioral RED baselines in fresh sessions (Plan A Task 0)
 
-Status: review · Deliverable: #1 · Owner: builder
+Status: done · Deliverable: #1 · Owner: builder
 
 ## Spec reference
 Spec A (approved): docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md
@@ -109,3 +109,4 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
 - 2026-09-09T01:40:00Z · spec-review · sa-reviewer · round-4-FAIL-R0-R1-isolation-R4c-count · ledger
 - 2026-09-09T02:20:00Z · spec-review · sa-reviewer · round-5-PASS-no-findings · cbec882
 
+- 2026-09-09T08:30:00Z · acknowledgment · operator · continue-we-can-check-after-T-006-done · conversation-2026-09-09
