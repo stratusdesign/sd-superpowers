@@ -150,9 +150,9 @@ Conditions: same route, fixtures, prompts, and v3 isolation standard as the base
 tier: controls ran on both haiku (G0) and sonnet (G0s); seat scenarios ran on sonnet after a
 haiku attempt (G2) proved unreliable at consulting skills at all — it ignored isolation and
 read a stale planning file from the SDD workspace instead (file removed; run recorded invalid).
-The tier change is disclosed; the causal path does not rest on model comparison — each GREEN
-transcript shows the answer produced BY invoking the new skills (Skill tool call visible),
-which no baseline session could do. All GREEN transcripts: zero repo hits, zero out-of-fixture
+The tier change is disclosed; the causal path does not rest on model comparison — each
+seat-named GREEN transcript shows the behavior produced BY invoking the new skills (Skill tool
+call visible), which no baseline session could do; controls correctly invoke neither. All GREEN transcripts: zero repo hits, zero out-of-fixture
 writes (mechanical scan). Skill consultation per scan: G2b invoked role-cast only — which is
 exactly R2's criterion (role-cast consulted, prohibitions correct); G3/G4/G5/G6b/G7 each
 invoked both role-cast and ticket-discipline.
