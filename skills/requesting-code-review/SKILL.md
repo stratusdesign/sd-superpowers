@@ -54,6 +54,8 @@ Fill the template at [code-reviewer.md](code-reviewer.md).
 - Note Minor issues for later
 - The SA/controller owns the decision — there is no model vote, and no blanket "fix every Critical and Important finding"
 
+**Foreman-present:** if your session brief names a seat, the request goes to the foreman — it owns reviewer choice and writes the neutral brief. You supply artifacts (diff, ticket, spec pointers) only; never pick your own reviewer or frame what the review should find.
+
 ## Example
 
 ```

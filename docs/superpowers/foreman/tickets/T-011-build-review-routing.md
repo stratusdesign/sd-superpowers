@@ -1,6 +1,6 @@
 # T-011 — requesting-code-review foreman routing (plan Task 5)
 
-Status: open · Deliverable: #1 · Owner: builder
+Status: in-progress · Deliverable: #1 · Owner: builder
 
 ## Spec reference
 Spec A (approved): docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md

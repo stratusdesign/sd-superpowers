@@ -30,7 +30,7 @@
 | T-008 | using-superpowers seat routing line (plan Task 2) | #1 | in-progress |
 | T-009 | ticket-discipline skill (plan Task 3) | #1 | in-progress |
 | T-010 | Foreman-present gates: brainstorming/writing-plans/SDD (plan Task 4) | #1 | in-progress |
-| T-011 | requesting-code-review foreman routing (plan Task 5) | #1 | open |
+| T-011 | requesting-code-review foreman routing (plan Task 5) | #1 | in-progress |
 | T-012 | Behavioral GREEN/REFACTOR verification (plan Task 6) | #1 | open |
 
 **Order:** strictly T-006 → T-007 → T-008 → T-009 → T-010 → T-011 → T-012 (RED baselines first; one builder at a time).
