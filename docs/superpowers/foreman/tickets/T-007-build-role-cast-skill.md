@@ -1,6 +1,6 @@
 # T-007 — role-cast skill created (plan Task 1)
 
-Status: open · Deliverable: #1 · Owner: builder
+Status: in-progress · Deliverable: #1 · Owner: builder
 
 ## Spec reference
 Spec A (approved): docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md

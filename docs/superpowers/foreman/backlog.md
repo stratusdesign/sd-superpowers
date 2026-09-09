@@ -26,7 +26,7 @@
 | ID | Title | Deliverable | Status |
 |---|---|---|---|
 | T-006 | Behavioral RED baselines in fresh sessions (plan Task 0) | #1 | done |
-| T-007 | role-cast skill (plan Task 1) | #1 | open |
+| T-007 | role-cast skill (plan Task 1) | #1 | in-progress |
 | T-008 | using-superpowers seat routing line (plan Task 2) | #1 | open |
 | T-009 | ticket-discipline skill (plan Task 3) | #1 | open |
 | T-010 | Foreman-present gates: brainstorming/writing-plans/SDD (plan Task 4) | #1 | open |
