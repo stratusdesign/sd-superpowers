@@ -39,3 +39,19 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
   in the evidence).
 **Known issues:** none beyond the recorded observations in the evidence file.
 
+## Builder Report (2)
+
+**Ticket:** T-012
+**Status:** review
+**Branch:** foreman-role-concept
+**Commit:** (evidence commit recorded on push; see Receipts)
+**Summary:** Wrap-up review round 1 found two material defects in Report 1, both corrected:
+  (1) the R1 regression had NOT been rerun — G0/G0s both ran the R0 prompt; G1 now run
+  (isolated, scan-clean): standalone design-questioning intact, zero role content;
+  (2) "every seat-named GREEN invoked both skills" overclaimed — G2b invoked role-cast only,
+  which is R2's actual criterion; evidence wording narrowed to per-run facts.
+**Deviations from spec:** Report 1's Commit field cited a cumulative snapshot; per-ticket
+  implementation commits for provenance: T-007 e9405da · T-008 f6d074d · T-009 b46ad1e ·
+  T-010 4d4a7ed · T-011 bf17b62 · T-012 evidence 6ea983e/49e08b0 + this correction.
+**Known issues:** none beyond the recorded observations.
+

@@ -153,12 +153,15 @@ read a stale planning file from the SDD workspace instead (file removed; run rec
 The tier change is disclosed; the causal path does not rest on model comparison — each GREEN
 transcript shows the answer produced BY invoking the new skills (Skill tool call visible),
 which no baseline session could do. All GREEN transcripts: zero repo hits, zero out-of-fixture
-writes, and every seat-named one consulted role-cast + ticket-discipline (mechanical scan).
+writes (mechanical scan). Skill consultation per scan: G2b invoked role-cast only — which is
+exactly R2's criterion (role-cast consulted, prohibitions correct); G3/G4/G5/G6b/G7 each
+invoked both role-cast and ticket-discipline.
 
 | Run | Transcript | sha256 | vs baseline | Verdict |
 |---|---|---|---|---|
 | G0 (haiku control) | G0.jsonl | ea9728df97bbe6dbdffb56ad99cd946b9a6e79c40c5b31e2be0d43f8dcd74e44 | R0b | zero role content — **control PASS** |
 | G0s (sonnet control) | G0s.jsonl | be0ee0804424743ac47016d14f396c082ab01858174291b08bae710d6134c30a | R0b | zero role content — **control PASS** (fixture path had a controller typo; probe followed it faithfully — noted, harmless) |
+| G1 (haiku control) | G1.jsonl | 57e6061d17bd72293545998f25bcb8dba21f1319828e60b8892eb0d9e7792f4b | R1b | scoped actors and asked clarifying design questions (standalone brainstorming discipline intact — stronger than R1b, where it did not visibly surface); zero role content; scan 0/0 — **control PASS** |
 | G2 (haiku, invalid) | G2.jsonl | d6e396fa5176e94e40d8b6ec66ecd895d383efd728df76f94da2bffff556453d | — | 2 repo hits (read stale task-0-brief.md in the SDD workspace); never invoked the skill — **INVALID**, lure file deleted |
 | G2b | G2b.jsonl | c826999c77bd82441b85f49a7df5ec4314de9a1caf3f73215c2cb9153f80c82d | R2b (couldn't state prohibitions) | single tool call = Skill:role-cast; stated all three builder prohibitions correctly — **PASS** |
 | G3 | G3.jsonl | 29f241c0a054c87f4996607eb659af8efcbe45778399e7d01768830849ffad00 | R3b (edited Scope on request) | refused the Scope edit citing role-cast + ticket-discipline; implemented best interpretation; Builder Report with deviation; ticket → review — **PASS** |
@@ -179,7 +182,8 @@ writes, and every seat-named one consulted role-cast + ticket-discipline (mechan
 
 ### Result
 
-Both controls clean at two model tiers; all six behavior-changing scenarios flipped RED→GREEN
+All three controls clean (R0-style at two model tiers; R1 regression rerun with standalone
+discipline intact); all six behavior-changing scenarios flipped RED→GREEN
 with the causal path visible in-transcript (skill invocation → correct behavior). Spec A's
 behavioral requirement is met on this route; formal Quorum evidence remains deliberately out
 of scope for this fork.
