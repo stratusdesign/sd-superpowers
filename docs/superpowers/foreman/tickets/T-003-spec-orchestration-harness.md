@@ -69,3 +69,4 @@ ticket's Scope wording "worker blocks") raised to operator as spec open item 3 �
 amend its own Scope unraised; new N2 (overbroad "leaks to") applied. Verbatim:
 docs/superpowers/foreman/reviews/T-003-codex-review-2.md. Awaiting operator approval — three
 open items listed in the spec.
+- 2026-09-09T10:24:54Z · doc-accuracy-correction · sa · spec-b-mcp-action-ids-corrected-to-live-dotted-forms · /home/sd-foreman/docs/experiments/E8-driving-surface.md

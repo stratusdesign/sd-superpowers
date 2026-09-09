@@ -26,9 +26,12 @@ EXPERIMENT (E#, listed in §Experiments). Every mechanism below carries one.
   visibility proven by Hermes listing host sessions — concept §MCP control surface); an
   in v1 the operator spawns the foreman by hand; Hermes-triggered spawning is deferred until
   a project actually needs it (operator decision 2026-09-08).
-- **Driving surface** = Happier MCP (`happier mcp serve`): 53-tool catalogue including
-  `session_spawn_new`, `session_message_send`, `session_status_get`, `session_wait_idle`
-  (catalogue VERIFIED; only `session_list` exercised live — concept §MCP control surface).
+- **Driving surface** = Happier MCP (`happier mcp serve`): 53-tool catalogue including the
+  spawn/send/status/wait actions (catalogue VERIFIED; only the list action exercised live at
+  approval — concept §MCP control surface). Doc-accuracy correction 2026-09-09 (receipt:
+  sd-foreman E8, T-001): the live catalogue's action ids are dot-segmented
+  (`session.spawn_new`, `session.message.send`, `session.status.get`, `session.wait.idle`),
+  not the snake_case forms this spec previously cited; semantics unchanged.
   Live semantics of every load-bearing action — spawn, message, status/wait, stop/teardown —
   are **E8** (shakedown), not assumed.
 - **Workers** = Happier-daemon-spawned sessions, bypass mode via daemon-level `IS_SANDBOX=1`
