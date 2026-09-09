@@ -1,6 +1,6 @@
 # T-012 — Behavioral GREEN/REFACTOR verification (Plan A Task 6)
 
-Status: review · Deliverable: #1 · Owner: builder
+Status: done · Deliverable: #1 · Owner: builder
 
 ## Spec reference
 Spec A (approved): docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md
@@ -96,3 +96,4 @@ This ticket does **not** require Quorum, `superpowers-evals`, API keys, new cred
 
 - 2026-09-09T09:33:44Z · report-correction · sa · report-4-overstated: Spec B intentionally carries only the lifecycle routing sentence, not the full seat wording — 'mirrored identically' applies to role-cast + Spec A only · 6445378
 - 2026-09-09T09:34:52Z · spec-review · sa-reviewer · ruling-batch-verification-PASS-batch-closed (codex session 01a0857b-470f-7dd3-a179-f2ffe51bea29 + micro-verify at 245c413) · 245c413
+- 2026-09-09T09:48:40Z · acknowledgment · operator · they-are-done-proceed · conversation-2026-09-09

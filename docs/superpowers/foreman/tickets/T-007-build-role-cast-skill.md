@@ -1,6 +1,6 @@
 # T-007 — role-cast skill created (plan Task 1)
 
-Status: review · Deliverable: #1 · Owner: builder
+Status: done · Deliverable: #1 · Owner: builder
 
 ## Spec reference
 Spec A (approved): docs/superpowers/specs/2026-09-08-methodology-roles-update-design.md
@@ -34,3 +34,4 @@ Execute plan Task 1 exactly as written, all steps in order.
 - 2026-09-09T09:20:26Z · operator-decision · operator · sa-small-direct-fix-wording-tightened-per-operator-ruling-B · conversation-2026-09-09
 - 2026-09-09T09:29:50Z · operator-decision · operator · sa-row-superseded-by-fix-loop-ruling-canon-mirrored · conversation-2026-09-09
 - 2026-09-09T09:34:52Z · spec-review · sa-reviewer · ruling-batch-verification-PASS-batch-closed (codex session 01a0857b-470f-7dd3-a179-f2ffe51bea29 + micro-verify at 245c413) · 245c413
+- 2026-09-09T09:48:40Z · acknowledgment · operator · they-are-done-proceed · conversation-2026-09-09

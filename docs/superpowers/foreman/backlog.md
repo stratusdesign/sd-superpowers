@@ -26,12 +26,12 @@
 | ID | Title | Deliverable | Status |
 |---|---|---|---|
 | T-006 | Behavioral RED baselines in fresh sessions (plan Task 0) | #1 | done |
-| T-007 | role-cast skill (plan Task 1) | #1 | review |
-| T-008 | using-superpowers seat routing line (plan Task 2) | #1 | review |
-| T-009 | ticket-discipline skill (plan Task 3) | #1 | review |
-| T-010 | Foreman-present gates: brainstorming/writing-plans/SDD (plan Task 4) | #1 | review |
-| T-011 | requesting-code-review foreman routing (plan Task 5) | #1 | review |
-| T-012 | Behavioral GREEN/REFACTOR verification (plan Task 6) | #1 | review |
+| T-007 | role-cast skill (plan Task 1) | #1 | done |
+| T-008 | using-superpowers seat routing line (plan Task 2) | #1 | done |
+| T-009 | ticket-discipline skill (plan Task 3) | #1 | done |
+| T-010 | Foreman-present gates: brainstorming/writing-plans/SDD (plan Task 4) | #1 | done |
+| T-011 | requesting-code-review foreman routing (plan Task 5) | #1 | done |
+| T-012 | Behavioral GREEN/REFACTOR verification (plan Task 6) | #1 | done |
 
 **Order:** strictly T-006 → T-007 → T-008 → T-009 → T-010 → T-011 → T-012 (RED baselines first; one builder at a time).
 
