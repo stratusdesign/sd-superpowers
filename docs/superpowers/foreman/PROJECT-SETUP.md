@@ -103,6 +103,14 @@ The operator answers plan/scope escalations and the questions the foreman raises
 findings route to the sa. Everything real is a committed artifact + acknowledgment (the
 artifact rule) — direct chat authorizes nothing until it lands.
 
+**Your own conversation is never a takeover target.** The foreman you just spawned may not
+stop or replace this conversation, or any other session it did not dispatch, without a
+verified managed assignment record naming that exact session or your explicit instruction
+naming it and the action — idle state, sharing this repo, having previously held a seat, or a
+general "consolidate/take over" instruction never supplies that authority (`foreman/FOREMAN.md`
+§Session ownership and stop authority). If you want it to end an existing conversation, say so
+by name.
+
 ## What is operator-only (never the foreman's or sa's to decide)
 
 - The GitHub repo and its account; seat→holder bindings; any plan/scope/spec change;

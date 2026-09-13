@@ -5,6 +5,11 @@
 > sources, escalation transport, recovery, repo layout. Duties and prohibitions are Spec A's;
 > artifact formats are Spec C's, unchanged. Rationale source:
 > `docs/superpowers/foreman-role-concept.md` (concept), tickets T-004/T-005 (experiment inputs).
+> Amended 2026-09-13 per sd-foreman T-016 (R8, incident:
+> `docs/experiments/2026-09-13-startup-failures.md`): matrix #1's attribution mechanics made
+> explicit — a receipt merely naming a session is not an assignment record — and stop/teardown
+> steps gated on that same verified-assignment-or-explicit-operator-instruction rule; no other
+> machinery changed.
 
 ## Goal
 
@@ -71,7 +76,8 @@ EXPERIMENT (E#, listed in §Experiments). Every mechanism below carries one.
    ruling 2026-09-09) → dispositions per acceptance owners → acknowledgment → `done`. All
    steps are receipts (Spec C).
 6. **Teardown.** Foreman stops the session (`happier session stop` exists — VERIFIED from
-   source/docs; live semantics E8); session id stays in the receipts for audit.
+   source/docs; live semantics E8) — only a session it holds a verified dispatch/assignment
+   record for, per §Session ownership (R8); session id stays in the receipts for audit.
 
 ## Handoff: design phase → foreman (T-004 input applied)
 
@@ -93,7 +99,7 @@ elsewhere.
 
 | # | Event | Source (mechanism + tag) | Foreman response | Persisted receipt | Failure behavior | Owner |
 |---|---|---|---|---|---|---|
-| 1 | A live session with no live assignment behind it | Structural: **workers are ephemeral** — spawned by foreman dispatch for one ticket, torn down at signoff; only the SA session may persist (operator decision 2026-09-08). So a live worker session implies a live assignment. Sweep at wake/rehydration: account session list vs dispatch receipts (visibility VERIFIED) — flags unknown sessions and workers outliving their signoff. No work-start/heartbeat contract: with single-ticket ephemeral workers, session existence IS the work-start event (operator decision — the drift-inside-a-known-session scenario was manufactured) | Unknown session → escalate to operator (cannot attribute). Worker outliving signoff → teardown (lifecycle step 6) | Escalation receipt on the affected ticket; unattributable → STATUS note | Session list unavailable → fail closed: no dispatch, no acknowledgment; escalation per §Escalation availability | Foreman (process); operator if plan implicated |
+| 1 | A live session with no live assignment behind it | Structural: **workers are ephemeral** — spawned by foreman dispatch for one ticket, torn down at signoff; only the SA session may persist (operator decision 2026-09-08). So a live worker session implies a live assignment. Sweep at wake/rehydration: account session list vs dispatch receipts (visibility VERIFIED) — flags unknown sessions and workers outliving their signoff. No work-start/heartbeat contract: with single-ticket ephemeral workers, session existence IS the work-start event (operator decision — the drift-inside-a-known-session scenario was manufactured). **Attribution is narrow (added 2026-09-13, R8):** "matches" means a dispatch/assignment receipt or STATUS assignment pointer names this EXACT session id with control authority — including one a recovered/respawned foreman inherits from a prior life. A receipt that merely mentions the session (investigation, status, outcome note; on any ticket, `done` or not) does not attribute it. Idle state, same repo, prior seat history, and non-done-scan presence/absence never classify a session by themselves | **Operator-started or unattributed session → never stop/replace/message-as-control; escalate to operator (cannot attribute); touch nothing** — this is the default, not an edge case. Verified attributable orphan (see attribution rule) → teardown (lifecycle step 6) then redispatch | Escalation receipt on the affected ticket; unattributable → STATUS note | Session list unavailable → fail closed: no dispatch, no acknowledgment; escalation per §Escalation availability | Foreman (process); operator if plan implicated |
 | 2 | Change to scope / design / a ticket's definition of done (incl. unauthorized status transitions) | Raised: worker message to foreman. Silent: caught at **signoff** — every worker's output gets an independent review (lifecycle step 5), and the reviewer brief always asks: did anything outside the ticket's files change; were spec files or ticket `## Scope` / `## Acceptance criteria` / `Status:` headers touched without a matching raise receipt? Workers are ephemeral and one-at-a-time, so the exposure window is one ticket's flight and signoff always runs. No standing watcher (operator decision 2026-09-08 — it duplicated the signoff review) | Raised → route to decision-class owner (plan/scope → operator; content → sa). Unraised change found at signoff → process breach: block acknowledgment, escalate | Receipts on the affected ticket | Signoff review is mandatory before `done` (Spec C lifecycle) — no review, no acknowledgment: fail closed | Operator (plan); sa (content); foreman (breach) |
 | 3 | Irreversible / outside-world action | **Source = the raised event only** (worker's raise message; raising is a Spec A seat duty). **Unraised instances are unobservable pre-action in v1** — layer 1 is off; this is the concept's stated, operator-accepted consequence ("the one thing v1 cannot do is pre-empt"). Compensations reduce exposure but do not observe: layer-2 scoping (tool not granted ≠ tool misused), post-hoc review at signoff | Raised → escalate to operator; **gate progression freezes** (no acknowledgment, no transition, no further dispatch). No mechanical worker stop is claimed; stop candidate = session stop (E8), not relied on | Escalation receipt on ticket | Escalation transport degraded → gates stay frozen; §Escalation availability applies | Operator |
 | 4 | Rabbit-hole (one ticket consuming far more than expected) | Foreman judgment at check-in: polling a worker (`session_status_get` / `session_wait_idle` — catalogue VERIFIED; live semantics E8), the foreman judges whether time-on-ticket is out of proportion. No formal per-ticket budget or breach bookkeeping (operator decision 2026-09-08 — formalize only if dogfooding shows judgment isn't enough) | Smells long → commission a code-reviewer scope pass (judgment, never script); verdict routes per acceptance owners | Commission + verdict receipts on the ticket | Polling unavailable → caught at next wake sweep; gates stay closed meanwhile | Foreman (raise); operator (if plan change) |
@@ -131,10 +137,16 @@ elsewhere.
   unanswered (same v1 limit as matrix #3).
 - **Foreman death → respawn + rehydration** (normative procedure, lives in `foreman/FOREMAN.md`):
   read PROCESS.md roles binding → backlog → all non-`done` tickets → STATUS; list live
-  sessions; reconcile (matrix #1 sweep). Orphan worker found: **stop it and redispatch fresh
-  from the ticket** under the fresh-spawn preconditions (§Handoff); adopting a live orphan via
-  takeover only after E1. Detection in v1 is operator/Hermes-initiated (manual); an automated
-  foreman-death watchdog is deferred to M1 observation.
+  sessions; reconcile (matrix #1 sweep, attribution rule applies unchanged across the restart).
+  A legitimate standing session (e.g. the persistent SA) is not treated as unknown/orphaned
+  merely because its spawning ticket reads `done` or falls off the non-done scan — reconcile
+  STATUS's assignment pointer and inherited assignment/replacement receipts before generic
+  unknown/orphan handling; no false escalation, no teardown. Verified attributable orphan
+  found: **stop it and redispatch fresh from the ticket** under the fresh-spawn preconditions
+  (§Handoff); adopting a live orphan via takeover only after E1. Operator-started or otherwise
+  unattributed sessions are never stopped on restart (matrix #1). Detection in v1 is
+  operator/Hermes-initiated (manual); an automated foreman-death watchdog is deferred to M1
+  observation.
 - **Reviewer failure** = unresolved review: report, retry, or operator-approved degraded proceed —
   receipt required, never silent substitution (concept invariant carried).
 

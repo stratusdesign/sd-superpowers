@@ -6,7 +6,12 @@
 > testing vehicle clarified — behavioral RED/GREEN evidence is mandatory, Quorum is not;
 > sa small-direct-fix allowance narrowed, then superseded same day by the fix-loop ruling:
 > minor review findings → builder via foreman; major → sa corrective ticket; sa never fixes
-> builder code directly (operator, 2026-09-09).
+> builder code directly (operator, 2026-09-09); amended 2026-09-13 per sd-foreman T-016 (R8,
+> incident: `docs/experiments/2026-09-13-startup-failures.md`): foreman prohibition added —
+> stopping/replacing a session requires a verified managed assignment record naming that exact
+> session (dispatch receipt or STATUS pointer, inheritable on recovery) or explicit operator
+> instruction naming target and action; supervising a project, idle state, or a receipt that
+> merely mentions a session never supplies that authority.
 > Boundary: this spec owns roles, duties, and skill changes (WHO). Artifact formats are owned by
 > Spec C and referenced by name. Rationale source: `docs/superpowers/foreman-role-concept.md`.
 
@@ -32,7 +37,7 @@ aliases before writing.
 |---|---|---|
 | **operator** (owner) | Owns the plan; answers escalations; approves specs/plans; acknowledges gates pre-M1; acceptance | none — but steering is real only as artifacts (concept artifact rule) |
 | **advisor** (strategic-advisor) | Turns operator intent into documentation updates | Never auto-launched — the operator opens this seat himself; no session control; no dispatch; no direct worker contact |
-| **foreman** | Holds worker sessions; dispatches tickets; commissions every check/review with neutral briefs; holds gates; routes deviation events and reviewer findings by the reviewer's severity label (minor → back to the builder to fix; major → to the sa for a corrective ticket); escalates per ladder; acknowledges artifacts post-M1; writes operational state artifacts (receipts, STATUS, escalation records) | Never authors domain solutions; never writes project intent artifacts (specs, acceptance criteria, architecture) or code; never answers its own commissions |
+| **foreman** | Holds worker sessions; dispatches tickets; commissions every check/review with neutral briefs; holds gates; routes deviation events and reviewer findings by the reviewer's severity label (minor → back to the builder to fix; major → to the sa for a corrective ticket); escalates per ladder; acknowledges artifacts post-M1; writes operational state artifacts (receipts, STATUS, escalation records) | Never authors domain solutions; never writes project intent artifacts (specs, acceptance criteria, architecture) or code; never answers its own commissions; never stops, replaces, or messages-as-control a session without a verified managed assignment record naming that exact session (dispatch receipt or STATUS pointer, including one inherited on recovery) or explicit operator instruction naming the target and action (R8, sd-foreman T-016) |
 | **sa** (architect) | Architecture, specs, tickets, doc accuracy (docs match reality, never reverse); writes corrective tickets for major review findings; never fixes builder code directly — minor findings return to the builder via the foreman (operator ruling 2026-09-09: all ticket execution and all code fixes are builder work, dispatched by the foreman); dispositions reviewer findings on content | Never dispatches builders; never commissions reviews of its own work; never approves its own done-claims; never changes scope unraised |
 | **builder** | Executes assigned ticket; runs seat-appropriate process skills (TDD etc.); appends Builder Report (format: Spec C); records deviations, implements best interpretation | Never edits Scope/Acceptance-criteria sections; never claims done (report → review state); never picks up unassigned work |
 | **sa-reviewer** | Reviews SA outputs — specs, plans, tickets, design done-claims — answering exactly the commissioned question from artifacts + standing rubric; needs docs access only | Never rewrites artifacts; never expands its question; no memory across commissions (fresh context) |
@@ -47,7 +52,11 @@ Cross-seat rules carried verbatim from the concept: artifact rule (real = in doc
 acknowledged — acknowledger: the foreman when one supervises the project, the operator
 otherwise); raised ≠ approved (acceptance
 owners: plan/scope → operator; content findings → sa; gate/process breaches → foreman); neutral
-briefs; escalation ladder producer → foreman → operator.
+briefs; escalation ladder producer → foreman → operator; session ownership (R8, added
+2026-09-13) — an operator-started conversation is protected by default regardless of idle
+state, shared repo, or prior seat history; stopping/replacing any session needs a verified
+managed assignment record naming it, or the operator's explicit instruction naming target and
+action; a handover may move delivery authority without closing the prior conversation.
 
 **Deviation routing (duty side; formats in Spec C):** a non-`none` deviation note is an event →
 foreman commissions a code-reviewer pass over the deviation → sa dispositions (pass, or corrective

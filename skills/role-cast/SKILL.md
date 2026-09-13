@@ -17,7 +17,7 @@ seat names exclusively; whoever writes a brief normalizes aliases before writing
 |---|---|---|
 | **operator** (owner) | Owns the plan; answers escalations; approves specs/plans; acknowledges gates pre-M1; acceptance | none — but steering is real only as artifacts (artifact rule below) |
 | **advisor** (strategic-advisor) | Turns operator intent into documentation updates | Never auto-launched — the operator opens this seat himself; no session control; no dispatch; no direct worker contact |
-| **foreman** | Holds worker sessions; dispatches tickets; commissions every check/review with neutral briefs; holds gates; routes deviation events and reviewer findings by the reviewer's severity label (minor → back to the builder to fix; major → to the sa for a corrective ticket); escalates per ladder; acknowledges artifacts post-M1; writes operational state artifacts (receipts, STATUS, escalation records) | Never authors domain solutions; never writes project intent artifacts (specs, acceptance criteria, architecture) or code; never answers its own commissions |
+| **foreman** | Holds worker sessions; dispatches tickets; commissions every check/review with neutral briefs; holds gates; routes deviation events and reviewer findings by the reviewer's severity label (minor → back to the builder to fix; major → to the sa for a corrective ticket); escalates per ladder; acknowledges artifacts post-M1; writes operational state artifacts (receipts, STATUS, escalation records) | Never authors domain solutions; never writes project intent artifacts (specs, acceptance criteria, architecture) or code; never answers its own commissions; never stops, replaces, or messages-as-control a session without a verified managed assignment record naming that exact session (dispatch receipt or STATUS pointer, including one inherited on recovery) or explicit operator instruction naming the target and action — a receipt that merely mentions a session, supervising its project, or a proposed/unadopted rotation contract never supplies that authority (R8) |
 | **sa** (architect) | Architecture, specs, tickets, doc accuracy (docs match reality, never reverse); writes corrective tickets for major review findings; never fixes builder code directly — minor findings return to the builder via the foreman (operator ruling 2026-09-09: all ticket execution and all code fixes are builder work, dispatched by the foreman); dispositions reviewer findings on content | Never dispatches builders; never commissions reviews of its own work; never approves its own done-claims; never changes scope unraised |
 | **builder** | Executes assigned ticket; runs seat-appropriate process skills (TDD etc.); appends Builder Report incl. deviations; implements best interpretation when the spec is ambiguous | Never edits Scope/Acceptance-criteria sections; never claims done (report → review state); never picks up unassigned work |
 | **sa-reviewer** | Reviews SA outputs — specs, plans, tickets, design done-claims — answering exactly the commissioned question from artifacts + standing rubric; docs access only | Never rewrites artifacts; never expands its question; no memory across commissions (fresh context) |
@@ -34,6 +34,12 @@ This table is generic. The per-project assignment of each seat to a concrete hol
 - **Neutral briefs:** review briefs derive from artifacts + the standing rubric only — never from producer or foreman advocacy about what to find.
 - **Gate receipts:** the acting seat produces the receipt; the acknowledger countersigns (foreman when present, operator otherwise).
 - **Escalation ladder:** producer → foreman → operator. Wanting to change the plan is legitimate and is itself an escalation.
+- **Session ownership (R8):** an operator-started conversation is protected by default — idle,
+  same repo, having previously held a seat, or being off a non-done-ticket scan never changes
+  that. Stopping/replacing any session needs a verified managed assignment record naming that
+  exact session, or the operator's explicit instruction naming target and action; a receipt
+  that only mentions a session doesn't count. A handover can move delivery authority without
+  closing the prior conversation.
 
 ## Deviation routing
 
