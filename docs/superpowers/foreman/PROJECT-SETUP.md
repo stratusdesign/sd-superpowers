@@ -12,7 +12,7 @@
   (workers run bypass-mode under root — path A). Verify: `systemctl --user cat
   happier-daemon.default.service | grep IS_SANDBOX`.
 - `happier` CLI available; the foreman/worker spawn form is the E8-verified
-  `happier session create --path <dir> --json`.
+  `happier session create --path <dir> --backend <backend-target> --model <model-id> --json`.
 - sd-superpowers present (the methodology this project inherits).
 
 ## 1. GitHub repo — right account, matched credential
@@ -83,6 +83,14 @@ operator sets these; changing a binding later is a plan change.
   rules so.
 ```
 
+**Binding check before any launch.** A seat's row in PROCESS.md's roles table must name an
+explicit backend + model before the foreman spawns that seat. Missing (blank/absent) or
+conflicting (two different models given for the same seat) is a hard stop: the foreman raises a
+receipted question naming the exact seat and field, and does not launch — never inferring from
+another seat, an old session, or a provider default. This applies to every project's own
+PROCESS.md table (see sd-foreman `PROCESS.md`'s §SA and review bindings and `foreman/FOREMAN.md`
+§Dispatch for a worked example); it is not a project-specific model choice.
+
 ## 4. First tickets
 
 Generate the project's first tickets from the approved plan (Spec C schema). The dogfood/first
@@ -92,10 +100,13 @@ work item should be a real, builder-owned deliverable OUTSIDE the foreman's writ
 ## 5. Spawn the foreman, then hands off
 
 ```
-happier session create --path <project-abs-path> --model <foreman-model> --permission-mode bypassPermissions --json
+happier session create --path <project-abs-path> --backend <foreman-backend> --model <foreman-model> --permission-mode bypassPermissions --json
 # then send, first line exactly:
 #   Seat: foreman · Ticket: T-### · Project: <name>
 #   Boot per foreman/FOREMAN.md.
+# happier session send <session-id> "<message>" --model <foreman-model> --json
+# --backend and --model both come from this project's PROCESS.md roles table (never omitted);
+# send has no --backend flag — the session's backend is fixed at create.
 ```
 
 After the boot brief, do not drive it. Watch its transcript; answer only what it escalates.

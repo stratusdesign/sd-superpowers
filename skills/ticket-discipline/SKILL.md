@@ -46,6 +46,18 @@ Ticket-scoped events append under an optional `## Receipts` section, one line ea
 `- <UTC ISO-8601> · <event> · <seat> · <verdict-or-action> · <evidence-ref>`
 (`<evidence-ref>` = commit hash, file path, session id, or review-report pointer.)
 
+**The timestamp is clock-sourced, never typed.** Produce it by command substitution inside the
+same shell command that appends the line, so the model never writes the digits itself:
+`printf -- "- %s · <event> · <seat> · <verdict> · <evidence>\n" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> <ticket>`
+A model-typed timestamp — however plausible, however close it looks to another file's mtime — is
+never a valid receipt time. This is not a style preference: prose instructions ("use actual UTC
+timestamps") have already failed in practice, including recurring inside the same pass meant to
+correct it (tickets/T-018-validate-backend-model.md, sd-foreman project). Reviewer cross-checks
+against this rule (claimed time vs. file mtime, vs. session activity records, future-dated) and
+the accepted drift tolerance live wherever the commissioning project documents its review
+commissioning (e.g. sd-foreman's `foreman/FOREMAN.md` §Completion) — this section is the format
+authority; it does not restate those checks.
+
 ## Spawn brief
 
 Line 1 is exactly `Seat: <seat> · Ticket: T-### · Project: <name>` and nothing else; free-form task text starts on line 2.

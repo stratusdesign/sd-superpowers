@@ -5,13 +5,16 @@
 > (manufactured); checker split into sa-reviewer + code-reviewer; advisor never auto-launched;
 > testing vehicle clarified — behavioral RED/GREEN evidence is mandatory, Quorum is not;
 > sa small-direct-fix allowance narrowed, then superseded same day by the fix-loop ruling:
-> minor review findings → builder via foreman; major → sa corrective ticket; sa never fixes
+> historical routing (superseded 2026-09-14 below): minor → builder via foreman; major → sa
+> corrective ticket. The prohibition remains: sa never fixes
 > builder code directly (operator, 2026-09-09); amended 2026-09-13 per sd-foreman T-016 (R8,
 > incident: `docs/experiments/2026-09-13-startup-failures.md`): foreman prohibition added —
 > stopping/replacing a session requires a verified managed assignment record naming that exact
 > session (dispatch receipt or STATUS pointer, inheritable on recovery) or explicit operator
 > instruction naming target and action; supervising a project, idle state, or a receipt that
 > merely mentions a session never supplies that authority.
+> Amended 2026-09-14 under the operator-authorized bounded process reset: severity does not
+> authorize scope expansion; in-scope rework stays in-ticket; original purpose bounds reviews.
 > Boundary: this spec owns roles, duties, and skill changes (WHO). Artifact formats are owned by
 > Spec C and referenced by name. Rationale source: `docs/superpowers/foreman-role-concept.md`.
 
@@ -37,8 +40,8 @@ aliases before writing.
 |---|---|---|
 | **operator** (owner) | Owns the plan; answers escalations; approves specs/plans; acknowledges gates pre-M1; acceptance | none — but steering is real only as artifacts (concept artifact rule) |
 | **advisor** (strategic-advisor) | Turns operator intent into documentation updates | Never auto-launched — the operator opens this seat himself; no session control; no dispatch; no direct worker contact |
-| **foreman** | Holds worker sessions; dispatches tickets; commissions every check/review with neutral briefs; holds gates; routes deviation events and reviewer findings by the reviewer's severity label (minor → back to the builder to fix; major → to the sa for a corrective ticket); escalates per ladder; acknowledges artifacts post-M1; writes operational state artifacts (receipts, STATUS, escalation records) | Never authors domain solutions; never writes project intent artifacts (specs, acceptance criteria, architecture) or code; never answers its own commissions; never stops, replaces, or messages-as-control a session without a verified managed assignment record naming that exact session (dispatch receipt or STATUS pointer, including one inherited on recovery) or explicit operator instruction naming the target and action (R8, sd-foreman T-016) |
-| **sa** (architect) | Architecture, specs, tickets, doc accuracy (docs match reality, never reverse); writes corrective tickets for major review findings; never fixes builder code directly — minor findings return to the builder via the foreman (operator ruling 2026-09-09: all ticket execution and all code fixes are builder work, dispatched by the foreman); dispositions reviewer findings on content | Never dispatches builders; never commissions reviews of its own work; never approves its own done-claims; never changes scope unraised |
+| **foreman** | Holds worker sessions; dispatches tickets; commissions every check/review with neutral briefs; holds gates; routes in-scope rework to the builder and disputed content to the sa; raises material scope changes to the operator; escalates per ladder; acknowledges artifacts post-M1; writes operational state artifacts (receipts, STATUS, escalation records) | Never authors domain solutions; never writes project intent artifacts (specs, acceptance criteria, architecture) or code; never answers its own commissions; never stops, replaces, or messages-as-control a session without a verified managed assignment record naming that exact session (dispatch receipt or STATUS pointer, including one inherited on recovery) or explicit operator instruction naming the target and action (R8, sd-foreman T-016) |
+| **sa** (architect) | Architecture, specs, tickets, doc accuracy (docs match reality, never reverse); dispositions major findings against original purpose and approved scope; creates tickets only for separately justified authorized work; never fixes builder code directly — minor findings return to the builder via the foreman (operator ruling 2026-09-09: all ticket execution and all code fixes are builder work, dispatched by the foreman); dispositions reviewer findings on content | Never dispatches builders; never commissions reviews of its own work; never approves its own done-claims; never changes scope unraised |
 | **builder** | Executes assigned ticket; runs seat-appropriate process skills (TDD etc.); appends Builder Report (format: Spec C); records deviations, implements best interpretation | Never edits Scope/Acceptance-criteria sections; never claims done (report → review state); never picks up unassigned work |
 | **sa-reviewer** | Reviews SA outputs — specs, plans, tickets, design done-claims — answering exactly the commissioned question from artifacts + standing rubric; needs docs access only | Never rewrites artifacts; never expands its question; no memory across commissions (fresh context) |
 | **code-reviewer** | Reviews builder outputs — diffs, tests, Builder Reports incl. deviations — against ticket + spec, labeling each finding minor or major; needs code access | Never rewrites artifacts; never expands its question; no memory across commissions (fresh context) |
@@ -59,8 +62,11 @@ managed assignment record naming it, or the operator's explicit instruction nami
 action; a handover may move delivery authority without closing the prior conversation.
 
 **Deviation routing (duty side; formats in Spec C):** a non-`none` deviation note is an event →
-foreman commissions a code-reviewer pass over the deviation → sa dispositions (pass, or corrective
-ticket citing the origin) → all steps recorded as receipts (format: Spec C §Receipts).
+foreman commissions a code-reviewer pass over the deviation → sa dispositions (accept, within-ticket
+rework, or an operator scope decision) → all steps recorded as receipts (format: Spec C §Receipts).
+A major label is not permission for a new corrective ticket. Consider deletion or narrower
+requirements before adding infrastructure. Neutral reviews include original purpose, approved
+scope/non-goals and artifacts; file-local compliance does not establish scope authority.
 
 **Gate receipts (duty side):** the acting seat produces the receipt; the acknowledger
 countersigns (foreman when present, operator otherwise). Format: Spec C §Receipts.
