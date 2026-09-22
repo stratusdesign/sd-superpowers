@@ -31,9 +31,9 @@ Done-claims are separate report files in `<project>/reports/`, one file per clai
 
 - Build tickets: `reports/T-###-builder-report.md`; re-work files `reports/T-###-builder-report-2.md` etc.
 - Experiment and spec tickets: `reports/T-###-result.md` (re-runs `-2` etc.).
-- Build report format — labeled single-line fields, each starting the line: `**Ticket:**` `**Status:**` `**Branch:**` `**Commit:**` `**Summary:**` `**Deviations from spec:**` `**Known issues:**`. Exactly one Deviations line; value `none` or prose. Long values continue on lines indented two spaces.
-- Experiment reports: prose. Spec reports: contain a `**Spec:** <path>` line.
-- Filing a done-claim means writing the report file AND appending its receipt to the ticket in the same pass. The receipt's verdict field ends with `deviations: none` or `deviations: N` (matching the report's Deviations field), so the foreman routes on deviations from a tail poll without opening the report.
+- Build report format — first line is the heading `## Builder Report` (re-work: `## Builder Report (2)` etc.), then labeled single-line fields, each starting the line: `**Ticket:**` `**Status:**` `**Branch:**` `**Commit:**` `**Summary:**` `**Deviations from spec:**` `**Known issues:**`. Exactly one Deviations line; value `none` or prose. Long values continue on lines indented two spaces.
+- Experiment and spec reports — first line is the heading `## Result`; experiment body is prose, spec body contains a `**Spec:** <path>` line. Either MAY carry a `**Deviations from spec:**` line; no line means none.
+- Filing a done-claim means writing the report file AND appending its receipt to the ticket in the same pass. **The done-claim receipt's evidence-ref is the report path — mandatory, never substituted.** Its verdict field ends with `deviations: none` or `deviations: N`, where N counts the distinct deviations the report records (prose describing a single deviation = 1; no Deviations line = none). The foreman routes on this suffix from a tail poll without opening the report.
 - Ambiguous or wrong spec → implement your best interpretation and record it as a deviation. Never block; never silently fix.
 
 ## Status lifecycle
@@ -57,7 +57,7 @@ Ticket-scoped events append under a `## Receipts` section (created on first rece
 
 **Receipt ceiling: 200 characters per line.** A receipt is timestamp · event · seat · verdict-plus-counts · evidence-ref — nothing more. Example:
 `- <ts> · review-verdict · code-reviewer · FAIL, 5 major · reports/T-006-code-review-1.md`
-Detail lives only in the referenced file; restating a report's content in a receipt is a format violation.
+Detail lives only in the referenced file; restating a report's content in a receipt is a format violation. A short reason (e.g. a finding rejection) that fits inside the ceiling lives in the verdict field; anything longer is filed and the receipt points to it.
 
 **The timestamp is clock-sourced, never typed.** Produce it by command substitution inside the
 same shell command that appends the line, so the model never writes the digits itself:
@@ -80,7 +80,7 @@ Where a project keeps a project-scope file (its operator-approved purpose, bound
 ## Machine anchors
 
 - `T-###` appears in every commit message and every builder report's `**Ticket:**` field.
-- Greppable in tickets, exact: `^Status: ` · `^## Receipts` · receipt lines `^- \d{4}-`.
+- Greppable in tickets, exact (POSIX ERE, `grep -E`): `^Status: ` · `^## Receipts` · receipt lines `^- [0-9]{4}-`.
 - Greppable in `reports/` files, exact: `^## Builder Report` · `^## Result` · `^\*\*Deviations from spec:\*\*`. These anchors live in report files, never in post-amendment tickets.
 - Receipt ceiling is mechanically checkable: `awk '/^- [0-9]{4}-/ && length($0)>200' <ticket>` — any output is a format violation.
 - Backlog (`<project>/backlog.md`, table `| ID | Title | Deliverable | Status |`) is an index; the ticket header is authoritative — on divergence, flag, never resolve.
@@ -88,4 +88,5 @@ Where a project keeps a project-scope file (its operator-approved purpose, bound
 ## Project documents
 
 - Specs: `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`; plans: `docs/superpowers/plans/` (existing conventions, unchanged).
+- SDD's per-task workspace reports (`.superpowers/sdd/<plan>/task-N-report.md`) are controller scratch, deleted with the workspace — they are NOT done-claim reports. A ticketed project's done-claim evidence lives in `reports/`, which survives.
 - Every ticketed project carries `backlog.md`, `tickets/`, `reports/` (created on first done-claim), `PROCESS.md` **or inherits the methodology default** (a carried PROCESS.md holds the roles table binding each active seat to its holder — binding changes are plan changes), and a STATUS/handover doc for infra state.
