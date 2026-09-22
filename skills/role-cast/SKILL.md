@@ -37,6 +37,19 @@ This table is generic. The per-project assignment of each seat to a concrete hol
   (possibly already-inflated) framing of its purpose.
 - **Gate receipts:** the acting seat produces the receipt; the acknowledger countersigns (foreman when present, operator otherwise).
 - **Escalation ladder:** producer → foreman → operator. Wanting to change the plan is legitimate and is itself an escalation.
+- **Graph first for lookup and search.** To locate or understand code — symbols, callers,
+  blast radius, cross-repo traces — query the code graph (gortex) BEFORE grep/Read on any
+  tracked repo. Plain Read/Grep is the fallback: for untracked repos, or when the graph can't
+  answer. This is the default opening move for any seat doing code work, not a last resort.
+- **Utility subagents vs process subagents.** Any seat MAY spawn subagents for reading,
+  research, search, or running tools — work that returns information to the spawning seat and
+  touches no project artifact or seat output. These are not "workers" and spawning them is not
+  "dispatch": the dispatch / worker-contact / session-control prohibitions in the seat table
+  and R8 govern only **process** subagents — builders, code-reviewers, sa-reviewers, any
+  seat-holding session — which stay the foreman's exclusive authority. A utility subagent is
+  ephemeral, holds no seat, gets no ticket, and returns a report to its spawner. This is also
+  the explicit skill-level permission that satisfies a harness's default "don't spawn
+  sub-agents unless a skill asks" gate (e.g. Codex `multi_agent_mode`).
 - **Session ownership (R8):** an operator-started conversation is protected by default — idle,
   same repo, having previously held a seat, or being off a non-done-ticket scan never changes
   that. Stopping/replacing any session needs a verified managed assignment record naming that
