@@ -15,7 +15,7 @@ description: Use when creating new skills, editing existing skills, or verifying
 
 **Personal skills live in your runtime's skills directory** (`~/.claude/skills/` on Claude Code) — see [codex-tools.md](../using-superpowers/references/codex-tools.md) or [gemini-tools.md](../using-superpowers/references/gemini-tools.md) for other runtimes. Codex, Copilot CLI, and Gemini CLI also recognize `~/.agents/skills/` as a cross-runtime alias.
 
-A **skill** is a reference guide for a proven technique, pattern, or tool — never a narrative about how you solved a problem once. **Create one when** the technique wasn't intuitively obvious, you'd reference it across projects, and it applies broadly. **Don't create one for** one-off solutions, practices well-documented elsewhere, project-specific conventions (instructions file), or mechanical constraints (automate those instead).
+A **skill** is a reference guide for a proven technique, pattern, or tool — never a narrative about how you solved a problem once. **Create one when** the technique wasn't intuitively obvious, you'd reference it across projects, it applies broadly, and others would benefit. **Don't create one for** one-off solutions, practices well-documented elsewhere, project-specific conventions (instructions file), or mechanical constraints (automate those instead).
 
 **Skill prose follows the house standard:** clear, factual, to the point; no unnecessary jargon; no wasteful sentences — each carries weight; properly formatted English.
 
@@ -48,11 +48,11 @@ Before writing guidance, classify the baseline failure. The form that bulletproo
 | Omits a required element from something they already produce | Structural: REQUIRED field or slot in the template they fill in | Prose reminders near the template |
 | Behavior should depend on a condition | Conditional keyed to an observable predicate ("if the brief exists, reference it") | Unconditional rule + exemption clauses |
 
-Prohibitions backfire on shaping problems; recipes leave nothing to negotiate. Evidence and the no-nuance-clause rules are in `references/bulletproofing.md`.
+Prohibitions backfire on shaping problems; recipes leave nothing to negotiate (evidence in `references/bulletproofing.md`). Two rules bind whichever form you pick: **no nuance clauses** — "don't X unless it matters" reopens the negotiation; express a real exception as its own conditional on an observable predicate — and **exemption clauses don't scope** — if part of the output must be exempt, restructure so the rule can't reach it.
 
 ## Structure and Discovery
 
-Frontmatter carries exactly `name` (letters/numbers/hyphens) and `description` (third person, "Use when..." — triggering conditions ONLY, never a workflow summary: agents follow a summarized description instead of reading the skill). **Read `references/structure-and-discovery.md` before writing a new SKILL.md** — the template, description examples, keyword coverage, naming, token-efficiency targets, and cross-referencing rules (never `@`-links). **Read `references/style-and-antipatterns.md` when adding flowcharts or examples.**
+Frontmatter requires `name` (letters/numbers/hyphens) and `description` (third person, "Use when..." — triggering conditions ONLY, never a workflow summary: agents follow a summarized description instead of reading the skill). **Read `references/structure-and-discovery.md` before writing a new SKILL.md or editing an existing one's structure or content** — the template, description examples, keyword coverage, naming, token-efficiency targets, inline-vs-separate-file rules, and cross-referencing rules (never `@`-links). **Read `references/style-and-antipatterns.md` when adding flowcharts or examples.**
 
 ## STOP: Before Moving to Next Skill
 
@@ -64,11 +64,11 @@ After writing ANY skill, STOP and complete deployment: test it, close loopholes,
 
 **GREEN:** valid frontmatter (name, description ≤1024 chars, "Use when...", third person) · keywords for search · clear overview with core principle · addresses the specific baseline failures · guidance form matches the failure type · behavior-shaping wording micro-tested against a no-guidance control (5+ reps, read every flagged match; N/A for pure reference) · one excellent example · scenarios re-run WITH skill, compliance verified.
 
-**REFACTOR:** new rationalizations countered · rationalization table built · red-flags list created · re-tested until bulletproof.
+**REFACTOR:** new rationalizations countered · rationalization table built from all test iterations · red-flags list created · re-tested until bulletproof.
 
 **Quality:** flowchart only if the decision is non-obvious · quick-reference table · common-mistakes section · no narrative storytelling · supporting files only for tools or heavy reference.
 
-**Deploy:** commit and push · consider contributing back via PR.
+**Deploy:** commit to git and push to your fork (if configured) · consider contributing back via PR (if broadly useful).
 
 ## Reference Map
 
