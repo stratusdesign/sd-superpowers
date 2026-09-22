@@ -7,21 +7,17 @@ description: Use when starting any conversation - establishes how to find and us
 If you were dispatched as a subagent to execute a specific task, ignore this skill.
 </SUBAGENT-STOP>
 
-<EXTREMELY-IMPORTANT>
-If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
-
-IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
-
-This is not negotiable. You cannot rationalize your way out of this.
-</EXTREMELY-IMPORTANT>
-
 ## The Rule
 
-**Invoke relevant or requested skills BEFORE any response or action** — including clarifying questions, exploring the codebase, or checking files. If it turns out wrong for the situation, you don't have to use it.
+**Check for applicable skills BEFORE any response or action** — including clarifying questions, exploring the codebase, or checking files. The check is the reflex; loading is judgment:
+
+- **Load a skill when it plausibly governs the task in front of you.** Not "might conceivably relate" — plausibly governs what you are about to do.
+- **Process skills load when their situation has actually arrived.** Brainstorming loads when creative or feature work is in front of you — building, adding, or changing behavior. Systematic-debugging loads when a bug, failing test, or unexpected behavior is in front of you. Neither loads at session start, and neither loads because the session might eventually get there.
+- **A skill named by the user, or by a project's CLAUDE.md, ALWAYS loads.** This is absolute — no relevance judgment applies.
 
 **Before entering plan mode:** if you haven't already brainstormed, invoke the brainstorming skill first.
 
-Then announce "Using [skill] to [purpose]" and follow the skill exactly. If it has a checklist, create a todo per item.
+Then announce "Using [skill] to [purpose]" and follow the skill exactly. If it has a checklist, create a todo per item. If a loaded skill turns out wrong for the situation, you don't have to use it.
 
 ## Skill Priority
 
@@ -38,18 +34,15 @@ These thoughts mean STOP—you're rationalizing:
 
 | Thought | Reality |
 |---------|---------|
-| "This is just a simple question" | Questions are tasks. Check for skills. |
 | "I need more context first" | Skill check comes BEFORE clarifying questions. |
 | "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
-| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
-| "Let me gather information first" | Skills tell you HOW to gather information. |
-| "This doesn't need a formal skill" | If a skill exists, use it. |
+| "This doesn't need a formal skill" | If a skill governs this task, use it. |
 | "I remember this skill" | Skills evolve. Read current version. |
-| "This doesn't count as a task" | Action = task. Check for skills. |
-| "The skill is overkill" | Simple things become complex. Use it. |
+| "The skill is overkill" | If its situation is in front of you, use it. |
 | "I'll just do this one thing first" | Check BEFORE doing anything. |
-| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
 | "I know what that means" | Knowing the concept ≠ using the skill. Invoke it. |
+
+The inverse rationalization is also a red flag: "the session will probably need brainstorming later, load it now." Load when the work arrives, not in anticipation.
 
 ## Platform Adaptation
 
