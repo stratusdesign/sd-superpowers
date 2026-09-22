@@ -22,11 +22,18 @@ All prose values — summaries, results, deviations, receipts — follow the hou
 - Line 3 exactly: `Status: <status> · Deliverable: <refs> · Owner: <seat>` (`<refs>` = `#N` or `#N,#M`, no spaces)
 - Required sections in order: `## Spec reference` · `## Scope` · `## Acceptance criteria`
 - `## Scope` and `## Acceptance criteria` are byte-immutable to the builder seat.
+- **Closed contents list.** A ticket file contains ONLY: the header and status line (plus a `Parked: <reason>` line while parked), `## Spec reference`, `## Scope`, `## Acceptance criteria`, and `## Receipts`. Nothing else accumulates in the ticket — no inline reports, no essays, no restated review content. Detail lives in the files receipts point to. Tickets stay small by structure, not by intent.
+- Pre-amendment tickets may still carry inline `## Builder Report` / `## Result` sections: read them as legacy, never imitate them.
 
-## Done-claims (appended, never edited)
+## Done-claim reports (filed, never edited)
 
-- Build tickets: `## Builder Report` — labeled single-line fields, each starting the line: `**Ticket:**` `**Status:**` `**Branch:**` `**Commit:**` `**Summary:**` `**Deviations from spec:**` `**Known issues:**`. Exactly one Deviations line; value `none` or prose. Long values continue on lines indented two spaces. Re-work appends `## Builder Report (2)` etc.
-- Experiment tickets: `## Result` (prose). Spec tickets: `## Result` containing a `**Spec:** <path>` line.
+Done-claims are separate report files in `<project>/reports/`, one file per claim — never appended to the ticket:
+
+- Build tickets: `reports/T-###-builder-report.md`; re-work files `reports/T-###-builder-report-2.md` etc.
+- Experiment and spec tickets: `reports/T-###-result.md` (re-runs `-2` etc.).
+- Build report format — labeled single-line fields, each starting the line: `**Ticket:**` `**Status:**` `**Branch:**` `**Commit:**` `**Summary:**` `**Deviations from spec:**` `**Known issues:**`. Exactly one Deviations line; value `none` or prose. Long values continue on lines indented two spaces.
+- Experiment reports: prose. Spec reports: contain a `**Spec:** <path>` line.
+- Filing a done-claim means writing the report file AND appending its receipt to the ticket in the same pass. The receipt's verdict field ends with `deviations: none` or `deviations: N` (matching the report's Deviations field), so the foreman routes on deviations from a tail poll without opening the report.
 - Ambiguous or wrong spec → implement your best interpretation and record it as a deviation. Never block; never silently fix.
 
 ## Status lifecycle
@@ -34,19 +41,23 @@ All prose values — summaries, results, deviations, receipts — follow the hou
 | From | To | Trigger |
 |---|---|---|
 | open | in-progress | work dispatched |
-| in-progress | review | done-claim artifact appended |
+| in-progress | review | done-claim report filed and its receipt appended |
 | review | done | independent review passed, every finding dispositioned (applied, or rejected with reason recorded as a receipt), acknowledged |
 | review | in-progress | review found material issues |
 | open / in-progress / review | parked | deliberate deferral; add a `Parked: <reason>` line under the header |
 | parked | open | revived (the only exit) |
 
-`done` is terminal. No state skips — a done-claim never jumps `in-progress → done`.
+`done` is terminal. No state skips — a done-claim never jumps `in-progress → done`. The receipt is what greps and tail polls see.
 
 ## Receipts
 
-Ticket-scoped events append under an optional `## Receipts` section, one line each, append-only:
+Ticket-scoped events append under a `## Receipts` section (created on first receipt), one line each, append-only:
 `- <UTC ISO-8601> · <event> · <seat> · <verdict-or-action> · <evidence-ref>`
 (`<evidence-ref>` = commit hash, file path, session id, or review-report pointer.)
+
+**Receipt ceiling: 200 characters per line.** A receipt is timestamp · event · seat · verdict-plus-counts · evidence-ref — nothing more. Example:
+`- <ts> · review-verdict · code-reviewer · FAIL, 5 major · reports/T-006-code-review-1.md`
+Detail lives only in the referenced file; restating a report's content in a receipt is a format violation.
 
 **The timestamp is clock-sourced, never typed.** Produce it by command substitution inside the
 same shell command that appends the line, so the model never writes the digits itself:
@@ -68,11 +79,13 @@ Where a project keeps a project-scope file (its operator-approved purpose, bound
 
 ## Machine anchors
 
-- `T-###` appears in every commit message and every Builder Report `**Ticket:**` field.
-- Greppable, exact: `^Status: ` · `^\*\*Deviations from spec:\*\*` · `^## Builder Report` · `^## Result` · `^## Receipts` · receipt lines `^- \d{4}-`.
+- `T-###` appears in every commit message and every builder report's `**Ticket:**` field.
+- Greppable in tickets, exact: `^Status: ` · `^## Receipts` · receipt lines `^- \d{4}-`.
+- Greppable in `reports/` files, exact: `^## Builder Report` · `^## Result` · `^\*\*Deviations from spec:\*\*`. These anchors live in report files, never in post-amendment tickets.
+- Receipt ceiling is mechanically checkable: `awk '/^- [0-9]{4}-/ && length($0)>200' <ticket>` — any output is a format violation.
 - Backlog (`<project>/backlog.md`, table `| ID | Title | Deliverable | Status |`) is an index; the ticket header is authoritative — on divergence, flag, never resolve.
 
 ## Project documents
 
 - Specs: `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`; plans: `docs/superpowers/plans/` (existing conventions, unchanged).
-- Every ticketed project carries `backlog.md`, `tickets/`, `PROCESS.md` **or inherits the methodology default** (a carried PROCESS.md holds the roles table binding each active seat to its holder — binding changes are plan changes), and a STATUS/handover doc for infra state.
+- Every ticketed project carries `backlog.md`, `tickets/`, `reports/` (created on first done-claim), `PROCESS.md` **or inherits the methodology default** (a carried PROCESS.md holds the roles table binding each active seat to its holder — binding changes are plan changes), and a STATUS/handover doc for infra state.
