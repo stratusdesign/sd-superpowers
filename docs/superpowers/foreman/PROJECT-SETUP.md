@@ -47,6 +47,28 @@ Minimum set — nothing listed before it exists:
   backlog.md           index table: | ID | Title | Deliverable | Status |
   tickets/             T-###-<slug>.md per Spec C
   docs/STATUS.md       infra/handover state — the authoritative "where things are"
+  docs/SCOPE.md        the project-scope file — operator-approved purpose/boundaries/success + supporting-doc pointers; the drift yardstick spawn briefs point to (see below)
+```
+
+**`docs/SCOPE.md` — the project-scope file.** Short, operator-approved, the authoritative
+project scope; changed only with operator sign-off. Spawn briefs point to it so a seat
+reads scope instead of rediscovering it (ticket-discipline §Spawn brief). Shape:
+
+```markdown
+# Project scope — <project>
+Approved: <operator> · <date>
+
+## Purpose
+What this project is for; why it exists.
+
+## Boundaries
+In scope / out of scope (non-goals).
+
+## Success
+What "done" / working looks like.
+
+## Supporting documents
+- `<path>` — a summary of what this document is and what it covers.
 ```
 
 A project that will be foreman-run also carries `foreman/FOREMAN.md` (the harness's operating
