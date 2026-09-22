@@ -62,6 +62,8 @@ authority; it does not restate those checks.
 
 Line 1 is exactly `Seat: <seat> · Ticket: T-### · Project: <name>` and nothing else; free-form task text starts on line 2.
 
+Where a project keeps a project-scope file (its operator-approved purpose, boundaries, and success conditions — the authoritative scope, changed only with operator sign-off), the brief points to it so the seat reads it rather than rediscovering scope.
+
 ## Machine anchors
 
 - `T-###` appears in every commit message and every Builder Report `**Ticket:**` field.
