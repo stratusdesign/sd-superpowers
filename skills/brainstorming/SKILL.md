@@ -25,7 +25,7 @@ You MUST create a task for each of these items and complete them in order:
 6. **Propose 2-3 approaches** — with trade-offs; lead with your recommendation and why. YAGNI ruthlessly.
 7. **Present candidate design** — in sections scaled to their complexity; validate each section with the user. Cover architecture, components, data flow, error handling, testing.
 8. **Review and synthesize design** — constructive + adversarial review, synthesize against evidence and user intent, then get final user approval. Read `references/review-gates.md` when the complete candidate design is coherent. (Foreman-present: if your brief names a seat, the review is commissioned by the foreman — submit your artifacts to it and do not choose the reviewer or write the review brief.)
-9. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` (user preferences for spec location override this default).
+9. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` (user preferences for spec location override this default). Spec prose is clear, factual, and to the point: no unnecessary jargon, no wasteful sentences — each carries weight.
 10. **Spec self-review** — inline check for placeholders, contradictions, ambiguity, scope; fix inline and move on.
 11. **Review and synthesize written spec** — independent adversarial/completeness review, verify and apply findings, establish the canonical spec, commit it. Read `references/review-gates.md` when the spec is written. (Same foreman rule as step 8.)
 12. **User reviews written spec** — ask the user to review the canonical spec before proceeding; wait. If they request changes, make them and redo steps 10-11.

@@ -7,6 +7,8 @@ description: Use when working on a ticketed project (a backlog.md + tickets/ dir
 
 One schema for humans and scripts. Scripts parse only the exact syntax below; anything semantic is a reviewer judgment.
 
+All prose values — summaries, results, deviations, receipts — follow the house standard: clear, factual, to the point; no unnecessary jargon; no wasteful sentences — each carries weight.
+
 ## Grammar
 
 - `<seat>`: canonical lowercase seat name (role-cast table). Aliases are NOT valid wire values; brief writers normalize before writing. `<status>`: `open|in-progress|review|done|parked`.
