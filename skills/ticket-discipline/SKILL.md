@@ -51,7 +51,7 @@ Done-claims are separate report files in `<project>/reports/`, one file per clai
 
 ## Receipts
 
-Receipts are their own file: `<project>/receipts/T-###.md` — line 1 `# T-### — receipts`, created on first receipt, never in the ticket. Ticket-scoped events append there, one line each, append-only:
+Receipts are their own file: `<project>/receipts/T-###.md` — line 1 `# T-### — receipts`, created on first receipt, never in the ticket. The first receipt initializes: create the directory and write the header line before the append (`mkdir -p <project>/receipts` + header, then the printf below). Consumers tolerate an absent file until then. Ticket-scoped events append there, one line each, append-only:
 `- <UTC ISO-8601> · <event> · <seat> · <verdict-or-action> · <evidence-ref>`
 (`<evidence-ref>` = commit hash, file path, session id, or review-report pointer.)
 
@@ -80,7 +80,7 @@ Where a project keeps a project-scope file (its operator-approved purpose, bound
 ## Machine anchors
 
 - `T-###` appears in every commit message and every builder report's `**Ticket:**` field.
-- Greppable in tickets, exact (POSIX ERE, `grep -E`): `^Status: ` — the only mutating anchor a post-amendment ticket carries.
+- Greppable in tickets, exact (POSIX ERE, `grep -E`): `^Status: ` — the state-poll anchor; the only other line that mutates in a post-amendment ticket is `Parked: <reason>` (added/removed with the parked state).
 - Greppable in `receipts/` files, exact: receipt lines `^- [0-9]{4}-`.
 - Greppable in `reports/` files, exact: `^## Builder Report` · `^## Result` · `^\*\*Deviations from spec:\*\*`. Receipt lines and report headings never appear in post-amendment tickets.
 - Receipt ceiling is mechanically checkable: `awk '/^- [0-9]{4}-/ && length($0)>200' receipts/T-###.md` — any output is a format violation.
