@@ -77,7 +77,7 @@ Synthesize findings into the spec before asking the user to review it:
 - Ask: **Can this be materially simpler while still fully solving the current requirement?** Resolve findings subtractive-first per **Simplicity and Defect Handling** above.
 - The SA owns the canonical spec. The independent reviewer reports findings; it does not rewrite the spec or make the final decision.
 
-Use at most one targeted re-check, only for an unresolved Critical finding or material factual dispute after synthesis. Optional or advisory findings do not trigger another pass. If a material issue remains, resolve it with the user instead of starting another reviewer loop.
+Use at most one targeted re-check, only for an unresolved Critical finding or material factual dispute after synthesis. Minor or advisory findings do not trigger another pass. If a material issue remains, resolve it with the user instead of starting another reviewer loop.
 
 Commit the canonical spec after synthesis and any targeted re-check or user resolution. Verify the committed file contains the reviewed version before asking for approval.
 

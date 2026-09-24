@@ -59,7 +59,7 @@ This table is generic. The per-project assignment of each seat to a concrete hol
 
 ## Deviation routing
 
-**The `minor|major` labels here are the deviation-routing scale — deliberately distinct from the review-severity scale (`Critical|Important|Minor`).** Severity grades how bad a finding is; minor|major decides who dispositions it (minor → builder, major → sa). Do not map one onto the other.
+**The `minor|major` labels here are the deviation-routing scale — deliberately distinct from the review-severity scale (`Critical|Important|Minor`).** Severity grades how bad a finding is; minor|major decides where it routes: minor → back to the builder to fix; major → to the sa for disposition against the project's original purpose. Do not map one onto the other.
 
 A non-`none` deviation in a Builder Report is an event: foreman commissions a code-reviewer pass over the deviation → sa dispositions against the project's original purpose and scope, never automatically (accept, within-ticket rework, or operator scope decision — a corrective ticket only where the sa's purpose-check authorizes one) → all steps recorded as receipts (formats: superpowers:ticket-discipline).
 
