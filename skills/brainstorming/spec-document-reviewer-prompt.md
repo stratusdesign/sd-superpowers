@@ -23,7 +23,7 @@ Subagent (codex:codex-rescue):   # or another independent reviewer route
     Central question: Could another competent coding agent implement this
     specification without making material assumptions?
 
-    Check for blockers, ambiguity, unsupported assumptions, hallucinated or
+    Check for Critical defects, ambiguity, unsupported assumptions, hallucinated or
     unverified technical claims, missing acceptance criteria, invented
     requirements, unnecessary complexity, materially simpler alternatives,
     missing edge cases, missing test requirements, and unimplementable
@@ -35,7 +35,7 @@ Subagent (codex:codex-rescue):   # or another independent reviewer route
     defect only when a confirmed actor, approved requirement, stated
     constraint, or observable success test requires it; do not treat
     speculative or unconfirmed capability as a missing feature. For each
-    BLOCKER or IMPORTANT finding, state the confirmed requirement affected and
+    Critical or Important finding, state the confirmed requirement affected and
     the smallest valid correction; if the correction adds something, also state
     the subtractive option considered and why adding is still necessary.
 
@@ -49,13 +49,13 @@ Subagent (codex:codex-rescue):   # or another independent reviewer route
 
     **Status:** Approved | Issues Found
 
-    **BLOCKERS**
+    **CRITICAL**
     - [Section]: [issue] — [impact and smallest useful correction or evidence needed]
 
     **IMPORTANT**
     - [Section]: [issue] — [impact and smallest useful correction or evidence needed]
 
-    **OPTIONAL**
+    **MINOR**
     - [advisory improvement]
 
     Classify material factual claims as VERIFIED, INFERRED, or UNSUPPORTED where

@@ -22,7 +22,7 @@ reason alone. Do not add a second whole-branch reviewer.
 ## Findings
 
 If the final review returns findings, first verify and adjudicate them against
-the requirements and evidence — apply valid findings and reject unsupported,
+the requirements and evidence — apply evidence-backed findings and reject unsupported,
 invented, or preference-only ones with reasoning — then dispatch ONE fix
 subagent with the complete accepted-findings list — not one fixer per finding.
 Per-finding fixers each rebuild context and re-run suites; a real session's

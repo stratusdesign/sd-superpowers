@@ -76,4 +76,5 @@ After writing ANY skill, STOP and complete deployment: test it, close loopholes,
 - Read `references/bulletproofing.md` when hardening a discipline skill; [persuasion-principles.md](persuasion-principles.md) holds the research foundation.
 - Read `references/structure-and-discovery.md` before writing a new SKILL.md or its description.
 - Read `references/style-and-antipatterns.md` when adding flowcharts or code examples.
+- Read `references/glossary.md` when naming severities, verdicts, gates, or routing labels — skills use the unified decision vocabulary; never fork a new term for an existing concept.
 - Read [anthropic-best-practices.md](anthropic-best-practices.md) for Anthropic's official authoring guidance, which complements this skill's TDD approach.

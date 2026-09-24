@@ -24,7 +24,7 @@ digraph brainstorming {
     "Spec self-review\n(fix inline)" [shape=box];
     "Independent spec review" [shape=box];
     "Synthesize canonical spec" [shape=box];
-    "Spec blocker remains?" [shape=diamond];
+    "Spec Critical finding remains?" [shape=diamond];
     "Targeted spec re-check" [shape=box];
     "Resolve spec with user" [shape=box];
     "Commit canonical spec" [shape=box];
@@ -58,12 +58,12 @@ digraph brainstorming {
     "Write design doc" -> "Spec self-review\n(fix inline)";
     "Spec self-review\n(fix inline)" -> "Independent spec review";
     "Independent spec review" -> "Synthesize canonical spec";
-    "Synthesize canonical spec" -> "Spec blocker remains?";
-    "Spec blocker remains?" -> "Targeted spec re-check" [label="yes, once"];
+    "Synthesize canonical spec" -> "Spec Critical finding remains?";
+    "Spec Critical finding remains?" -> "Targeted spec re-check" [label="yes, once"];
     "Targeted spec re-check" -> "Resolve spec with user" [label="still unresolved"];
     "Targeted spec re-check" -> "Commit canonical spec" [label="resolved"];
     "Resolve spec with user" -> "Commit canonical spec";
-    "Spec blocker remains?" -> "Commit canonical spec" [label="no"];
+    "Spec Critical finding remains?" -> "Commit canonical spec" [label="no"];
     "Commit canonical spec" -> "User reviews spec?";
     "User reviews spec?" -> "Write design doc" [label="changes requested"];
     "User reviews spec?" -> "Invoke writing-plans skill" [label="approved"];

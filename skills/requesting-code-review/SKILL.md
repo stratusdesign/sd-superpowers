@@ -50,7 +50,7 @@ Fill the template at [code-reviewer.md](code-reviewer.md).
 
 **3. Verify and adjudicate findings (do not auto-apply):**
 - Verify each Critical and Important finding against the requirements and evidence
-- Apply valid findings; reject unsupported, invented, or preference-only findings, with reasoning
+- Apply evidence-backed findings; reject unsupported, invented, or preference-only findings, with reasoning
 - Note Minor issues for later
 - The SA/controller owns the decision — there is no model vote, and no blanket "fix every Critical and Important finding"
 

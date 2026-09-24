@@ -63,12 +63,12 @@ Clarify, and only then Add. A missing capability is a defect only when a
 confirmed actor, approved requirement, stated constraint, or observable success
 test requires it; do not treat speculative or unconfirmed capability as missing.
 
-Classify each finding as BLOCKER, IMPORTANT, or OPTIONAL. For load-bearing
+Classify each finding as Critical, Important, or Minor. For load-bearing
 factual claims where useful, classify them VERIFIED, INFERRED, or UNSUPPORTED.
-Every BLOCKER or IMPORTANT finding reports the confirmed requirement affected and
+Every Critical or Important finding reports the confirmed requirement affected and
 the smallest valid correction; a finding whose correction ADDS something also
 reports the subtractive option you considered and why adding is still necessary.
-Do not force this format onto OPTIONAL findings.
+Do not force this format onto Minor findings.
 
 [REVIEW BRIEF]
 ```
@@ -96,7 +96,7 @@ the unresolved issue:
 Re-check one unresolved candidate-design issue. Do not reopen settled findings
 or offer unrelated improvements.
 
-Unresolved finding: [BLOCKER OR IMPORTANT FINDING]
+Unresolved finding: [CRITICAL OR IMPORTANT FINDING]
 Relevant user intent and constraints: [ONLY RELEVANT ITEMS]
 Design delta since review: [CHANGED PARTS ONLY]
 New evidence: [EVIDENCE OR "NONE"]
